@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">e-care</string>
+    <string name="welcome_msg">Welcome to e-Care</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="forgot_password_msg">Forgot password?</string>
+    <string name="login_btn_msg">Login</string>
+    <string name="register_prompt_msg">REGISTER</string>
+    <string name="account_prompt_msg">Don\'t have an account?</string>
+    <string name="avatar_content_description">TODO</string>
 </resources>
