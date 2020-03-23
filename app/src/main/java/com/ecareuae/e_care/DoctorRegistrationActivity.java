@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -99,12 +97,12 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
     private void addTextChangedListeners() {
-        this.mFirstNameET.addTextChangedListener(new ValidationUtil(this.mFNameLayout));
-        this.mSurnameET.addTextChangedListener(new ValidationUtil(this.mSurnameLayout));
-        this.mPracticeET.addTextChangedListener(new ValidationUtil(this.mPracticeLayout));
-        this.mPass1ET.addTextChangedListener(new ValidationUtil(this.mPassOneLayout));
-        this.mPass2ET.addTextChangedListener(new ValidationUtil(this.mPassTwoLayout));
-        this.mSpecializationET.addTextChangedListener(new ValidationUtil(this.mSpecializationLayout));
+        this.mFirstNameET.addTextChangedListener(new CustomTextWatcher(this.mFNameLayout));
+        this.mSurnameET.addTextChangedListener(new CustomTextWatcher(this.mSurnameLayout));
+        this.mPracticeET.addTextChangedListener(new CustomTextWatcher(this.mPracticeLayout));
+        this.mPass1ET.addTextChangedListener(new CustomTextWatcher(this.mPassOneLayout));
+        this.mPass2ET.addTextChangedListener(new CustomTextWatcher(this.mPassTwoLayout));
+        this.mSpecializationET.addTextChangedListener(new CustomTextWatcher(this.mSpecializationLayout));
     }
 
     private void saveDoctor() {
