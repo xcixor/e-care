@@ -17,7 +17,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class DoctorRegistrationActivity extends AppCompatActivity {
-    private boolean isValidForm;
     private Button mRegister;
     private TextInputEditText mFirstNameET;
     private EditText mSurnameET;
@@ -60,7 +59,6 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         instantiateLayouts();
         instantiateViews();
         addTextChangedListeners();
-
 
         mRegister = findViewById(R.id.register_btn);
         mRegister.setOnClickListener(new View.OnClickListener() {
@@ -106,18 +104,18 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
     private void saveDoctor() {
-        UserDoctor doctor = getDoctor();
+        User doctor = getDoctor();
         if (doctor != null)
             FirebaseUtil.getmDatabaseReference().child("users").push().setValue(doctor);
 //            open another activity
     }
 
-    private UserDoctor getDoctor() {
+    private User getDoctor() {
         return getDataFromViews();
 
     }
 
-    private UserDoctor getDataFromViews() {
+    private User getDataFromViews() {
         mFName = mFirstNameET.getText().toString();
         mSurname = mSurnameET.getText().toString();
         mPractice = mPracticeET.getText().toString();
@@ -132,7 +130,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         return validateUserData();
     }
 
-    private UserDoctor validateUserData() {
+    private User validateUserData() {
 
         if(
             isValidFirstName()
@@ -141,7 +139,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
                     && isValidPasswordOne()
                     && isValidSpecialization()
                     && isValidPasswordTwo()){
-            this.isValidForm = true;
+            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
             return instantiateDoctor();
         }else{
             Toast.makeText(this, "Please validate your data!", Toast.LENGTH_SHORT).show();
@@ -233,17 +231,18 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private UserDoctor instantiateDoctor() {
-        UserDoctor doctor = new UserDoctor(
+    private User instantiateDoctor() {
+        User doctor = new User(
                     this.mFName,
                     this.mSurname,
-                    this.mPractice,
                     this.mEmail,
-                    this.mSpecialization,
-                    this.mGender
+                    this.mGender,
+                true
             );
         doctor.setPassword(this.mPassOne);
         doctor.setMobilePhoneNumber(this.mMobile, this.mCountryCode);
+        doctor.setPractice(this.mPractice);
+        doctor.setSpecialization(this.mSpecialization);
         return doctor;
     }
 

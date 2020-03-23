@@ -1,6 +1,6 @@
 package com.ecareuae.e_care;
 
-public class UserDoctor {
+public class User {
     private String firstName;
     private String surName;
     private String practice;
@@ -12,18 +12,15 @@ public class UserDoctor {
     private String image;
     private String location;
     private String ID;
+    private boolean isDoctor;
 
-    public UserDoctor(String firstName, String surName, String practice,
-                      String email, String specialization,
-                      String gender)
+    public User(String firstName, String surName, String email, String gender, boolean isDoctor)
     {
         this.firstName = firstName;
         this.surName = surName;
-        this.practice = practice;
         this.email = email;
-        this.specialization = specialization;
         this.gender = gender;
-        this.image = image;
+        this.isDoctor = isDoctor;
     }
 
     public String getFirstName() {
@@ -73,5 +70,18 @@ public class UserDoctor {
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    public void setPractice(String practice) {
+        if (!practice.isEmpty() && practice != null) {
+            this.practice = practice;
+        }else {
+            this.practice = "Practise name not provided";
+        }
+
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 }
