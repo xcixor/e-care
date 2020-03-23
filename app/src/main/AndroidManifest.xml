@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".UserTypeSelectionActivity"></activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".DoctorRegistrationActivity"
             android:label="@string/title_activity_registration"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
@@ -26,5 +26,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
