@@ -13,6 +13,7 @@ public class User {
     private String location;
     private String ID;
     private boolean isDoctor;
+    private String mUserImageName;
 
     public User(String firstName, String surName, String email, String gender, boolean isDoctor)
     {
@@ -83,5 +84,36 @@ public class User {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+
+    public void setImageUrl(String image) {
+        this.image = image;
+    }
+
+    public String getUserImageName() {
+        return mUserImageName;
+    }
+
+    public void setUserImageName(String userImageName) {
+        mUserImageName = userImageName;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", surName='" + surName + '\'' +
+                ", practice='" + practice + '\'' +
+                ", mobilePhoneNumber='" + mobilePhoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", specialization='" + specialization + '\'' +
+                ", gender='" + gender + '\'' +
+                ", password='" + password + '\'' +
+                ", image='" + image + '\'' +
+                ", location='" + location + '\'' +
+                ", ID='" + ID + '\'' +
+                ", isDoctor=" + isDoctor +
+                ", mUserImageName='" + mUserImageName + '\'' +
+                '}';
     }
 }
