@@ -86,7 +86,6 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     private String mUserImageName;
     private final int PICK_IMAGE_REQUEST = 71;
     private TextView mUploadPhoto;
-    private FirebaseStorage mStorage;
     private Transformation transformation;
     private String mSavedDoctorId;
 
@@ -105,7 +104,6 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mUserImageView = findViewById(R.id.user_image);
         mUploadPhoto = findViewById(R.id.tv_upload_photo);
-        mStorage = FirebaseStorage.getInstance();
 
         mUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,74 +118,6 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
                 saveDoctor();
             }
         });
-
-    }
-
-    private void selectImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
-            mImageUri = data.getData();
-            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
-            int margin = 0;
-            if (mImageUri != null) {
-                transformation = new RoundedCornersTransformation(radius, margin);
-//                int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-                Picasso.get()
-                        .load(mImageUri.toString())
-                        .transform(transformation)
-                        .placeholder(R.drawable.account_user)
-                        .error(R.drawable.account_user)
-                        .fit()
-                        .into(mUserImageView);
-                saveImage();
-            }
-
-        }
-    }
-
-    private void saveImage(){
-        if(mImageUri != null)
-        {
-            final StorageReference ref = FirebaseUtil.getmStorageReference().child(mImageUri.getLastPathSegment());
-            UploadTask uploadTask = ref.putFile(mImageUri);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        mUserImagePath = downloadUri.toString();
-                        mUserImageName = ref.getName();
-                    } else {
-                        showImageSavingError();
-                    }
-                }
-            });
-        }
-    }
-
-    private void showImageSavingError() {
-        Toast.makeText(this, "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -399,9 +329,6 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
 //    location stuff
-    private void saveUserLocation(){
-
-    }
 
     private boolean checkPermissions(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -489,5 +416,72 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
             longitude = mLastLocation.getLongitude();
         }
     };
+
+//    image saving
+private void selectImage() {
+    Intent intent = new Intent();
+    intent.setType("image/*");
+    intent.setAction(Intent.ACTION_GET_CONTENT);
+    startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), PICK_IMAGE_REQUEST);
+}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            mImageUri = data.getData();
+            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
+            int margin = 0;
+            if (mImageUri != null) {
+                transformation = new RoundedCornersTransformation(radius, margin);
+                Picasso.get()
+                        .load(mImageUri.toString())
+                        .transform(transformation)
+                        .placeholder(R.drawable.account_user)
+                        .error(R.drawable.account_user)
+                        .fit()
+                        .into(mUserImageView);
+                saveImage();
+            }
+
+        }
+    }
+
+    private void saveImage(){
+        if(mImageUri != null)
+        {
+            final StorageReference ref = FirebaseUtil.getmStorageReference().child(mImageUri.getLastPathSegment());
+            UploadTask uploadTask = ref.putFile(mImageUri);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        mUserImagePath = downloadUri.toString();
+                        mUserImageName = ref.getName();
+                    } else {
+                        showImageSavingError();
+                    }
+                }
+            });
+        }
+    }
+
+    private void showImageSavingError() {
+        Toast.makeText(this, "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
+    }
 
 }
