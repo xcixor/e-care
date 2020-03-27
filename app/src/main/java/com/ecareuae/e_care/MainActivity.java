@@ -59,8 +59,8 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements
-        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BasicNavigationActivity implements
+        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     public static final String TAG = "MainActivity";
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.onCreateDrawer();
         setContentView(R.layout.activity_main);
+
         mSearchInput = (EditText)findViewById(R.id.et_search);
         mGpsLocater = (ImageView)findViewById(R.id.ic_gps);
         mDatabaseReference = FirebaseUtil.getmDatabaseReference();
@@ -92,19 +94,19 @@ public class MainActivity extends AppCompatActivity implements
 
         instantiateDoctorsLocations();
 
-        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTopToolbar.setTitle("e-care");
-        setSupportActionBar(mTopToolbar);
-        mDrawerLayout=findViewById(R.id.drawer_layout);
-        mNavigationView=findViewById(R.id.nav_view);
-        mNavigationView.bringToFront();
-        ActionBarDrawerToggle toggle=new
-                ActionBarDrawerToggle(
-                        this, mDrawerLayout, mTopToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setCheckedItem(R.id.nav_home);
+//        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        mTopToolbar.setTitle("e-care");
+//        setSupportActionBar(mTopToolbar);
+//        mDrawerLayout=findViewById(R.id.drawer_layout);
+//        mNavigationView=findViewById(R.id.nav_view);
+//        mNavigationView.bringToFront();
+//        ActionBarDrawerToggle toggle=new
+//                ActionBarDrawerToggle(
+//                        this, mDrawerLayout, mTopToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        mDrawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
+//        mNavigationView.setNavigationItemSelectedListener(this);
+//        mNavigationView.setCheckedItem(R.id.nav_home);
 
 
         if(isServiceOk()){
@@ -122,30 +124,31 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_home: break;
-            case R.id.nav_history:
-                handleSelections("Bookings");
-//                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
-//                startActivity(intent);
-                break;
-            case R.id.nav_login:
-                Intent regIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(regIntent);
-                break;
-            case R.id.nav_profile: menu.findItem(R.id.nav_logout).setVisible(true);
-                menu.findItem(R.id.nav_profile).setVisible(true);
-                menu.findItem(R.id.nav_login).setVisible(false);
-                break;
-            case R.id.nav_logout: menu.findItem(R.id.nav_logout).setVisible(false);
-                menu.findItem(R.id.nav_profile).setVisible(false);
-                menu.findItem(R.id.nav_login).setVisible(true);
-                break;
-        }
-        mDrawerLayout.closeDrawer(GravityCompat.START); return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//        switch (menuItem.getItemId()) {
+//            case R.id.nav_home: break;
+//            case R.id.nav_history:
+//                handleSelections("Bookings");
+////                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
+////                startActivity(intent);
+//                break;
+//            case R.id.nav_login:
+//                Intent regIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(regIntent);
+//                break;
+//            case R.id.nav_profile: menu.findItem(R.id.nav_logout).setVisible(true);
+//                menu.findItem(R.id.nav_profile).setVisible(true);
+//                menu.findItem(R.id.nav_login).setVisible(false);
+//                break;
+//            case R.id.nav_logout: menu.findItem(R.id.nav_logout).setVisible(false);
+//                menu.findItem(R.id.nav_profile).setVisible(false);
+//                menu.findItem(R.id.nav_login).setVisible(true);
+//                break;
+//        }
+//        mDrawerLayout.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
     private void handleSelections(String message) {
 

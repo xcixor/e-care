@@ -15,14 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".BasicNavigationActivity"></activity>
         <activity
             android:name=".BookAppointmentActivity"
-            android:label="@string/title_book_appointment" >
-
+            android:label="@string/title_book_appointment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ecareuae.e_care.MainActivity">
-            </meta-data>
+                android:value="com.ecareuae.e_care.MainActivity"></meta-data>
         </activity>
 
         <meta-data
