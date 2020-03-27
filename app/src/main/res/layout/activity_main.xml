@@ -9,85 +9,18 @@
     tools:openDrawer="start"
     tools:context=".MainActivity">
 
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/main_menu" />
+        app:menu="@menu/drawer_menu" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            style="@style/HeaderBar"
-            android:elevation="4dp"/>
-
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.ecareuae.e_care.MainActivity"
-            tools:layout_editor_absoluteX="34dp"
-            tools:layout_editor_absoluteY="130dp" />
-
-        <RelativeLayout
-            android:id="@+id/relative_layout_one"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="@dimen/search_bar_margin"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_marginRight="@dimen/search_bar_margin"
-            android:background="@drawable/search_background"
-            android:elevation="@dimen/search_bar_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ic_magnify"
-                android:layout_width="@dimen/map_magnfying_icon_dimensions"
-                android:layout_height="@dimen/map_magnfying_icon_dimensions"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/map_magnifying_icon_margin"
-                app:srcCompat="@drawable/ic_search" />
-
-            <EditText
-                android:id="@+id/et_search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/ic_magnify"
-                android:background="@null"
-                android:hint="@string/search_message"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textColor="#000"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ic_gps"
-            android:layout_width="@dimen/map_centering_icon_size"
-            android:layout_height="@dimen/map_centering_icon_size"
-            android:layout_below="@id/relative_layout_one"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/map_magnifying_icon_margin"
-            android:layout_marginRight="@dimen/map_magnifying_icon_margin"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_gps" />
-
-    </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

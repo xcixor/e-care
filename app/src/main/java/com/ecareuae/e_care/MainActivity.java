@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements
 
         instantiateDoctorsLocations();
 
-        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mTopToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTopToolbar.setTitle("e-care");
         setSupportActionBar(mTopToolbar);
         mDrawerLayout=findViewById(R.id.drawer_layout);
@@ -117,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        else
-        {
+        else {
             super.onBackPressed();
         }
     }
@@ -128,23 +127,28 @@ public class MainActivity extends AppCompatActivity implements
         switch (menuItem.getItemId()) {
             case R.id.nav_home: break;
             case R.id.nav_history:
-                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
-                startActivity(intent);
+                handleSelections("Bookings");
+//                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.nav_login:
-                Intent regIntent = new Intent(MainActivity.this, DoctorRegistrationActivity.class);
+                Intent regIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(regIntent);
                 break;
-//            case R.id.nav_login: menu.findItem(R.id.nav_logout).setVisible(true);
-//                menu.findItem(R.id.nav_profile).setVisible(true);
-//                menu.findItem(R.id.nav_login).setVisible(false);
-//                break;
+            case R.id.nav_profile: menu.findItem(R.id.nav_logout).setVisible(true);
+                menu.findItem(R.id.nav_profile).setVisible(true);
+                menu.findItem(R.id.nav_login).setVisible(false);
+                break;
             case R.id.nav_logout: menu.findItem(R.id.nav_logout).setVisible(false);
                 menu.findItem(R.id.nav_profile).setVisible(false);
                 menu.findItem(R.id.nav_login).setVisible(true);
                 break;
         }
         mDrawerLayout.closeDrawer(GravityCompat.START); return true;
+    }
+
+    private void handleSelections(String message) {
+
     }
 
     private void instantiateDoctorsLocations() {
