@@ -7,4 +7,10 @@
     <dimen name="internal_padding">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
+    <dimen name="search_bar_margin">10dp</dimen>
+    <dimen name="map_magnfying_icon_dimensions">15dp</dimen>
+    <dimen name="map_magnifying_icon_margin">15dp</dimen>
+    <dimen name="search_area_border_radius">5dp</dimen>
+    <dimen name="map_centering_icon_size">40dp</dimen>
+    <dimen name="appointment_screen_top_margin">16dp</dimen>
 </resources>

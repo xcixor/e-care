@@ -36,4 +36,17 @@
         <item>Doctor</item>
         <item>Patient</item>
     </string-array>
+    <string name="API_KEY">AIzaSyCRmqYouU2-m7fBSkSH8GIxyMOJrEKtit0</string>
+    <string name="search_message">Address, practice or Dr\'s name</string>
+    <string name="map_info_window_name">Dr Rajesh</string>
+    <string name="map_info_window_address">Address</string>
+    <string name="map_info_window_mobile">Mobile</string>
+    <string name="map_info_window_tv_message">Click to make an Appointment</string>
+    <string name="message_to_doctor">Message to doctor</string>
+    <string name="appointment_back_button">Back</string>
+    <string name="appointment_confirm_button">Confirm</string>
+    <string name="title_book_appointment">Book Appointment</string>
+    <string name="ev_appointment_doctor_s_name_msg">Doctor\'s Name</string>
+    <string name="ev_appointment_specialization_msg">Specialization</string>
+    <string name="appointment_fab_msg">Confirm Appointment</string>
 </resources>

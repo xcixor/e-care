@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/internal_padding"
     android:paddingTop="20dp"
     android:paddingRight="@dimen/internal_padding"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <ImageView
         android:id="@+id/avatar"
