@@ -1,6 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
+<!--    remember to enable darkactionbar for other activitities this is-->
+<!--    for the purpose of main map activity-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>

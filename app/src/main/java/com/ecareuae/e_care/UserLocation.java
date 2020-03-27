@@ -25,4 +25,13 @@ public class UserLocation {
     public void setUserId(String userId) {
         mUserId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "UserLocation{" +
+                "mLatitude=" + mLatitude +
+                ", mLongitude=" + mLongitude +
+                ", mUserId='" + mUserId + '\'' +
+                '}';
+    }
 }
