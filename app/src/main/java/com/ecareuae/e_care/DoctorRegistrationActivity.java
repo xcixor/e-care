@@ -40,7 +40,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -439,8 +438,8 @@ private void selectImage() {
                 Picasso.get()
                         .load(mImageUri.toString())
                         .transform(transformation)
-                        .placeholder(R.drawable.account_user)
-                        .error(R.drawable.account_user)
+                        .placeholder(R.drawable.ic_account)
+                        .error(R.drawable.ic_account)
                         .fit()
                         .into(mUserImageView);
                 saveImage();
