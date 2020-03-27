@@ -1,9 +1,13 @@
 package com.ecareuae.e_care;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -24,6 +28,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -40,6 +46,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,8 +58,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 public class MainActivity extends AppCompatActivity implements
-        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = "MainActivity";
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -68,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements
     private ArrayList<LatLng> mPlaces;
     private DatabaseReference mDatabaseReference;
     private ArrayList<User> mUsers;
+    private Toolbar mTopToolbar;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +92,59 @@ public class MainActivity extends AppCompatActivity implements
 
         instantiateDoctorsLocations();
 
+        mTopToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mTopToolbar.setTitle("e-care");
+        setSupportActionBar(mTopToolbar);
+        mDrawerLayout=findViewById(R.id.drawer_layout);
+        mNavigationView=findViewById(R.id.nav_view);
+        mNavigationView.bringToFront();
+        ActionBarDrawerToggle toggle=new
+                ActionBarDrawerToggle(
+                        this, mDrawerLayout, mTopToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setCheckedItem(R.id.nav_home);
+
 
         if(isServiceOk()){
             init();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home: break;
+            case R.id.nav_history:
+                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_login:
+                Intent regIntent = new Intent(MainActivity.this, DoctorRegistrationActivity.class);
+                startActivity(regIntent);
+                break;
+//            case R.id.nav_login: menu.findItem(R.id.nav_logout).setVisible(true);
+//                menu.findItem(R.id.nav_profile).setVisible(true);
+//                menu.findItem(R.id.nav_login).setVisible(false);
+//                break;
+            case R.id.nav_logout: menu.findItem(R.id.nav_logout).setVisible(false);
+                menu.findItem(R.id.nav_profile).setVisible(false);
+                menu.findItem(R.id.nav_login).setVisible(true);
+                break;
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START); return true;
     }
 
     private void instantiateDoctorsLocations() {

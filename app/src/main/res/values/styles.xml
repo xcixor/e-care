@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
 <!--    remember to enable darkactionbar for other activitities this is-->
 <!--    for the purpose of main map activity-->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -22,6 +22,10 @@
 
     <style name="customfontstyle" parent="@android:style/TextAppearance.Medium">
         <item name="android:fontFamily">@font/sofia</item>
+    </style>
+
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
     </style>
 
 </resources>
