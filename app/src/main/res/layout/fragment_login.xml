@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/internal_padding"
     android:paddingTop="20dp"
-    android:paddingRight="@dimen/internal_padding"
-    tools:context=".LoginActivity">
+    android:paddingRight="@dimen/internal_padding">
 
     <ImageView
         android:id="@+id/avatar"
@@ -39,13 +38,13 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:autofillHints=""
+        android:drawableStart="@drawable/ic_name"
+        android:drawableLeft="@drawable/ic_name"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/username_hint"
         android:includeFontPadding="false"
         android:inputType="textPersonName"
-        android:drawableStart="@drawable/ic_name"
-        android:drawableLeft="@drawable/ic_name"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -55,13 +54,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:drawableStart="@drawable/ic_password"
+        android:drawableLeft="@drawable/ic_password"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/password_hint"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:drawableStart="@drawable/ic_password"
-        android:drawableLeft="@drawable/ic_password"
         app:layout_constraintEnd_toEndOf="@+id/et_username"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/et_username"
