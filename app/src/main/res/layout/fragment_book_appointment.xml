@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/internal_padding"
+    android:paddingRight="@dimen/internal_padding"
+    android:paddingBottom="10dp"
+    tools:context=".BookAppointmentActivity">
+
+    <TextView
+        android:id="@+id/tv_appointment_doctor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        android:text="@string/ev_appointment_doctor_s_name_msg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_appointment_specialization"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        android:text="@string/ev_appointment_specialization_msg"
+        app:layout_constraintEnd_toEndOf="@+id/tv_appointment_doctor"
+        app:layout_constraintStart_toStartOf="@+id/tv_appointment_doctor"
+        app:layout_constraintTop_toBottomOf="@+id/tv_appointment_doctor" />
+
+    <CalendarView
+        android:id="@+id/appointment_calender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        app:layout_constraintEnd_toEndOf="@+id/tv_appointment_specialization"
+        app:layout_constraintStart_toStartOf="@+id/tv_appointment_specialization"
+        app:layout_constraintTop_toBottomOf="@+id/tv_appointment_specialization" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:padding="@dimen/icon_padding"
+        android:tooltipText="@string/appointment_fab_msg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/appointment_calender"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/appointment_calender"
+        app:layout_constraintTop_toBottomOf="@+id/tv_appointment_specialization"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_confirm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

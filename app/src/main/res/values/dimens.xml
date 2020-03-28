@@ -13,4 +13,9 @@
     <dimen name="search_area_border_radius">5dp</dimen>
     <dimen name="map_centering_icon_size">40dp</dimen>
     <dimen name="appointment_screen_top_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 </resources>
