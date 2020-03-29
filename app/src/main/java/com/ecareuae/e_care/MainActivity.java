@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
-public class NavigationActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
