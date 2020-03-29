@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#0336ff</color>
+    <color name="colorPrimaryDark">#3700b3</color>
     <color name="colorAccent">#D81B60</color>
     <color name="important_msgs_color">#960019</color>
     <color name="search_bar_background_color">#fff</color>
+    <color name="profile_head_color">#6200ee</color>
+    <color name="orange_text">#f9aa33</color>
+    <color name="faint_border">#C0C0C0</color>
 </resources>

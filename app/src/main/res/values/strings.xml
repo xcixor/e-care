@@ -48,5 +48,31 @@
     <string name="title_book_appointment">Book Appointment</string>
     <string name="ev_appointment_doctor_s_name_msg">Doctor\'s Name</string>
     <string name="ev_appointment_specialization_msg">Specialization</string>
+    <string name="ev_appointment_heading_msg">Request for Appointment</string>
     <string name="appointment_fab_msg">Confirm Appointment</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_login">Login</string>
+    <string name="menu_history">My Appointments</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_logout">Logout</string>
+    <string name="app_image_content_desc">Profile Image Content Desc</string>
+    <string name="profile_username">User Name</string>
+    <string name="profile_profession">Profession</string>
+    <string name="profile_email">User Email</string>
+    <string name="profile_mobile">Phone Number</string>
+    <string name="profile_name">Full Name</string>
+    <string name="appointment_title">Appointment Title</string>
+    <string name="appointment_description">Appointment Description</string>
+    <string name="appointment_status_content_desc">Appointment Status Icon Content Desc</string>
+    <string name="appointment_edit_content_desc">Edit Icon Content Desc</string>
+    <string name="appointment_delete_content_desc">Delete Icon Content Desc</string>
 </resources>
