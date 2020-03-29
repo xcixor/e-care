@@ -48,6 +48,7 @@
     <string name="title_book_appointment">Book Appointment</string>
     <string name="ev_appointment_doctor_s_name_msg">Doctor\'s Name</string>
     <string name="ev_appointment_specialization_msg">Specialization</string>
+    <string name="ev_appointment_heading_msg">Request for Appointment</string>
     <string name="appointment_fab_msg">Confirm Appointment</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

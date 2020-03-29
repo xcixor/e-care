@@ -6,4 +6,5 @@
     <color name="important_msgs_color">#960019</color>
     <color name="search_bar_background_color">#fff</color>
     <color name="profile_head_color">#6200ee</color>
+    <color name="orange_text">#f9aa33</color>
 </resources>
