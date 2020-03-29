@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="important_msgs_color">#960019</color>
     <color name="search_bar_background_color">#fff</color>
+    <color name="profile_head_color">#6200ee</color>
 </resources>
