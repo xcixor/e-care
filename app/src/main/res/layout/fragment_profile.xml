@@ -57,7 +57,7 @@
                 android:id="@+id/profile_fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="80dp"
+                android:paddingLeft="@dimen/profile_text_padding"
                 android:text="@string/profile_name" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -93,7 +93,7 @@
                 android:id="@+id/profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="80dp"
+                android:paddingLeft="@dimen/profile_text_padding"
                 android:text="@string/profile_email" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -132,7 +132,7 @@
                 android:id="@+id/profile_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="80dp"
+                android:paddingLeft="@dimen/profile_text_padding"
                 android:text="@string/profile_mobile" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 

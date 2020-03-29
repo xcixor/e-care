@@ -70,4 +70,9 @@
     <string name="profile_email">User Email</string>
     <string name="profile_mobile">Phone Number</string>
     <string name="profile_name">Full Name</string>
+    <string name="appointment_title">Appointment Title</string>
+    <string name="appointment_description">Appointment Description</string>
+    <string name="appointment_status_content_desc">Appointment Status Icon Content Desc</string>
+    <string name="appointment_edit_content_desc">Edit Icon Content Desc</string>
+    <string name="appointment_delete_content_desc">Delete Icon Content Desc</string>
 </resources>
