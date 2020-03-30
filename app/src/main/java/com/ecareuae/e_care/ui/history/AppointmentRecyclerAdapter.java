@@ -12,8 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ecareuae.e_care.models.MedicalAppointment;
 import com.ecareuae.e_care.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<AppointmentRecyclerAdapter.ViewHolder>{
     private final Context mContext;
@@ -36,7 +42,10 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MedicalAppointment appointment = mAppointments.get(position);
-        String title = "Appointment with " + appointment.getDoctor() + " on " + appointment.getDate().toString();
+        String title = "Appointment with " + appointment.getDoctor();
+        Date date = appointment.getDate();
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+        holder.mTvDate.setText(df.format("yyyy-MM-dd hh:mm a", date));
         holder.mTvTitle.setText(title);
         holder.mTvDescription.setText(appointment.getMessage());
 
@@ -51,11 +60,13 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
 
         public final TextView mTvTitle;
         public final TextView mTvDescription;
+        private final TextView mTvDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvTitle = itemView.findViewById(R.id.appointment_title);
             mTvDescription = itemView.findViewById(R.id.appointment_description);
+            mTvDate = itemView.findViewById(R.id.appointment_date);
         }
     }
 }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -344,6 +345,5 @@ public class HomeFragment extends Fragment implements
         ft.addToBackStack(null);
         ft.commit();
     }
-
 
 }

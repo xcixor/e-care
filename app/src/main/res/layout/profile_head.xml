@@ -17,6 +17,7 @@
     <TextView
         android:id="@+id/profile_user_name"
         android:layout_width="wrap_content"
+        android:textSize="@dimen/medium_heading_txt_size"
         android:text="@string/profile_username"
         android:textColor="#fff"
         android:layout_height="wrap_content"/>

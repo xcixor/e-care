@@ -26,53 +26,29 @@
         <TextView
             android:id="@+id/appointment_title"
             android:textColor="@color/orange_text"
+            android:textSize="@dimen/medium_heading_txt_size"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/divider_bottom"
             android:text="@string/appointment_title" />
+        <TextView
+            android:id="@+id/appointment_date"
+            android:textColor="@color/orange_text"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/small_heading_txt_size"
+            android:layout_height="wrap_content"
+            android:text="@string/appointment_date" />
 
         <TextView
             android:id="@+id/appointment_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="always"
+            android:scrollbars="vertical"
             android:text="@string/appointment_description" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/history_linear_layout_two"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:background="@drawable/divider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/history_linear_layout_one"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/appointment_status_content_desc"
-            android:layout_margin="@dimen/appointment_container_image_margin"
-            app:srcCompat="@drawable/ic_status" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/appointment_edit_content_desc"
-            app:srcCompat="@drawable/ic_edit" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:contentDescription="@string/appointment_delete_content_desc"
-            app:srcCompat="@drawable/ic_delete" />
-    </LinearLayout>
 
 </LinearLayout>
 </androidx.cardview.widget.CardView>
