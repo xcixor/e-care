@@ -46,6 +46,36 @@
             android:layout_height="match_parent"
             android:scrollbars="vertical"
             android:text="@string/appointment_description" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/history_linear_layout_two"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@drawable/divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/history_linear_layout_one"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/appointment_edit_content_desc"
+            app:srcCompat="@drawable/ic_edit" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/appointment_delete_content_desc"
+            app:srcCompat="@drawable/ic_delete" />
     </LinearLayout>
 
 

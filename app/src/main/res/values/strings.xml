@@ -76,4 +76,5 @@
     <string name="appointment_edit_content_desc">Edit Icon Content Desc</string>
     <string name="appointment_delete_content_desc">Delete Icon Content Desc</string>
     <string name="appointment_date">Date</string>
+    <string name="submit">Delete Icon</string>
 </resources>

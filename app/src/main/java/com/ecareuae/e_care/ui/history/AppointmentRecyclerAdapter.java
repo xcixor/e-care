@@ -1,6 +1,7 @@
 package com.ecareuae.e_care.ui.history;
 
 import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
             super(itemView);
             mTvTitle = itemView.findViewById(R.id.appointment_title);
             mTvDescription = itemView.findViewById(R.id.appointment_description);
+            mTvDescription.setMovementMethod(new ScrollingMovementMethod());
             mTvDate = itemView.findViewById(R.id.appointment_date);
         }
     }
