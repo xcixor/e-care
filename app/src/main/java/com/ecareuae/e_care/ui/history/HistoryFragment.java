@@ -5,22 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ecareuae.e_care.models.MedicalAppointment;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.ui.tools.ToolsFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HistoryFragment extends Fragment implements AppointmentRecyclerAdapter.OnAppointmentListener {
 
@@ -30,6 +29,8 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     private RecyclerView mRecyclerAppointments;
     private LinearLayoutManager mAppointmentsLayoutManager;
     private AppointmentRecyclerAdapter mAdapter;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,17 +57,34 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         Log.d(TAG, "initializeAppointments: initialized!");
     }
 
-    private ArrayList<MedicalAppointment> getAppointments() {
+    private ArrayList<MedicalAppointmentModel> getAppointments() {
         return null;
     }
 
-
-    private void openEditAppointmentScren() {
-        Toast.makeText(getContext(), "Edited!", Toast.LENGTH_SHORT).show();
+    private void openEditScreen(int position){
+        MedicalAppointmentModel appointment = mHistoryViewModel.getMedicalAppointment(position);
+        if (appointment != null){
+            Fragment frag = new ToolsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("key", appointment);
+            frag.setArguments(bundle);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(this.getId(), frag);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
+//        Fragment frag = new ToolsFragment();
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.replace(this.getId(), frag);
+//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//        ft.addToBackStack(null);
+//        ft.commit();
     }
 
     @Override
     public void onAppointmentClicked(int position) {
+        openEditScreen(position);
         Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDoctor());
     }
 
@@ -80,6 +98,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
 
     @Override
     public void onEditIconClick(int position) {
+        openEditScreen(position);
         Log.d(TAG, "onEditClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
     }
 }

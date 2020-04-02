@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ecareuae.e_care.models.MedicalAppointment;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.R;
 
 import java.util.Date;
@@ -21,14 +21,14 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     private static String TAG = "HistoryFragment";
     private final Context mContext;
     private final LayoutInflater mInflater;
-    private final List<MedicalAppointment> mAppointments;
+    private final List<MedicalAppointmentModel> mAppointments;
     private OnAppointmentListener mOnAppointmentListener;
     private HistoryViewModel mViewModel;
     public ImageView mDeleteIcon;
     private ImageView mEditIcon;
 
 
-    public AppointmentRecyclerAdapter(Context context, List<MedicalAppointment> appointments, OnAppointmentListener onAppointmentListener) {
+    public AppointmentRecyclerAdapter(Context context, List<MedicalAppointmentModel> appointments, OnAppointmentListener onAppointmentListener) {
         mContext = context;
         mAppointments = appointments;
         mInflater = LayoutInflater.from(mContext);
@@ -45,7 +45,7 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MedicalAppointment appointment = mAppointments.get(position);
+        MedicalAppointmentModel appointment = mAppointments.get(position);
         String title = "Appointment with " + appointment.getDoctor();
         Date date = appointment.getDate();
         android.text.format.DateFormat df = new android.text.format.DateFormat();

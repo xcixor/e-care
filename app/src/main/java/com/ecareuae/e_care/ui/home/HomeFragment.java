@@ -338,7 +338,6 @@ public class HomeFragment extends Fragment implements
 
         Fragment frag = new BookAppointmentFragment();
 
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(this.getId(), frag);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

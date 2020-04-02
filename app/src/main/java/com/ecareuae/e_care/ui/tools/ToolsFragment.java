@@ -1,6 +1,7 @@
 package com.ecareuae.e_care.ui.tools;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +14,29 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
 
 public class ToolsFragment extends Fragment {
 
+    private static String TAG = "ToolsFragment";
     private ToolsViewModel mToolsViewModel;
+    private MedicalAppointmentModel mAppointment;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mToolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tools, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
-        mToolsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        Bundle bundle = getArguments();
+
+        if(null != bundle) {
+            mAppointment = bundle.getParcelable("key");
+            setAppointmentDetails(mAppointment);
+        }
         return root;
+    }
+
+    private void setAppointmentDetails(MedicalAppointmentModel appointment) {
+        Log.d(TAG, "setAppointmentDetails: "+ appointment.getDate());
     }
 }

@@ -2,9 +2,7 @@ package com.ecareuae.e_care.repositories;
 
 import android.util.Log;
 
-import androidx.lifecycle.MutableLiveData;
-
-import com.ecareuae.e_care.models.MedicalAppointment;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +17,7 @@ public class AppointmentsRepository {
 //    eg web service or db
     private static String TAG = "AppointmentsRepository";
     private static AppointmentsRepository sAppointmentsRepositoryInstance;
-    private ArrayList<MedicalAppointment> mAppointments = new ArrayList<>();
+    private ArrayList<MedicalAppointmentModel> mAppointments = new ArrayList<>();
 
     public static AppointmentsRepository getInstance(){
         if(sAppointmentsRepositoryInstance == null)
@@ -28,41 +26,41 @@ public class AppointmentsRepository {
     }
 
 //    pretending to get data online
-    public List<MedicalAppointment> getAppointments(){
+    public List<MedicalAppointmentModel> getAppointments(){
 //        fetch data here
         setDummyAppointments();
         return mAppointments;
     }
 
 
-    public MedicalAppointment getAppointment(int position){
+    public MedicalAppointmentModel getAppointment(int position){
         Log.d(TAG, "getAppointment: position is "+ position);
-        MedicalAppointment appointment = mAppointments.get(position);
+        MedicalAppointmentModel appointment = mAppointments.get(position);
         return appointment;
     }
 
     public void setDummyAppointments(){
-        mAppointments.add(new MedicalAppointment(
+        mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Rajesh",
                 new Date(),
                 "Hi doc, I would like to have plastic surgery please advise")
         );
-        mAppointments.add(new MedicalAppointment(
+        mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Zainab",
                 new Date(),
                 "Hello, can i see you about a troubling appendix..")
         );
-        mAppointments.add(new MedicalAppointment(
+        mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Akipeteshi",
                 new Date(),
                 "I would like to see you on the mentioned date for a colonoscopy")
         );
-        mAppointments.add(new MedicalAppointment(
+        mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Rajesh",
                 new Date(),
                 "My child has a fever, can I see you then for a check up?!")
         );
-        mAppointments.add(new MedicalAppointment(
+        mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Nina",
                 new Date(),
                 "Id like to fuck your fat pussy, oooooowi!")
@@ -70,7 +68,7 @@ public class AppointmentsRepository {
     }
 
     public boolean removeAppointment(int position) {
-        MedicalAppointment appointment = getAppointment(position);
+        MedicalAppointmentModel appointment = getAppointment(position);
         if (mAppointments.contains(appointment)) {
             mAppointments.remove(position);
             return true;
