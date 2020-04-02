@@ -1,78 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    app:cardCornerRadius="4dp"
-    app:contentPadding="4dp"
-    app:cardUseCompatPadding="true"
-    android:elevation="4dp"
-    android:layout_height="150dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false">
+    android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/history_linear_layout_one"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <include layout="@layout/appointment_booking_content"/>
 
-            <TextView
-                android:id="@+id/appointment_title"
-                android:textColor="@color/orange_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/divider_bottom"
-                android:text="@string/appointment_title" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:elevation="3dp"
+        app:srcCompat="@drawable/ic_send" />
 
-            <TextView
-                android:id="@+id/appointment_description"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="always"
-                android:text="@string/appointment_description" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/history_linear_layout_two"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:background="@drawable/divider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/history_linear_layout_one"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/appointment_status_content_desc"
-                android:layout_margin="@dimen/appointment_container_image_margin"
-                app:srcCompat="@drawable/ic_status" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/appointment_edit_content_desc"
-                app:srcCompat="@drawable/ic_edit" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:contentDescription="@string/appointment_delete_content_desc"
-                app:srcCompat="@drawable/ic_delete" />
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
