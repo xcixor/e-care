@@ -24,7 +24,6 @@ public class MedicalAppointmentModel implements Parcelable {
         mSpecialization = source.readString();
         long tmpDate = source.readLong();
         mDate = tmpDate == -1 ? null : new Date(tmpDate);
-//        mDate = source.
     }
 
     public String getDoctor() {
