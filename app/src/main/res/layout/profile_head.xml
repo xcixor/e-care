@@ -21,9 +21,11 @@
         android:text="@string/profile_username"
         android:textColor="#fff"
         android:layout_height="wrap_content"/>
+
     <TextView
+        android:id="@+id/profile_profession"
         android:layout_width="wrap_content"
-        android:textColor="#fff"
+        android:layout_height="wrap_content"
         android:text="@string/profile_profession"
-        android:layout_height="wrap_content"/>
+        android:textColor="#fff" />
 </LinearLayout>

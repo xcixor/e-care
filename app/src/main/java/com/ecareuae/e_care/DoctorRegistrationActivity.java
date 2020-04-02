@@ -29,7 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ecareuae.e_care.models.User;
+import com.ecareuae.e_care.models.UserModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -154,7 +154,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
     private void saveDoctor() {
-        User doctor = getDoctor();
+        UserModel doctor = getDoctor();
         if (doctor != null)
 
             getLastLocation();
@@ -175,12 +175,12 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
 //            open another activity
     }
 
-    private User getDoctor() {
+    private UserModel getDoctor() {
         return getDataFromViews();
 
     }
 
-    private User getDataFromViews() {
+    private UserModel getDataFromViews() {
         mFName = mFirstNameET.getText().toString();
         mSurname = mSurnameET.getText().toString();
         mPractice = mPracticeET.getText().toString();
@@ -195,7 +195,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         return validateUserData();
     }
 
-    private User validateUserData() {
+    private UserModel validateUserData() {
 
         if(
             isValidFirstName()
@@ -296,8 +296,8 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
 
-    private User instantiateDoctor() {
-        User doctor = new User(
+    private UserModel instantiateDoctor() {
+        UserModel doctor = new UserModel(
                     this.mFName,
                     this.mSurname,
                     this.mEmail,

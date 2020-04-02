@@ -14,9 +14,7 @@ public class HistoryViewModel extends ViewModel {
     private AppointmentsRepository mRepository;
     private MutableLiveData<MedicalAppointmentModel> mLiveAppointment;
 
-    public HistoryViewModel() {
-
-    }
+    public HistoryViewModel() {}
 
     public void init(){
         if (mRepository != null){

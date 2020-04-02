@@ -3,7 +3,7 @@ package com.ecareuae.e_care.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable {
+public class UserModel implements Parcelable {
     private String firstName;
     private String surName;
     private String practice;
@@ -18,7 +18,7 @@ public class User implements Parcelable {
     private boolean isDoctor;
     private String mUserImageName;
 
-    public User(String firstName, String surName, String email, String gender, boolean isDoctor)
+    public UserModel(String firstName, String surName, String email, String gender, boolean isDoctor)
     {
         this.firstName = firstName;
         this.surName = surName;
@@ -27,7 +27,7 @@ public class User implements Parcelable {
         this.isDoctor = isDoctor;
     }
 
-    private User(Parcel in){
+    private UserModel(Parcel in){
         firstName = in.readString();
         surName = in.readString();
         email = in.readString();
@@ -113,7 +113,7 @@ public class User implements Parcelable {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserModel{" +
                 "firstName='" + firstName + '\'' +
                 ", surName='" + surName + '\'' +
                 ", practice='" + practice + '\'' +
@@ -146,17 +146,17 @@ public class User implements Parcelable {
         parcel.writeInt(isDoctor ? 1 : 0);
     }
 
-    public final static Parcelable.Creator<User> CREATOR =
-            new Parcelable.Creator<User>(){
+    public final static Parcelable.Creator<UserModel> CREATOR =
+            new Parcelable.Creator<UserModel>(){
 
                 @Override
-                public User createFromParcel(Parcel parcel) {
-                    return new User(parcel);
+                public UserModel createFromParcel(Parcel parcel) {
+                    return new UserModel(parcel);
                 }
 
                 @Override
-                public User[] newArray(int i) {
-                    return new User[i];
+                public UserModel[] newArray(int i) {
+                    return new UserModel[i];
                 }
             };
 }

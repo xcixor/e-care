@@ -4,16 +4,29 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.UserRepository;
+
+import java.util.List;
+
 public class ProfileViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private UserRepository mRepository;
+    private List<UserModel> mUsers;
 
     public ProfileViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is profile fragment");
+        if (mRepository != null){
+            return;
+        }
+        mRepository = UserRepository.getInstance();
+        mUsers = mRepository.getUsers();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<UserModel> getUsers(){
+        return mUsers;
+    }
+
+    public UserModel getUserByEmail(String email){
+        return mRepository.getUserByEmail(email);
     }
 }

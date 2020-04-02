@@ -31,7 +31,7 @@ import com.ecareuae.e_care.CustomInfoWindowAdapter;
 import com.ecareuae.e_care.FirebaseUtil;
 import com.ecareuae.e_care.MarkerInfo;
 import com.ecareuae.e_care.R;
-import com.ecareuae.e_care.models.User;
+import com.ecareuae.e_care.models.UserModel;
 import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements
     private ImageView mGpsLocater;
     private ArrayList<LatLng> mPlaces;
     private DatabaseReference mDatabaseReference;
-    private ArrayList<User> mUsers;
+    private ArrayList<UserModel> mUserModels;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment implements
         for (int i = 0; i < mPlaces.size(); i++){
             MarkerInfo markerInfo = new MarkerInfo();
 //            UserLocation userLocation = mPlaces.get(i);
-//            User user = getLocationUser(userLocation.getUserId());
+//            UserModel user = getLocationUser(userLocation.getUserId());
             markerInfo.setName("Rajesh");
 //            change below to address once u get it
             markerInfo.setAddress("Green Oaks Clinic");
@@ -210,15 +210,15 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private User getLocationUser(String userId) {
+    private UserModel getLocationUser(String userId) {
         DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
 
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers = new ArrayList<>();
-                User user = dataSnapshot.getValue(User.class);
-                mUsers.add(user);
+                mUserModels = new ArrayList<>();
+                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                mUserModels.add(userModel);
             }
 
             @Override
@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment implements
 
             }
         });
-        return mUsers.get(0);
+        return mUserModels.get(0);
     }
 
     public boolean isServiceOk(){
