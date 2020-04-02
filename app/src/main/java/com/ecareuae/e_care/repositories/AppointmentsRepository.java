@@ -1,5 +1,7 @@
 package com.ecareuae.e_care.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.ecareuae.e_care.models.MedicalAppointment;
@@ -15,6 +17,7 @@ import java.util.List;
 public class AppointmentsRepository {
 //    build functionality/access points for accessing data source
 //    eg web service or db
+    private static String TAG = "AppointmentsRepository";
     private static AppointmentsRepository sAppointmentsRepositoryInstance;
     private ArrayList<MedicalAppointment> mAppointments = new ArrayList<>();
 
@@ -25,22 +28,15 @@ public class AppointmentsRepository {
     }
 
 //    pretending to get data online
-    public MutableLiveData<List<MedicalAppointment>> getAppointments(){
+    public List<MedicalAppointment> getAppointments(){
 //        fetch data here
         setDummyAppointments();
-        MutableLiveData<List<MedicalAppointment>> dataSet = new MutableLiveData<>();
-        dataSet.setValue(mAppointments);
-        return dataSet;
+        return mAppointments;
     }
 
-//    public MutableLiveData<MedicalAppointment> getAppointment(int position){
-//        MedicalAppointment appointment = mAppointments.get(position);
-//        MutableLiveData<MedicalAppointment> appointmentMutableLiveData = new MutableLiveData<>();
-//        appointmentMutableLiveData.setValue(appointment);
-//        return appointmentMutableLiveData;
-//    }
 
     public MedicalAppointment getAppointment(int position){
+        Log.d(TAG, "getAppointment: position is "+ position);
         MedicalAppointment appointment = mAppointments.get(position);
         return appointment;
     }
@@ -49,22 +45,22 @@ public class AppointmentsRepository {
         mAppointments.add(new MedicalAppointment(
                 "Dr. Rajesh",
                 new Date(),
-                "Hi doc, my dick hurts, I'm peeing blood and its oozing a yellow liquid")
+                "Hi doc, I would like to have plastic surgery please advise")
         );
         mAppointments.add(new MedicalAppointment(
                 "Dr. Zainab",
                 new Date(),
-                "Hi doc, I missed my periods can i see you?")
+                "Hello, can i see you about a troubling appendix..")
         );
         mAppointments.add(new MedicalAppointment(
                 "Dr. Akipeteshi",
                 new Date(),
-                "Hi doc, you are a moron, the last time i came to you for help you asked sex as payement, you are a pest and a shame and blight to this stupidly religious but rich arabic country that has suprisingly rich architecture but questionable morals")
+                "I would like to see you on the mentioned date for a colonoscopy")
         );
         mAppointments.add(new MedicalAppointment(
                 "Dr. Rajesh",
                 new Date(),
-                "Hi go fuck yourself")
+                "My child has a fever, can I see you then for a check up?!")
         );
         mAppointments.add(new MedicalAppointment(
                 "Dr. Nina",
@@ -73,4 +69,12 @@ public class AppointmentsRepository {
         );
     }
 
+    public boolean removeAppointment(int position) {
+        MedicalAppointment appointment = getAppointment(position);
+        if (mAppointments.contains(appointment)) {
+            mAppointments.remove(position);
+            return true;
+        }
+        return false;
+    }
 }

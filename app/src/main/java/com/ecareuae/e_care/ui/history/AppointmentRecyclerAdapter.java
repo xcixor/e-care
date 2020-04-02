@@ -56,13 +56,6 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-//        final MedicalAppointment appointment = mViewModel.getMedicalAppointment(position);
-//        return  appointment.type();
-    }
-
-    @Override
     public int getItemCount() {
         return mAppointments.size();
     }

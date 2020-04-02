@@ -22,7 +22,7 @@ import com.ecareuae.e_care.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryFragment extends Fragment implements View.OnClickListener, AppointmentRecyclerAdapter.OnAppointmentListener {
+public class HistoryFragment extends Fragment implements AppointmentRecyclerAdapter.OnAppointmentListener {
 
     private static String TAG = "HistoryFragment";
     private HistoryViewModel mHistoryViewModel;
@@ -38,12 +38,6 @@ public class HistoryFragment extends Fragment implements View.OnClickListener, A
         mRoot = inflater.inflate(R.layout.fragment_history, container, false);
 
         mHistoryViewModel.init();
-        mHistoryViewModel.getMedicalAppointments().observe(getViewLifecycleOwner(), new Observer<List<MedicalAppointment>>() {
-            @Override
-            public void onChanged(List<MedicalAppointment> medicalAppointments) {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
         initializeViews();
         initializeAppointments();
         return mRoot;
@@ -55,7 +49,7 @@ public class HistoryFragment extends Fragment implements View.OnClickListener, A
 
 
     private void initializeAppointments(){
-        mAdapter = new AppointmentRecyclerAdapter(getContext(), mHistoryViewModel.getMedicalAppointments().getValue(), this);
+        mAdapter = new AppointmentRecyclerAdapter(getContext(), mHistoryViewModel.getMedicalAppointments(), this);
         mAppointmentsLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerAppointments.setLayoutManager(mAppointmentsLayoutManager);
         mRecyclerAppointments.setAdapter(mAdapter);
@@ -66,23 +60,6 @@ public class HistoryFragment extends Fragment implements View.OnClickListener, A
         return null;
     }
 
-    @Override
-    public void onClick(View view) {
-        Log.d(TAG, "onClick: switching!");
-        switch (view.getId()){
-            case R.id.ic_appointment_edit:
-                openEditAppointmentScren();
-                break;
-            case R.id.ic_appointment_delete:
-                deleteAppointment();
-                break;
-            default: break;
-        }
-    }
-
-    private void deleteAppointment() {
-        Toast.makeText(getContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-    }
 
     private void openEditAppointmentScren() {
         Toast.makeText(getContext(), "Edited!", Toast.LENGTH_SHORT).show();
@@ -95,8 +72,10 @@ public class HistoryFragment extends Fragment implements View.OnClickListener, A
 
     @Override
     public void onDeleteIconClick(int position) {
-        Log.d(TAG, "onDeleteClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
-
+        if (mHistoryViewModel.removeAppointment(position)) {
+            mAdapter.notifyDataSetChanged();
+            Toast.makeText(getContext(), "Appointment Deleted!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HistoryViewModel extends ViewModel {
 
-    private MutableLiveData<List<MedicalAppointment>> mMutableLiveAppointments;
+    private List<MedicalAppointment> mMutableLiveAppointments;
     private AppointmentsRepository mRepository;
     private MutableLiveData<MedicalAppointment> mLiveAppointment;
 
@@ -28,16 +28,15 @@ public class HistoryViewModel extends ViewModel {
         mMutableLiveAppointments = mRepository.getAppointments();
     }
 
-    public LiveData<List<MedicalAppointment>> getMedicalAppointments(){
+    public List<MedicalAppointment> getMedicalAppointments(){
         return mMutableLiveAppointments;
     }
-
-//    public LiveData<MedicalAppointment> getMedicalAppointment(int position){
-//        return mLiveAppointment = mRepository.getAppointment(position);
-//    }
 
     public MedicalAppointment getMedicalAppointment(int position){
         return mRepository.getAppointment(position);
     }
 
+    public boolean removeAppointment(int position) {
+        return mRepository.removeAppointment(position);
+    }
 }
