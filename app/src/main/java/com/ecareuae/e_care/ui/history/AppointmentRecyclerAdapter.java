@@ -5,6 +5,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,12 +23,17 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     private final LayoutInflater mInflater;
     private final List<MedicalAppointment> mAppointments;
     private OnAppointmentListener mOnAppointmentListener;
+    private HistoryViewModel mViewModel;
+    public ImageView mDeleteIcon;
+    private ImageView mEditIcon;
+
 
     public AppointmentRecyclerAdapter(Context context, List<MedicalAppointment> appointments, OnAppointmentListener onAppointmentListener) {
         mContext = context;
         mAppointments = appointments;
         mInflater = LayoutInflater.from(mContext);
         this.mOnAppointmentListener = onAppointmentListener;
+        mViewModel = new HistoryViewModel();
     }
 
     @NonNull
@@ -50,6 +56,13 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+//        final MedicalAppointment appointment = mViewModel.getMedicalAppointment(position);
+//        return  appointment.type();
+    }
+
+    @Override
     public int getItemCount() {
         return mAppointments.size();
     }
@@ -69,15 +82,32 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
             mTvDate = itemView.findViewById(R.id.appointment_date);
             this.mAppointmentListener = onAppointmentListener;
             itemView.setOnClickListener(this);
+            mDeleteIcon = itemView.findViewById(R.id.ic_appointment_delete);
+            mDeleteIcon.setOnClickListener(this);
+            mEditIcon = itemView.findViewById(R.id.ic_appointment_edit);
+            mEditIcon.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            mAppointmentListener.onAppointmentClicked(getAdapterPosition());
+            switch (view.getId()){
+                case R.id.appointment:
+                    mAppointmentListener.onAppointmentClicked(getAdapterPosition());
+                    break;
+                case R.id.ic_appointment_delete:
+                    mAppointmentListener.onDeleteIconClick(getAdapterPosition());
+                    break;
+                case R.id.ic_appointment_edit:
+                    mAppointmentListener.onEditIconClick(getAdapterPosition());
+                    break;
+                default: break;
+            }
         }
     }
 
     public interface OnAppointmentListener{
         void onAppointmentClicked(int position);
+        void onDeleteIconClick(int position);
+        void onEditIconClick(int position);
     }
 }

@@ -90,6 +90,17 @@ public class HistoryFragment extends Fragment implements View.OnClickListener, A
 
     @Override
     public void onAppointmentClicked(int position) {
-        Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getValue().getDoctor());
+        Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDoctor());
+    }
+
+    @Override
+    public void onDeleteIconClick(int position) {
+        Log.d(TAG, "onDeleteClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
+
+    }
+
+    @Override
+    public void onEditIconClick(int position) {
+        Log.d(TAG, "onEditClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
     }
 }

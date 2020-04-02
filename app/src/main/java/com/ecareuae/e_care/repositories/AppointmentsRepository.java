@@ -33,11 +33,16 @@ public class AppointmentsRepository {
         return dataSet;
     }
 
-    public MutableLiveData<MedicalAppointment> getAppointment(int position){
+//    public MutableLiveData<MedicalAppointment> getAppointment(int position){
+//        MedicalAppointment appointment = mAppointments.get(position);
+//        MutableLiveData<MedicalAppointment> appointmentMutableLiveData = new MutableLiveData<>();
+//        appointmentMutableLiveData.setValue(appointment);
+//        return appointmentMutableLiveData;
+//    }
+
+    public MedicalAppointment getAppointment(int position){
         MedicalAppointment appointment = mAppointments.get(position);
-        MutableLiveData<MedicalAppointment> appointmentMutableLiveData = new MutableLiveData<>();
-        appointmentMutableLiveData.setValue(appointment);
-        return appointmentMutableLiveData;
+        return appointment;
     }
 
     public void setDummyAppointments(){

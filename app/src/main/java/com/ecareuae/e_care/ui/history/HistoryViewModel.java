@@ -32,8 +32,12 @@ public class HistoryViewModel extends ViewModel {
         return mMutableLiveAppointments;
     }
 
-    public LiveData<MedicalAppointment> getMedicalAppointment(int position){
-        return mLiveAppointment = mRepository.getAppointment(position);
+//    public LiveData<MedicalAppointment> getMedicalAppointment(int position){
+//        return mLiveAppointment = mRepository.getAppointment(position);
+//    }
+
+    public MedicalAppointment getMedicalAppointment(int position){
+        return mRepository.getAppointment(position);
     }
 
 }
