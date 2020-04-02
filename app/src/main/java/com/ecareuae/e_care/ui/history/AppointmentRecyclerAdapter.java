@@ -13,31 +13,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ecareuae.e_care.models.MedicalAppointment;
 import com.ecareuae.e_care.R;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<AppointmentRecyclerAdapter.ViewHolder>{
+    private static String TAG = "HistoryFragment";
     private final Context mContext;
     private final LayoutInflater mInflater;
     private final List<MedicalAppointment> mAppointments;
+    private OnAppointmentListener mOnAppointmentListener;
 
-    public AppointmentRecyclerAdapter(Context context, List<MedicalAppointment> appointments) {
+    public AppointmentRecyclerAdapter(Context context, List<MedicalAppointment> appointments, OnAppointmentListener onAppointmentListener) {
         mContext = context;
         mAppointments = appointments;
         mInflater = LayoutInflater.from(mContext);
+        this.mOnAppointmentListener = onAppointmentListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.appointment_container, parent, false);
-        return new ViewHolder(itemView);
+        View itemView = mInflater.inflate(R.layout.appointment_item_container, parent, false);
+        return new ViewHolder(itemView, mOnAppointmentListener);
     }
 
     @Override
@@ -57,18 +54,30 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
         return mAppointments.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mTvTitle;
         public final TextView mTvDescription;
         private final TextView mTvDate;
+        public OnAppointmentListener mAppointmentListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnAppointmentListener onAppointmentListener) {
             super(itemView);
             mTvTitle = itemView.findViewById(R.id.appointment_title);
             mTvDescription = itemView.findViewById(R.id.appointment_description);
             mTvDescription.setMovementMethod(new ScrollingMovementMethod());
             mTvDate = itemView.findViewById(R.id.appointment_date);
+            this.mAppointmentListener = onAppointmentListener;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            mAppointmentListener.onAppointmentClicked(getAdapterPosition());
+        }
+    }
+
+    public interface OnAppointmentListener{
+        void onAppointmentClicked(int position);
     }
 }

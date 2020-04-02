@@ -14,6 +14,7 @@ public class HistoryViewModel extends ViewModel {
 
     private MutableLiveData<List<MedicalAppointment>> mMutableLiveAppointments;
     private AppointmentsRepository mRepository;
+    private MutableLiveData<MedicalAppointment> mLiveAppointment;
 
     public HistoryViewModel() {
 
@@ -29,6 +30,10 @@ public class HistoryViewModel extends ViewModel {
 
     public LiveData<List<MedicalAppointment>> getMedicalAppointments(){
         return mMutableLiveAppointments;
+    }
+
+    public LiveData<MedicalAppointment> getMedicalAppointment(int position){
+        return mLiveAppointment = mRepository.getAppointment(position);
     }
 
 }

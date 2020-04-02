@@ -5,6 +5,8 @@
     app:cardCornerRadius="4dp"
     app:contentPadding="4dp"
     app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
     android:elevation="4dp"
     android:layout_height="150dp">
 <LinearLayout
@@ -62,18 +64,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/ic_appointment_edit"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:contentDescription="@string/appointment_edit_content_desc"
             app:srcCompat="@drawable/ic_edit" />
 
         <ImageView
+            android:id="@+id/ic_appointment_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="10dp"
+            android:layout_weight="1"
             android:contentDescription="@string/appointment_delete_content_desc"
             app:srcCompat="@drawable/ic_delete" />
     </LinearLayout>
