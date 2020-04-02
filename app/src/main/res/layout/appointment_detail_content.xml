@@ -7,6 +7,7 @@
 
     <TextView
         android:id="@+id/tv_appointment_detail_doctor"
+        android:textColor="@color/orange_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/ev_appointment_doctor_s_name_msg"
@@ -15,24 +16,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_appointment_detail_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/appointment_date"
-        app:layout_constraintEnd_toEndOf="@id/tv_appointment_detail_doctor"
-        app:layout_constraintStart_toStartOf="@id/tv_appointment_detail_doctor"
-        app:layout_constraintTop_toBottomOf="@id/tv_appointment_detail_doctor" />
-
-    <TextView
         android:id="@+id/select_date_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textStyle="bold"
         android:text="@string/select_new_date"
-        app:layout_constraintEnd_toEndOf="@id/tv_appointment_detail_date"
-        app:layout_constraintStart_toStartOf="@id/tv_appointment_detail_date"
-        app:layout_constraintTop_toBottomOf="@id/tv_appointment_detail_date" />
+        app:layout_constraintEnd_toEndOf="@id/tv_appointment_detail_doctor"
+        app:layout_constraintStart_toStartOf="@id/tv_appointment_detail_doctor"
+        app:layout_constraintTop_toBottomOf="@id/tv_appointment_detail_doctor" />
 
     <CalendarView
         android:id="@+id/select_date"

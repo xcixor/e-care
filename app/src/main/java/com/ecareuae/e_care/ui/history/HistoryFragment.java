@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.R;
-import com.ecareuae.e_care.ui.tools.ToolsFragment;
+import com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     private void openEditScreen(int position){
         MedicalAppointmentModel appointment = mHistoryViewModel.getMedicalAppointment(position);
         if (appointment != null){
-            Fragment frag = new ToolsFragment();
+            Fragment frag = new AppointmentEditFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable("key", appointment);
             frag.setArguments(bundle);
@@ -74,7 +74,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
             ft.addToBackStack(null);
             ft.commit();
         }
-//        Fragment frag = new ToolsFragment();
+//        Fragment frag = new AppointmentEditFragment();
 //        FragmentTransaction ft = getFragmentManager().beginTransaction();
 //        ft.replace(this.getId(), frag);
 //        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
