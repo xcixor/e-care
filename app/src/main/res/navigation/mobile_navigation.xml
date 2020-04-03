@@ -35,11 +35,10 @@
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_history" />
 
-    <fragment
-        android:id="@+id/nav_logout"
-        android:name="com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment"
-        android:label="@string/menu_logout"
-        tools:layout="@layout/fragment_book_appointment" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_logout"-->
+<!--        android:label="@string/menu_logout"-->
+<!--        android:name="com.ecareuae.e_care.ui.logout.LogoutFragment"/>-->
 
     <fragment
         android:id="@+id/user_selection"

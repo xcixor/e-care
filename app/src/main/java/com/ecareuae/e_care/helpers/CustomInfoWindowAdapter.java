@@ -1,10 +1,11 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.helpers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;

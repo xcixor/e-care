@@ -28,12 +28,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.ecareuae.e_care.CustomTextWatcher;
-import com.ecareuae.e_care.FirebaseUtil;
+import com.ecareuae.e_care.helpers.CustomTextWatcher;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.ui.login.LoginFragment;
 import com.ecareuae.e_care.utils.ValidationUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -45,6 +47,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,7 +60,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 //import static android.app.Activity.RESULT_OK;
 
 public class DoctorRegistrationFragment extends Fragment {
-
+    private static String TAG = "DoctorRegistrationFragment";
     private Button mRegister;
     private TextInputEditText mFirstNameET;
     private EditText mSurnameET, mPracticeET;
@@ -78,6 +82,7 @@ public class DoctorRegistrationFragment extends Fragment {
     private final int PICK_IMAGE_REQUEST = 71;
     private TextView mUploadPhoto;
     private Transformation transformation;
+    private FirebaseAuth mAuth;
 
     private View mRoot;
 
@@ -88,6 +93,7 @@ public class DoctorRegistrationFragment extends Fragment {
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 
+        mAuth = FirebaseAuth.getInstance();
         instantiateLayouts();
         instantiateViews();
         addTextChangedListeners();
@@ -179,7 +185,7 @@ public class DoctorRegistrationFragment extends Fragment {
             doctor.setUserImageName(mUserImageName);
 
         Log.d("doc", doctor.toString());
-
+        saveToAuth(doctor.getEmail(), doctor.getPassword());
         DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
         mSavedDoctorId = docRef.getKey();
         docRef.setValue(doctor);
@@ -187,6 +193,37 @@ public class DoctorRegistrationFragment extends Fragment {
         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
 
 //            open another activity
+    }
+
+    private void saveToAuth(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "New user registration: " + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Fragment fragment = new DoctorRegistrationFragment();
+                            switchFragments(fragment);
+                            toastMessage("Authentication failed. " + task.getException());
+                        } else {
+                            Fragment fragment = new LoginFragment();
+                            switchFragments(fragment);
+                        }
+                    }
+                });
+    }
+
+    private void switchFragments(Fragment fragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(this.getId(), fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private UserModel getDoctor() {

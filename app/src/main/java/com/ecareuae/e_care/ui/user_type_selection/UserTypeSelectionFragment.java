@@ -1,13 +1,9 @@
 package com.ecareuae.e_care.ui.user_type_selection;
 
-import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
@@ -16,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ecareuae.e_care.DoctorRegistrationActivity;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment;
 import com.ecareuae.e_care.ui.normal_normal_user.NormalUserRegistrationFragment;

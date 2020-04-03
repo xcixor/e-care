@@ -27,8 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ecareuae.e_care.CustomInfoWindowAdapter;
-import com.ecareuae.e_care.FirebaseUtil;
+import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.UserLocationModel;
