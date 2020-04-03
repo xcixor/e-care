@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.ecareuae.e_care.ui.user_type_selection.UserTypeSelectionFragment;
@@ -54,11 +55,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (user != null){
                     Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
                     toastMessage("Welcome @" + user.getEmail());
+                    ((MainActivity)getActivity()).toggleMenutItems();
                     Fragment fragment = new ProfileFragment();
                     switchFragments(fragment);
                 }else{
                     Log.d(TAG, "onAuthStateChanged: signed out");
-                    toastMessage("Successfully signed out!");
+                    ((MainActivity)getActivity()).toggleMenutItems();
+//                    toastMessage("Successfully signed out!");
                 }
             }
         };

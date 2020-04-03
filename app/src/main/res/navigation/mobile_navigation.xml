@@ -35,11 +35,6 @@
         android:label="@string/menu_profile"
         tools:layout="@layout/fragment_history" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_logout"-->
-<!--        android:label="@string/menu_logout"-->
-<!--        android:name="com.ecareuae.e_care.ui.logout.LogoutFragment"/>-->
-
     <fragment
         android:id="@+id/user_selection"
         android:name="com.ecareuae.e_care.ui.user_type_selection.UserTypeSelectionFragment"

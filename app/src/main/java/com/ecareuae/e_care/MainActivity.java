@@ -1,14 +1,22 @@
 package com.ecareuae.e_care;
 
 import android.app.FragmentManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import com.ecareuae.e_care.ui.home.HomeFragment;
+import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -26,8 +35,16 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
+    private NavigationView mNavigationView;
+    private NavController mNavController;
+    private FirebaseUser mCurrentUser;
+    private DrawerLayout mDrawer;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private boolean mShowVisible=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,27 +53,57 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            logout();
-            return true;
-        });
+        mDrawer = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+
+
+        addLogoutFunctionality();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_login, R.id.nav_history,
                 R.id.nav_tools, R.id.nav_profile, R.id.nav_logout)
-                .setDrawerLayout(drawer)
+                .setDrawerLayout(mDrawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(mNavigationView, mNavController);
+        toggleMenutItems();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.invalidateOptionsMenu();
+        }
     }
 
-    private void logout() {
-        mAuth.signOut();
+    public void toggleMenutItems() {
+        mCurrentUser = mAuth.getCurrentUser();
+        Menu nav_Menu = mNavigationView.getMenu();
+        if (mCurrentUser == null){
+//            logged out
+            nav_Menu.findItem(R.id.nav_login).setVisible(true);
+            nav_Menu.findItem(R.id.nav_history).setVisible(false);
+            nav_Menu.findItem(R.id.nav_profile).setVisible(false);
+            nav_Menu.findItem(R.id.nav_logout).setVisible(false);
+
+        }else{
+            nav_Menu.findItem(R.id.nav_login).setVisible(false);
+            nav_Menu.findItem(R.id.nav_history).setVisible(true);
+            nav_Menu.findItem(R.id.nav_profile).setVisible(true);
+            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+        }
+
     }
+
+
+    private void addLogoutFunctionality() {
+        mNavigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
+            mDrawer.closeDrawer(GravityCompat.START, false);
+            mAuth.signOut();
+            toggleMenutItems();
+            return true;
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,4 +131,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+//
+//    @Override
+//    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//        Menu nav_Menu = mNavigationView.getMenu();
+//        if (mCurrentUser != null){
+//            nav_Menu.findItem(R.id.nav_login).setVisible(false);
+//            nav_Menu.findItem(R.id.nav_history).setVisible(true);
+//            nav_Menu.findItem(R.id.nav_profile).setVisible(true);
+//            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+//        }else{
+//            nav_Menu.findItem(R.id.nav_login).setVisible(false);
+//            nav_Menu.findItem(R.id.nav_history).setVisible(true);
+//            nav_Menu.findItem(R.id.nav_profile).setVisible(true);
+//            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+//            Log.d(TAG, "onAuthStateChanged: signed out");
+////                    ((MainActivity)getActivity()).toggleMenutItems();
+////                    toastMessage("Successfully signed out!");
+//        }
+//    }
 }
