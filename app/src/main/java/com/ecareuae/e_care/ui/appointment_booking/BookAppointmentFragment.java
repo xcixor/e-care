@@ -50,7 +50,6 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
         if(null != bundle) {
             mDoctor = bundle.getParcelable("key");
             mAppointmentDoctor.setText("Dr. " + mDoctor.getSurName() + " : " + mDoctor.getSpecialization());
-//            createAppointment(mDoctor);
         }
         return mRoot;
     }
