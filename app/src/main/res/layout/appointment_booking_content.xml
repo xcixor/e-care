@@ -21,22 +21,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:text="@string/ev_appointment_doctor_s_name_msg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_appointment_specialization"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/ev_appointment_specialization_msg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_appointment_doctor"
-            app:layout_constraintTop_toBottomOf="parent" />
 
     </LinearLayout>
 
@@ -49,7 +37,6 @@
         android:text="@string/ev_appointment_heading_msg"
         android:textSize="@dimen/medium_heading_txt_size"
         android:textStyle="bold"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/doctor_details"
         app:layout_constraintStart_toStartOf="@+id/doctor_details"
         app:layout_constraintTop_toBottomOf="@+id/doctor_details" />

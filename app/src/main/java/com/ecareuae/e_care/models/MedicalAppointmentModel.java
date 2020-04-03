@@ -50,6 +50,14 @@ public class MedicalAppointmentModel implements Parcelable {
         mMessage = message;
     }
 
+    public String getSpecialization() {
+        return mSpecialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        mSpecialization = specialization;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -76,4 +84,14 @@ public class MedicalAppointmentModel implements Parcelable {
                     return new MedicalAppointmentModel[size];
                 }
             };
+
+    @Override
+    public String toString() {
+        return "MedicalAppointmentModel{" +
+                "mDoctor='" + mDoctor + '\'' +
+                ", mDate=" + mDate +
+                ", mMessage='" + mMessage + '\'' +
+                ", mSpecialization='" + mSpecialization + '\'' +
+                '}';
+    }
 }

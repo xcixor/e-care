@@ -1,24 +1,22 @@
 package com.ecareuae.e_care.ui.profile;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ecareuae.e_care.models.UserModel;
-import com.ecareuae.e_care.repositories.UserRepository;
+import com.ecareuae.e_care.repositories.UsersRepository;
 
 import java.util.List;
 
 public class ProfileViewModel extends ViewModel {
 
-    private UserRepository mRepository;
+    private UsersRepository mRepository;
     private List<UserModel> mUsers;
 
     public ProfileViewModel() {
         if (mRepository != null){
             return;
         }
-        mRepository = UserRepository.getInstance();
+        mRepository = UsersRepository.getInstance();
         mUsers = mRepository.getUsers();
     }
 

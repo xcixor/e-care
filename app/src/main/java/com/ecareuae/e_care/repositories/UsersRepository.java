@@ -5,15 +5,15 @@ import com.ecareuae.e_care.models.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepository {
+public class UsersRepository {
     private static String TAG = "AppointmentsRepository";
-    private static UserRepository sUserRepositoryInstance;
+    private static UsersRepository sUsersRepositoryInstance;
     private ArrayList<UserModel> mUsers = new ArrayList<>();
 
-    public static UserRepository getInstance(){
-        if (sUserRepositoryInstance == null)
-            sUserRepositoryInstance = new UserRepository();
-        return sUserRepositoryInstance;
+    public static UsersRepository getInstance(){
+        if (sUsersRepositoryInstance == null)
+            sUsersRepositoryInstance = new UsersRepository();
+        return sUsersRepositoryInstance;
     }
 
 //    get all users
@@ -45,6 +45,13 @@ public class UserRepository {
                 "Rajesh",
                 "dr@rajesh.com",
                 "male",
+                true
+        ));
+        mUsers.add(new UserModel(
+                "Dr",
+                "Zainab",
+                "zainabu@zainab.com",
+                "female",
                 true
         ));
     }

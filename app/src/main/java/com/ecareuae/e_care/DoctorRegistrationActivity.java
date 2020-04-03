@@ -29,7 +29,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.utils.ValidationUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -158,7 +160,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         if (doctor != null)
 
             getLastLocation();
-            UserLocation userLocation = new UserLocation(latitude, longitude);
+            UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, doctor);
 
             doctor.setImageUrl(mUserImagePath);
             doctor.setUserImageName(mUserImageName);
@@ -168,8 +170,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
             DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
             mSavedDoctorId = docRef.getKey();
             docRef.setValue(doctor);
-            userLocation.setUserId(mSavedDoctorId);
-            FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocation);
+            FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
 
 //            open another activity

@@ -29,8 +29,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ecareuae.e_care.CustomInfoWindowAdapter;
 import com.ecareuae.e_care.FirebaseUtil;
-import com.ecareuae.e_care.MarkerInfo;
+import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.models.UserModel;
 import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
 import com.google.android.gms.common.ConnectionResult;
@@ -71,7 +72,7 @@ public class HomeFragment extends Fragment implements
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private EditText mSearchInput;
     private ImageView mGpsLocater;
-    private ArrayList<LatLng> mPlaces;
+    private List<UserLocationModel> mPlaces;
     private DatabaseReference mDatabaseReference;
     private ArrayList<UserModel> mUserModels;
 
@@ -83,10 +84,7 @@ public class HomeFragment extends Fragment implements
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
         mDatabaseReference = FirebaseUtil.getmDatabaseReference();
-        mPlaces = new ArrayList<>();
-
-        instantiateDoctorsLocations();
-
+        mPlaces = homeViewModel.getLocations();
 
         if(isServiceOk()){
             init();
@@ -94,15 +92,15 @@ public class HomeFragment extends Fragment implements
         return root;
     }
     private void instantiateDoctorsLocations() {
-        LatLng latLng1 = new LatLng(-1.281229, 36.834509);
-        LatLng latLng2 = new LatLng(-1.398734, 36.774996);
-        LatLng latLng3 = new LatLng(-1.379428, 36.769717);
-        LatLng latLng4 = new LatLng(-1.395345, 36.753667);
-
-        mPlaces.add(latLng1);
-        mPlaces.add(latLng2);
-        mPlaces.add(latLng3);
-        mPlaces.add(latLng4);
+//        LatLng latLng1 = new LatLng(-1.281229, 36.834509);
+//        LatLng latLng2 = new LatLng(-1.398734, 36.774996);
+//        LatLng latLng3 = new LatLng(-1.379428, 36.769717);
+//        LatLng latLng4 = new LatLng(-1.395345, 36.753667);
+//
+//        mPlaces.add(latLng1);
+//        mPlaces.add(latLng2);
+//        mPlaces.add(latLng3);
+//        mPlaces.add(latLng4);
 
 //        DatabaseReference locations = mDatabaseReference.child("userLocations");
 //        ValueEventListener valueEventListener = new ValueEventListener() {
@@ -190,19 +188,21 @@ public class HomeFragment extends Fragment implements
 
     private void setDoctorsLocations() {
         MarkerOptions markerOptions = new MarkerOptions();
-        for (int i = 0; i < mPlaces.size(); i++){
+        for (UserLocationModel location : mPlaces){
             MarkerInfo markerInfo = new MarkerInfo();
 //            UserLocation userLocation = mPlaces.get(i);
 //            UserModel user = getLocationUser(userLocation.getUserId());
-            markerInfo.setName("Rajesh");
+            Log.d(TAG, "setDoctorsLocations: location info" + location.toString());
+            markerInfo.setName("Dr. " + location.getUser().getSurName());
 //            change below to address once u get it
-            markerInfo.setAddress("Green Oaks Clinic");
-            markerInfo.setMobile("+974 44423296");
-            markerInfo.setUserId("Qwerer45767bxfgh567456vsd");
+            markerInfo.setAddress(location.getUser().getPractice());
+            markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
+            markerInfo.setUserId(location.getUser().getEmail());
+            markerInfo.setUser(location.getUser());
             Gson gson = new Gson();
             String markerInfoString = gson.toJson(markerInfo);
             markerOptions
-                    .position(mPlaces.get(i))
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
                     .snippet(markerInfoString);
             mGoogleMap.addMarker(markerOptions);
             mGoogleMap.setInfoWindowAdapter(
@@ -336,6 +336,9 @@ public class HomeFragment extends Fragment implements
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
 
         Fragment frag = new BookAppointmentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("key", markerInfo.getUser());
+        frag.setArguments(bundle);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(this.getId(), frag);
