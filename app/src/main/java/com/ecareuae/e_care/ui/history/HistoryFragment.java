@@ -32,7 +32,6 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment implements AppointmentRecyclerAdapter.OnAppointmentListener {
 
     private static String TAG = "HistoryFragment";
-//    private HistoryViewModel mHistoryViewModel;
     private View mRoot;
     private RecyclerView mRecyclerAppointments;
     private LinearLayoutManager mAppointmentsLayoutManager;
@@ -46,15 +45,10 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        mHistoryViewModel =
-//                ViewModelProviders.of(this).get(HistoryViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_history, container, false);
-
-//        mHistoryViewModel.init();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         initializeViews();
-//        initializeAppointments();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("appointments");
         Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
@@ -119,7 +113,6 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     @Override
     public void onAppointmentClicked(int position) {
         openEditScreen(position);
-//        Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDoctor());
     }
 
     @Override
@@ -148,6 +141,5 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     @Override
     public void onEditIconClick(int position) {
         openEditScreen(position);
-//        Log.d(TAG, "onEditClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
     }
 }

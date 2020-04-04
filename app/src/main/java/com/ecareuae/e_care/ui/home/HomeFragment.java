@@ -62,7 +62,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements
         OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
 
-    private HomeViewModel homeViewModel;
     public static final String TAG = "HomeFragment";
     public static final int ERROR_DIALOG_REQUEST = 9001;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 200;
@@ -74,14 +73,12 @@ public class HomeFragment extends Fragment implements
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private EditText mSearchInput;
     private ImageView mGpsLocater;
-    private List<UserLocationModel> mPlaces;
+    private ArrayList<UserLocationModel> mPlaces;
     private ArrayList<UserModel> mUserModels;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity)getActivity()).toggleMenutItems();
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
@@ -183,48 +180,28 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private void setDoctorsLocations(List<UserLocationModel> locations) {
+    private void setDoctorsLocations(ArrayList<UserLocationModel> locations) {
         MarkerOptions markerOptions = new MarkerOptions();
         for (UserLocationModel location : locations){
-            MarkerInfo markerInfo = new MarkerInfo();
-//            UserLocation userLocation = mPlaces.get(i);
-//            UserModel user = getLocationUser(userLocation.getUserId());
-            Log.d(TAG, "setDoctorsLocations: location info" + location.toString());
-            markerInfo.setName("Dr. " + location.getUser().getSurName());
-//            change below to address once u get it
-            markerInfo.setAddress(location.getUser().getPractice());
-            markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
-            markerInfo.setUserId(location.getUser().getEmail());
-            markerInfo.setUser(location.getUser());
-            Gson gson = new Gson();
-            String markerInfoString = gson.toJson(markerInfo);
-            markerOptions
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .snippet(markerInfoString);
-            mGoogleMap.addMarker(markerOptions);
-            mGoogleMap.setInfoWindowAdapter(
-                    new CustomInfoWindowAdapter(getContext()));
+            if (location.getUser().isDoctor())
+                Log.d(TAG, "setDoctorsLocations: lats "  + location.getLatitude() + " user " + location.getUser().getEmail());
+                MarkerInfo markerInfo = new MarkerInfo();
+                Log.d(TAG, "setDoctorsLocations: location info" + location.toString());
+                markerInfo.setName("Dr. " + location.getUser().getSurName());
+                markerInfo.setAddress(location.getUser().getPractice());
+                markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
+                markerInfo.setUserId(location.getUser().getEmail());
+                markerInfo.setUser(location.getUser());
+                Gson gson = new Gson();
+                String markerInfoString = gson.toJson(markerInfo);
+                markerOptions
+                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .snippet(markerInfoString);
+                mGoogleMap.addMarker(markerOptions);
+                mGoogleMap.setInfoWindowAdapter(
+                        new CustomInfoWindowAdapter(getContext()));
         }
     }
-
-//    private UserModel getLocationUser(String userId) {
-//        DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
-//
-//        userRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                mUserModels = new ArrayList<>();
-//                UserModel userModel = dataSnapshot.getValue(UserModel.class);
-//                mUserModels.add(userModel);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        return mUserModels.get(0);
-//    }
 
     public boolean isServiceOk(){
         Log.d(TAG, "isServiceOk: checking google services version");

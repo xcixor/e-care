@@ -30,7 +30,6 @@ import java.util.Date;
 
 public class BookAppointmentFragment extends Fragment implements CalendarView.OnDateChangeListener, View.OnClickListener {
 
-    private BookAppointmentViewModel sendViewModel;
     private Calendar mCalendar;
     private CalendarView mCalendarView;
     private UserModel mDoctor;
@@ -44,8 +43,6 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        sendViewModel =
-                ViewModelProviders.of(this).get(BookAppointmentViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_book_appointment, container, false);
         mDate = new Date();
         Bundle bundle = getArguments();

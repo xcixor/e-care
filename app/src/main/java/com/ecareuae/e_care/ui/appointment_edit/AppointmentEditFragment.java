@@ -35,7 +35,6 @@ import java.util.Map;
 public class AppointmentEditFragment extends Fragment implements View.OnClickListener, CalendarView.OnDateChangeListener{
 
     private static String TAG = "AppointmentEditFragment";
-    private AppointmentEditViewModel mAppointmentEditViewModel;
     private MedicalAppointmentModel mAppointment;
     private TextView mHeadline;
     private CalendarView mCalender;
@@ -51,8 +50,6 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mAppointmentEditViewModel =
-                ViewModelProviders.of(this).get(AppointmentEditViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_appointment_edit, container, false);
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
