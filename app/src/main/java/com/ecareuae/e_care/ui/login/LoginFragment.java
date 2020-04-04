@@ -28,7 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private static String TAG = "LoginFragment";
-    private LoginViewModel mLoginViewModel;
     private TextView mRegisterPrompt;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -41,8 +40,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mLoginViewModel =
-                ViewModelProviders.of(this).get(LoginViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_login, container, false);
         instantiateViews();
         mRegisterPrompt.setOnClickListener(this);

@@ -30,7 +30,6 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class ProfileFragment extends Fragment {
 
     private static String TAG = "ProfileFragment";
-    private ProfileViewModel mProfileViewModel;
     private TextView mUsername, mProfession, mFullname, mEmail, mPhone;
     private ImageView mUserImage;
     private UserModel mUser;
@@ -41,8 +40,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity)getActivity()).toggleMenutItems();
-        mProfileViewModel =
-                ViewModelProviders.of(this).get(ProfileViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_profile, container, false);
         instantiateViews();
         Bundle bundle = this.getArguments();
@@ -94,10 +91,6 @@ public class ProfileFragment extends Fragment {
         }else {
             Log.d(TAG, "onDataChange: user not found");
         }
-    }
-
-    private void getUser(String userId) {
-        mUser = mProfileViewModel.getUserById(userId);
     }
 
     private void instantiateViews() {

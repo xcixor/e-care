@@ -19,13 +19,11 @@ import com.ecareuae.e_care.ui.normal_normal_user.NormalUserRegistrationFragment;
 public class UserTypeSelectionFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
     private static final String BACK_STACK_ROOT_TAG = "user_type_selection_fragment";
-    private UserTypeSelectionViewModel mViewModel;
     private RadioGroup mRadioGroup;
     private View mRoot;
     private View mRadioButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mViewModel = new ViewModelProvider(requireActivity()).get(UserTypeSelectionViewModel.class);
         Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
         actionBar.setTitle("User Type Selection");
         mRoot = inflater.inflate(R.layout.fragment_user_type_selection, container, false);

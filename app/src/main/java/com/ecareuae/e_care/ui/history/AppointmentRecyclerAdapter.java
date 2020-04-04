@@ -23,7 +23,6 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     private final LayoutInflater mInflater;
     private final List<MedicalAppointmentModel> mAppointments;
     private OnAppointmentListener mOnAppointmentListener;
-    private HistoryViewModel mViewModel;
     public ImageView mDeleteIcon;
     private ImageView mEditIcon;
 
@@ -33,7 +32,6 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
         mAppointments = appointments;
         mInflater = LayoutInflater.from(mContext);
         this.mOnAppointmentListener = onAppointmentListener;
-        mViewModel = new HistoryViewModel();
     }
 
     @NonNull
