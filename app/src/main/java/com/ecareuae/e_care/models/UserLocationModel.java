@@ -1,14 +1,17 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.models;
 
-public class UserLocation {
+public class UserLocationModel {
     private double mLatitude;
     private double mLongitude;
-    private String mUserId;
+    private UserModel mUser;
 
-    public UserLocation(double latitude, double longitude) {
+    public UserLocationModel(double latitude, double longitude, UserModel user) {
         mLatitude = latitude;
         mLongitude = longitude;
+        mUser = user;
     }
+
+    public UserLocationModel(){}
 
     public double getLatitude() {
         return mLatitude;
@@ -18,12 +21,12 @@ public class UserLocation {
         return mLongitude;
     }
 
-    public String getUserId() {
-        return mUserId;
+    public UserModel getUser() {
+        return mUser;
     }
 
-    public void setUserId(String userId) {
-        mUserId = userId;
+    public void setUser(UserModel user) {
+        mUser = user;
     }
 
     @Override
@@ -31,7 +34,6 @@ public class UserLocation {
         return "UserLocation{" +
                 "mLatitude=" + mLatitude +
                 ", mLongitude=" + mLongitude +
-                ", mUserId='" + mUserId + '\'' +
                 '}';
     }
 }

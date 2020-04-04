@@ -2,28 +2,23 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/appointment_booking_content"/>
 
+        <include layout="@layout/appointment_detail_content" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/send_booking_appointment"
+            android:id="@+id/send_edited_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="@dimen/icon_padding"
-            android:tooltipText="@string/appointment_fab_msg"
+            android:layout_margin="16dp"
+            app:elevation="3dp"
             app:srcCompat="@drawable/ic_send" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

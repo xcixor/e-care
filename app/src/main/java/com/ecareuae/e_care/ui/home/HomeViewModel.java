@@ -4,16 +4,30 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
+import com.ecareuae.e_care.models.UserLocationModel;
+import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.AppointmentsRepository;
+import com.ecareuae.e_care.repositories.LocationsRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private List<UserLocationModel> mLocations;
+    private LocationsRepository mRepository;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        if (mRepository != null){
+            return;
+        }
+        mRepository = LocationsRepository.getInstance();
+        mLocations = mRepository.getLocations();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public List<UserLocationModel> getLocations(){
+        return mLocations;
     }
+
 }

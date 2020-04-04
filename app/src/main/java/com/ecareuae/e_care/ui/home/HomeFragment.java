@@ -27,11 +27,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.ecareuae.e_care.CustomInfoWindowAdapter;
-import com.ecareuae.e_care.FirebaseUtil;
-import com.ecareuae.e_care.MarkerInfo;
+import com.ecareuae.e_care.MainActivity;
+import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
+import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.R;
-import com.ecareuae.e_care.User;
+import com.ecareuae.e_care.models.UserLocationModel;
+import com.ecareuae.e_care.models.UserModel;
 import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -49,6 +51,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -71,55 +74,48 @@ public class HomeFragment extends Fragment implements
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private EditText mSearchInput;
     private ImageView mGpsLocater;
-    private ArrayList<LatLng> mPlaces;
-    private DatabaseReference mDatabaseReference;
-    private ArrayList<User> mUsers;
+    private List<UserLocationModel> mPlaces;
+    private ArrayList<UserModel> mUserModels;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).toggleMenutItems();
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
-        mDatabaseReference = FirebaseUtil.getmDatabaseReference();
-        mPlaces = new ArrayList<>();
-
-        instantiateDoctorsLocations();
-
 
         if(isServiceOk()){
             init();
         }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("userLocations");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                instantiateDoctorsLocations(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return root;
     }
-    private void instantiateDoctorsLocations() {
-        LatLng latLng1 = new LatLng(-1.281229, 36.834509);
-        LatLng latLng2 = new LatLng(-1.398734, 36.774996);
-        LatLng latLng3 = new LatLng(-1.379428, 36.769717);
-        LatLng latLng4 = new LatLng(-1.395345, 36.753667);
 
-        mPlaces.add(latLng1);
-        mPlaces.add(latLng2);
-        mPlaces.add(latLng3);
-        mPlaces.add(latLng4);
-
-//        DatabaseReference locations = mDatabaseReference.child("userLocations");
-//        ValueEventListener valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mPlaces = new ArrayList<>();
-//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    UserLocation location = ds.getValue(UserLocation.class);
-//                    mPlaces.add(location);
-//                }
-//                Log.d(TAG, mPlaces.get(0).toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {}
-//        };
-//        mDatabaseReference.addListenerForSingleValueEvent(valueEventListener);
+    private void instantiateDoctorsLocations(DataSnapshot dataSnapshot) {
+        mPlaces = new ArrayList<>();
+        for (DataSnapshot ds: dataSnapshot.getChildren()){
+            String key = ds.getKey();
+            UserLocationModel location = new UserLocationModel();
+            location = ds.getValue(UserLocationModel.class);
+            mPlaces.add(location);
+        }
+        setDoctorsLocations(mPlaces);
     }
 
     private void init(){
@@ -179,7 +175,6 @@ public class HomeFragment extends Fragment implements
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         mGoogleMap = googleMap;
         mGoogleMap.setOnInfoWindowClickListener(this);
-        setDoctorsLocations();
         if(mMLocationPermissionGranted){
             getDeviceLocation();
             mGoogleMap.setMyLocationEnabled(true);
@@ -188,21 +183,23 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private void setDoctorsLocations() {
+    private void setDoctorsLocations(List<UserLocationModel> locations) {
         MarkerOptions markerOptions = new MarkerOptions();
-        for (int i = 0; i < mPlaces.size(); i++){
+        for (UserLocationModel location : locations){
             MarkerInfo markerInfo = new MarkerInfo();
 //            UserLocation userLocation = mPlaces.get(i);
-//            User user = getLocationUser(userLocation.getUserId());
-            markerInfo.setName("Rajesh");
+//            UserModel user = getLocationUser(userLocation.getUserId());
+            Log.d(TAG, "setDoctorsLocations: location info" + location.toString());
+            markerInfo.setName("Dr. " + location.getUser().getSurName());
 //            change below to address once u get it
-            markerInfo.setAddress("Green Oaks Clinic");
-            markerInfo.setMobile("+974 44423296");
-            markerInfo.setUserId("Qwerer45767bxfgh567456vsd");
+            markerInfo.setAddress(location.getUser().getPractice());
+            markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
+            markerInfo.setUserId(location.getUser().getEmail());
+            markerInfo.setUser(location.getUser());
             Gson gson = new Gson();
             String markerInfoString = gson.toJson(markerInfo);
             markerOptions
-                    .position(mPlaces.get(i))
+                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
                     .snippet(markerInfoString);
             mGoogleMap.addMarker(markerOptions);
             mGoogleMap.setInfoWindowAdapter(
@@ -210,24 +207,24 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private User getLocationUser(String userId) {
-        DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers = new ArrayList<>();
-                User user = dataSnapshot.getValue(User.class);
-                mUsers.add(user);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return mUsers.get(0);
-    }
+//    private UserModel getLocationUser(String userId) {
+//        DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
+//
+//        userRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                mUserModels = new ArrayList<>();
+//                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+//                mUserModels.add(userModel);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        return mUserModels.get(0);
+//    }
 
     public boolean isServiceOk(){
         Log.d(TAG, "isServiceOk: checking google services version");
@@ -336,7 +333,9 @@ public class HomeFragment extends Fragment implements
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
 
         Fragment frag = new BookAppointmentFragment();
-
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("key", markerInfo.getUser());
+        frag.setArguments(bundle);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(this.getId(), frag);
@@ -344,6 +343,5 @@ public class HomeFragment extends Fragment implements
         ft.addToBackStack(null);
         ft.commit();
     }
-
 
 }

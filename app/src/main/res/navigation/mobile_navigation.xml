@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="com.ecareuae.e_care.ui.tools.ToolsFragment"
+        android:name="com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment"
         android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_appointment_edit" />
 
     <fragment
         android:id="@+id/nav_profile"
@@ -36,8 +36,14 @@
         tools:layout="@layout/fragment_history" />
 
     <fragment
-        android:id="@+id/nav_logout"
-        android:name="com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment"
-        android:label="@string/menu_logout"
-        tools:layout="@layout/fragment_book_appointment" />
+        android:id="@+id/user_selection"
+        android:name="com.ecareuae.e_care.ui.user_type_selection.UserTypeSelectionFragment"
+        android:label="User Type Selection"
+        tools:layout="@layout/fragment_user_type_selection"/>
+
+    <fragment
+        android:id="@+id/doctor_registration"
+        android:name="com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment"
+        android:label="Doctor Registration"
+        tools:layout="@layout/fragment_doctor_registration"/>
 </navigation>

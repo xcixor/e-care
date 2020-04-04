@@ -1,10 +1,9 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.helpers;
 
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Patterns;
 
+import com.ecareuae.e_care.utils.ValidationUtil;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.lang.ref.WeakReference;

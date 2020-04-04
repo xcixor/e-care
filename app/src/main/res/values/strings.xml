@@ -19,7 +19,7 @@
     <string name="et_pass_1_placeholder">Password</string>
     <string name="et_pass_2_placeholder">Repeat Password</string>
     <string name="register_button_msg">Register</string>
-    <string name="user_type_select_msg">Select type of user to continue</string>
+    <string name="user_type_select_msg">Select type of userModel to continue</string>
     <string name="doctor_radio_placeholder">Doctor</string>
     <string name="patient_radio_placeholder">Patient</string>
     <string-array name="gender_array">
@@ -50,11 +50,11 @@
     <string name="ev_appointment_specialization_msg">Specialization</string>
     <string name="ev_appointment_heading_msg">Request for Appointment</string>
     <string name="appointment_fab_msg">Confirm Appointment</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_activity_navigation">e-care</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">e-care</string>
+    <string name="nav_header_subtitle">e-care@ecareuae</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -75,4 +75,8 @@
     <string name="appointment_status_content_desc">Appointment Status Icon Content Desc</string>
     <string name="appointment_edit_content_desc">Edit Icon Content Desc</string>
     <string name="appointment_delete_content_desc">Delete Icon Content Desc</string>
+    <string name="appointment_date">Date</string>
+    <string name="submit">Delete Icon</string>
+    <string name="select_new_date">Select new Date</string>
+    <string name="et_profession_placeholder">Profession</string>
 </resources>

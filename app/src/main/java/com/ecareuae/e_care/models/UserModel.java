@@ -1,6 +1,9 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.models;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class UserModel implements Parcelable {
     private String firstName;
     private String surName;
     private String practice;
@@ -14,14 +17,44 @@ public class User {
     private String ID;
     private boolean isDoctor;
     private String mUserImageName;
+    private String mCountryCode;
 
-    public User(String firstName, String surName, String email, String gender, boolean isDoctor)
+
+    public UserModel(String firstName, String surName, String email, String gender, boolean isDoctor)
     {
         this.firstName = firstName;
         this.surName = surName;
         this.email = email;
         this.gender = gender;
         this.isDoctor = isDoctor;
+    }
+
+    public UserModel(){}
+
+    private UserModel(Parcel in){
+        firstName = in.readString();
+        surName = in.readString();
+        email = in.readString();
+        gender = in.readString();
+        isDoctor = in.readInt() == 1;
+        image = in.readString();
+        specialization = in.readString();
+    }
+
+    public boolean isDoctor() {
+        return isDoctor;
+    }
+
+    public void setDoctor(boolean doctor) {
+        isDoctor = doctor;
+    }
+
+    public String getCountryCode() {
+        return mCountryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        mCountryCode = countryCode;
     }
 
     public String getFirstName() {
@@ -64,9 +97,8 @@ public class User {
         return location;
     }
 
-    public void setMobilePhoneNumber(String phoneNumber, String countryCode) {
-        String userNumber = countryCode + phoneNumber;
-        this.mobilePhoneNumber = userNumber;
+    public void setMobilePhoneNumber(String phoneNumber) {
+        this.mobilePhoneNumber = phoneNumber;
     }
 
     public void setPassword(String password){
@@ -86,7 +118,7 @@ public class User {
         this.specialization = specialization;
     }
 
-    public void setImageUrl(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -100,7 +132,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserModel{" +
                 "firstName='" + firstName + '\'' +
                 ", surName='" + surName + '\'' +
                 ", practice='" + practice + '\'' +
@@ -116,4 +148,34 @@ public class User {
                 ", mUserImageName='" + mUserImageName + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(firstName);
+        parcel.writeString(surName);
+        parcel.writeString(email);
+        parcel.writeString(gender);
+        parcel.writeString(image);
+        parcel.writeString(specialization);
+        parcel.writeInt(isDoctor ? 1 : 0);
+    }
+
+    public final static Parcelable.Creator<UserModel> CREATOR =
+            new Parcelable.Creator<UserModel>(){
+
+                @Override
+                public UserModel createFromParcel(Parcel parcel) {
+                    return new UserModel(parcel);
+                }
+
+                @Override
+                public UserModel[] newArray(int i) {
+                    return new UserModel[i];
+                }
+            };
 }

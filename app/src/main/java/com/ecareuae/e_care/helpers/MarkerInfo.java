@@ -1,4 +1,6 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.helpers;
+
+import com.ecareuae.e_care.models.UserModel;
 
 public class MarkerInfo {
     private String mAddress;
@@ -6,6 +8,7 @@ public class MarkerInfo {
     private String mMobile;
     private String mImageUrl;
     private String userId;
+    private UserModel mUser;
 
     public MarkerInfo(){}
 
@@ -47,5 +50,13 @@ public class MarkerInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public UserModel getUser() {
+        return mUser;
+    }
+
+    public void setUser(UserModel user) {
+        mUser = user;
     }
 }

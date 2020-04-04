@@ -1,14 +1,14 @@
-package com.ecareuae.e_care.ui.tools;
+package com.ecareuae.e_care.ui.appointment_edit;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class AppointmentEditViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public AppointmentEditViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is tools fragment");
     }

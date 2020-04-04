@@ -1,4 +1,4 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.ui.normal_normal_user;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,17 +10,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-
-
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +24,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.ecareuae.e_care.helpers.CustomTextWatcher;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
+import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.models.UserLocationModel;
+import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.ui.profile.ProfileFragment;
+import com.ecareuae.e_care.utils.ValidationUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -39,6 +47,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,62 +57,50 @@ import com.squareup.picasso.Transformation;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-public class DoctorRegistrationActivity extends AppCompatActivity {
+//import static android.app.Activity.RESULT_OK;
+
+public class NormalUserRegistrationFragment extends Fragment {
+    private static String TAG = "PatientRegistrationFragment";
     private Button mRegister;
     private TextInputEditText mFirstNameET;
     private EditText mSurnameET;
-    private EditText mPracticeET;
-    private Spinner mCountryCodeSpinnerET;
-    private Spinner mGenderSpinnerET;
-    private EditText mPhoneNumberET;
-    private EditText mEmailET;
-    private EditText mSpecializationET;
-    private EditText mPass1ET;
-    private EditText mPass2ET;
-    private String mFName;
-    private String mSurname;
-    private String mPractice;
-    private String mEmail;
-    private String mSpecialization;
-    private String mPassOne;
-    private String mPassTwo;
-    private String mGender;
-    private String mCountryCode;
-    private String mMobile;
-    private TextInputLayout mFNameLayout;
-    private TextInputLayout mSurnameLayout;
-    private TextInputLayout mEmailLayout;
-    private TextInputLayout mPassOneLayout;
-    private TextInputLayout mPassTwoLayout;
-    private TextInputLayout mPracticeLayout;
-    private TextInputLayout mSpecializationLayout;
+    private Spinner mCountryCodeSpinnerET, mGenderSpinnerET;
+    private EditText mPhoneNumberET, mEmailET, mSpecializationET,
+            mPass1ET, mPass2ET;
+    private String mFName, mSurname,
+            mEmail, mSpecialization, mPassOne, mPassTwo, mGender,
+            mCountryCode, mMobile, mUserImagePath,
+            mUserImageName, mSavedPatientId;
+    private TextInputLayout mFNameLayout, mSurnameLayout, mEmailLayout,
+            mPassOneLayout, mPassTwoLayout,
+            mSpecializationLayout;
     private static final int PERMISSION_ID = 200;
     private FusedLocationProviderClient mFusedLocationClient;
     private double latitude, longitude;
     private ImageView mUserImageView;
     private Uri mImageUri;
-    private String mUserImagePath;
-    private String mUserImageName;
     private final int PICK_IMAGE_REQUEST = 71;
     private TextView mUploadPhoto;
     private Transformation transformation;
-    private String mSavedDoctorId;
+    private FirebaseAuth mAuth;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_doctor_registration);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private View mRoot;
+
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        mRoot = inflater.inflate(R.layout.fragment_normal_user_registration, container, false);
+        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
+        actionBar.setTitle("Patient Registration");
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 
+        mAuth = FirebaseAuth.getInstance();
         instantiateLayouts();
         instantiateViews();
         addTextChangedListeners();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mUserImageView = findViewById(R.id.user_image);
-        mUploadPhoto = findViewById(R.id.tv_upload_photo);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        mUserImageView = mRoot.findViewById(R.id.user_image);
+        mUploadPhoto = mRoot.findViewById(R.id.tv_upload_photo);
+        mRegister = mRoot.findViewById(R.id.register_btn);
 
         mUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,79 +108,126 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
                 selectImage();
             }
         });
-        mRegister = findViewById(R.id.register_btn);
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveDoctor();
+                getPatient();
             }
         });
+
+        return mRoot;
     }
 
+    private void initializeCountryCodesDropdown() {
+        Spinner spinner = mRoot.findViewById(R.id.gender_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.gender_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private void initializeGenderDropdown() {
+        Spinner codeSpinner =  mRoot.findViewById(R.id.number_prefix_spinner);
+        ArrayAdapter<CharSequence> codeAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.country_codes_array, android.R.layout.simple_spinner_item);
+        codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        codeSpinner.setAdapter(codeAdapter);
+    }
 
     private void instantiateLayouts() {
-        this.mFNameLayout = (TextInputLayout) findViewById(R.id.registration_firstname_et_input_layout);
-        this.mSurnameLayout = (TextInputLayout) findViewById(R.id.registration_surname_et_input_layout);
-        this.mEmailLayout = (TextInputLayout) findViewById(R.id.registration_email_et_input_layout);
-        this.mPassOneLayout = (TextInputLayout) findViewById(R.id.registration_password_one_et_input_layout);
-        this.mPassTwoLayout = (TextInputLayout) findViewById(R.id.registration_password_two_et_input_layout);
-        this.mSpecializationLayout = (TextInputLayout) findViewById(R.id.registration_specialization_et_input_layout);
-        this.mPracticeLayout = (TextInputLayout) findViewById(R.id.registration_hospital_et_input_layout);
+        this.mFNameLayout = mRoot.findViewById(R.id.registration_firstname_et_input_layout);
+        this.mSurnameLayout = mRoot.findViewById(R.id.registration_surname_et_input_layout);
+        this.mEmailLayout = mRoot.findViewById(R.id.registration_email_et_input_layout);
+        this.mPassOneLayout = mRoot.findViewById(R.id.registration_password_one_et_input_layout);
+        this.mPassTwoLayout = mRoot.findViewById(R.id.registration_password_two_et_input_layout);
+        this.mSpecializationLayout = mRoot.findViewById(R.id.registration_specialization_et_input_layout);
     }
 
     private void instantiateViews() {
-        mFirstNameET = (TextInputEditText) findViewById(R.id.et_first_name);
-        mSurnameET = (EditText) findViewById(R.id.et_surname);
-        mPracticeET = (EditText) findViewById(R.id.et_hospital);
-        mCountryCodeSpinnerET = (Spinner) findViewById(R.id.number_prefix_spinner);
-        mGenderSpinnerET = (Spinner) findViewById(R.id.gender_spinner);
-        mPhoneNumberET = (EditText) findViewById(R.id.et_mobile);
-        mEmailET = (EditText) findViewById(R.id.et_email);
-        mSpecializationET = (EditText) findViewById(R.id.et_specialization);
-        mPass1ET = (EditText) findViewById(R.id.et_pass_1);
-        mPass2ET = (EditText) findViewById(R.id.et_pass_2);
+        mFirstNameET = mRoot.findViewById(R.id.et_first_name);
+        mSurnameET = mRoot.findViewById(R.id.et_surname);
+        mCountryCodeSpinnerET = mRoot.findViewById(R.id.number_prefix_spinner);
+        mGenderSpinnerET = mRoot.findViewById(R.id.gender_spinner);
+        mPhoneNumberET = mRoot.findViewById(R.id.et_mobile);
+        mEmailET = mRoot.findViewById(R.id.et_email);
+        mSpecializationET = mRoot.findViewById(R.id.et_specialization);
+        mPass1ET = mRoot.findViewById(R.id.et_pass_1);
+        mPass2ET = mRoot.findViewById(R.id.et_pass_2);
+        mUserImageName = "";
+        mUserImagePath = "";
     }
 
     private void addTextChangedListeners() {
         this.mFirstNameET.addTextChangedListener(new CustomTextWatcher(this.mFNameLayout));
         this.mSurnameET.addTextChangedListener(new CustomTextWatcher(this.mSurnameLayout));
-        this.mPracticeET.addTextChangedListener(new CustomTextWatcher(this.mPracticeLayout));
         this.mPass1ET.addTextChangedListener(new CustomTextWatcher(this.mPassOneLayout));
         this.mPass2ET.addTextChangedListener(new CustomTextWatcher(this.mPassTwoLayout));
         this.mSpecializationET.addTextChangedListener(new CustomTextWatcher(this.mSpecializationLayout));
     }
 
-    private void saveDoctor() {
-        User doctor = getDoctor();
-        if (doctor != null)
+    //    image saving
+    private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), PICK_IMAGE_REQUEST);
+    }
 
+    private void savePatient(UserModel patient) {
+        if (patient != null)
             getLastLocation();
-            UserLocation userLocation = new UserLocation(latitude, longitude);
+            UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, patient);
+            if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
+                patient.setImage(mUserImagePath);
+                patient.setUserImageName(mUserImageName);
+            Log.d(TAG, "savePatient: **  " + patient.toString());
+            mAuth.createUserWithEmailAndPassword(patient.getEmail(), patient.getPassword())
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "New user registration: " + task.isSuccessful());
 
-            doctor.setImageUrl(mUserImagePath);
-            doctor.setUserImageName(mUserImageName);
+                            if (!task.isSuccessful()) {
+                                Log.d(TAG, "onComplete: error" + task.getException());
+                                toastMessage(task.getException().getMessage());
 
-            Log.d("doc", doctor.toString());
-
-            DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
-            mSavedDoctorId = docRef.getKey();
-            docRef.setValue(doctor);
-            userLocation.setUserId(mSavedDoctorId);
-            FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocation);
-            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
-
-//            open another activity
+                                Fragment fragment = new NormalUserRegistrationFragment();
+                                switchFragments(fragment);
+                            } else {
+                                DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
+                                mSavedPatientId = docRef.getKey();
+                                docRef.setValue(patient);
+                                FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
+    //                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                                Fragment fragment = new ProfileFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("userId", patient.getEmail());
+                                fragment.setArguments(bundle);
+                                switchFragments(fragment);
+                            }
+                        }
+                    });
     }
 
-    private User getDoctor() {
-        return getDataFromViews();
-
+    private void switchFragments(Fragment fragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(this.getId(), fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
-    private User getDataFromViews() {
+    private void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void getPatient() {
+        getDataFromViews();
+    }
+
+    private void getDataFromViews() {
         mFName = mFirstNameET.getText().toString();
         mSurname = mSurnameET.getText().toString();
-        mPractice = mPracticeET.getText().toString();
         mEmail = mEmailET.getText().toString();
         mSpecialization = mSpecializationET.getText().toString();
         mPassOne = mPass1ET.getText().toString();
@@ -190,31 +235,32 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         mGender = mGenderSpinnerET.getSelectedItem().toString();
         mCountryCode = mCountryCodeSpinnerET.getSelectedItem().toString();
         mMobile = mPhoneNumberET.getText().toString();
-
-        return validateUserData();
+        validateUserData();
     }
 
-    private User validateUserData() {
-
-        if(
-            isValidFirstName()
-                    && isValidSurname()
-                    && isValidEmail()
-                    && isValidPasswordOne()
-                    && isValidSpecialization()
-                    && isValidPasswordTwo()){
-            Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
-            return instantiateDoctor();
+    private void validateUserData() {
+        isValidFirstName();
+        isValidSurname();
+        isValidEmail();
+        isValidPasswordOne();
+        isValidSpecialization();
+        isValidPasswordTwo();
+        if(isValidFirstName()
+            && isValidSurname()
+            && isValidEmail()
+            && isValidPasswordOne()
+            && isValidSpecialization()
+            && isValidPasswordTwo()){
+            mRegister.setEnabled(false);
+            instantiatePatient();
         }else{
-            Toast.makeText(this, "Please validate your data!", Toast.LENGTH_SHORT).show();
-            return null;
+            Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private boolean isValidSpecialization() {
         if (ValidationUtil.stringIsEmpty(this.mSpecialization)) {
-            this.mSpecializationLayout.setError("Specialization Required");
+            this.mSpecializationLayout.setError("Profession Required");
             return false;
         }
         else if (ValidationUtil.hasSpecialCharacters(this.mSpecialization)){
@@ -227,10 +273,10 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
     }
 
     private boolean isValidPasswordTwo() {
-        if (ValidationUtil.stringIsEmpty(this.mPassTwo)){
-            this.mPassTwoLayout.setError("Confirm Password!");
+        if (ValidationUtil.stringIsEmpty(mPassTwo)){
+            mPassTwoLayout.setError("Confirm Password!");
             return false;
-        }else if (!this.mPassOne.equals(this.mPassTwo)){
+        }else if (!mPassOne.equals(mPassTwo)){
             mPassTwoLayout.setError("Passwords don't match");
             this.mPass2ET.setText("");
             return false;
@@ -294,72 +340,19 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         }
     }
 
-
-    private User instantiateDoctor() {
-        User doctor = new User(
-                    this.mFName,
-                    this.mSurname,
-                    this.mEmail,
-                    this.mGender,
+    private void instantiatePatient() {
+        UserModel patient = new UserModel(
+                this.mFName,
+                this.mSurname,
+                this.mEmail,
+                this.mGender,
                 true
-            );
-        doctor.setPassword(this.mPassOne);
-        doctor.setMobilePhoneNumber(this.mMobile, this.mCountryCode);
-        doctor.setPractice(this.mPractice);
-        doctor.setSpecialization(this.mSpecialization);
-        return doctor;
-    }
-
-
-    private void initializeCountryCodesDropdown() {
-        Spinner spinner = (Spinner) findViewById(R.id.gender_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.gender_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-    }
-
-    private void initializeGenderDropdown() {
-        Spinner codeSpinner = (Spinner) findViewById(R.id.number_prefix_spinner);
-        ArrayAdapter<CharSequence> codeAdapter = ArrayAdapter.createFromResource(this,
-                R.array.country_codes_array, android.R.layout.simple_spinner_item);
-        codeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        codeSpinner.setAdapter(codeAdapter);
-    }
-
-//    location stuff
-
-    private boolean checkPermissions(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            return true;
-        }
-        return false;
-    }
-
-    private void requestPermissions(){
-        ActivityCompat.requestPermissions(
-                this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSION_ID
         );
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_ID) {
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                // Granted. Start getting the location information
-            }
-        }
-    }
-
-    private boolean isLocationEnabled(){
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
+        patient.setPassword(this.mPassOne);
+        patient.setCountryCode(this.mCountryCode);
+        patient.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
+        patient.setSpecialization(this.mSpecialization);
+        savePatient(patient);
     }
 
     @SuppressLint("MissingPermission")
@@ -381,7 +374,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
                         }
                 );
             } else {
-                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Turn on location", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
@@ -399,7 +392,7 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setNumUpdates(1);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mFusedLocationClient.requestLocationUpdates(
                 mLocationRequest, mLocationCallback,
                 Looper.myLooper()
@@ -416,18 +409,10 @@ public class DoctorRegistrationActivity extends AppCompatActivity {
         }
     };
 
-//    image saving
-private void selectImage() {
-    Intent intent = new Intent();
-    intent.setType("image/*");
-    intent.setAction(Intent.ACTION_GET_CONTENT);
-    startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), PICK_IMAGE_REQUEST);
-}
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK
                 && data != null && data.getData() != null )
         {
             mImageUri = data.getData();
@@ -480,7 +465,29 @@ private void selectImage() {
     }
 
     private void showImageSavingError() {
-        Toast.makeText(this, "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
     }
 
+    private boolean checkPermissions(){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+        return false;
+    }
+
+    private void requestPermissions(){
+        ActivityCompat.requestPermissions(
+                getActivity(),
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSION_ID
+        );
+    }
+
+    private boolean isLocationEnabled(){
+        LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+        );
+    }
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/internal_padding"
+    android:paddingRight="@dimen/internal_padding"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:id="@+id/doctor_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_appointment_doctor"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/ev_appointment_doctor_s_name_msg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_appointment_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        android:text="@string/ev_appointment_heading_msg"
+        android:textSize="@dimen/medium_heading_txt_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/doctor_details"
+        app:layout_constraintStart_toStartOf="@+id/doctor_details"
+        app:layout_constraintTop_toBottomOf="@+id/doctor_details" />
+
+    <CalendarView
+        android:id="@+id/appointment_calender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/appointment_screen_top_margin"
+        app:layout_constraintEnd_toEndOf="@+id/tv_appointment_head"
+        app:layout_constraintStart_toStartOf="@+id/tv_appointment_head"
+        app:layout_constraintTop_toBottomOf="@+id/tv_appointment_head" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/appointment_message_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingTop="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appointment_calender">
+
+        <EditText
+            android:id="@+id/appointment_message"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/textinput_background"
+            android:gravity="top"
+            android:hint="@string/message_to_doctor"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:overScrollMode="always"
+            android:padding="15dp"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

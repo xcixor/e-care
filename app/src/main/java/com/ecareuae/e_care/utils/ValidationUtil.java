@@ -1,4 +1,4 @@
-package com.ecareuae.e_care;
+package com.ecareuae.e_care.utils;
 
 import android.text.TextUtils;
 import android.util.Patterns;
