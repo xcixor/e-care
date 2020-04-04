@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
             mPhone.setText("N/A");
         }
 
-        if (!user.getImage().isEmpty()){
+        if (user.getImage() != null && !user.getImage().isEmpty()){
             int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
             int margin = 0;
             transformation = new RoundedCornersTransformation(radius, margin);

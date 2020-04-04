@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -55,6 +57,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
+
+import java.util.Objects;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
@@ -112,7 +116,7 @@ public class DoctorRegistrationFragment extends Fragment {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveDoctor();
+                getDoctor();
             }
         });
 
@@ -177,43 +181,41 @@ public class DoctorRegistrationFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent, "Select Profile Picture"), PICK_IMAGE_REQUEST);
     }
 
-    private void saveDoctor() {
-        UserModel doctor = getDoctor();
+    private void saveDoctor(UserModel doctor) {
+        Log.d(TAG, "saveDoctor: before check  " + doctor);
         if (doctor != null)
-
+            Log.d(TAG, "saveDoctor: in if not null  " + doctor);
             getLastLocation();
-        UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, doctor);
-        if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
-            doctor.setImage(mUserImagePath);
-            doctor.setUserImageName(mUserImageName);
+            UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, doctor);
+            if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
+                doctor.setImage(mUserImagePath);
+                doctor.setUserImageName(mUserImageName);
+            mAuth.createUserWithEmailAndPassword(doctor.getEmail(), doctor.getPassword())
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "New user registration: " + task.isSuccessful());
 
-//        saveToAuth(doctor.getEmail(), doctor.getPassword());
-        mAuth.createUserWithEmailAndPassword(doctor.getEmail(), doctor.getPassword())
-            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d(TAG, "New user registration: " + task.isSuccessful());
+                        if (!task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: error" + task.getException());
+                            toastMessage(task.getException().getMessage());
 
-                    if (!task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: error" + task.getException());
-                        toastMessage(task.getException().getMessage());
-
-                        Fragment fragment = new DoctorRegistrationFragment();
-                        switchFragments(fragment);
-                    } else {
-                        DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
-                        mSavedDoctorId = docRef.getKey();
-                        docRef.setValue(doctor);
-                        FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
-//                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-                        Fragment fragment = new ProfileFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("userId", doctor.getEmail());
-                        fragment.setArguments(bundle);
-                        switchFragments(fragment);
+                            Fragment fragment = new DoctorRegistrationFragment();
+                            switchFragments(fragment);
+                        } else {
+                            DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
+                            mSavedDoctorId = docRef.getKey();
+                            docRef.setValue(doctor);
+                            FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
+                            Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                            Fragment fragment = new ProfileFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userId", doctor.getEmail());
+                            fragment.setArguments(bundle);
+                            switchFragments(fragment);
+                        }
                     }
-                }
-            });
+                });
     }
 
     private void switchFragments(Fragment fragment) {
@@ -228,11 +230,11 @@ public class DoctorRegistrationFragment extends Fragment {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
-    private UserModel getDoctor() {
-        return getDataFromViews();
+    private void getDoctor() {
+        getDataFromViews();
     }
 
-    private UserModel getDataFromViews() {
+    private void getDataFromViews() {
         mFName = mFirstNameET.getText().toString();
         mSurname = mSurnameET.getText().toString();
         mPractice = mPracticeET.getText().toString();
@@ -244,23 +246,21 @@ public class DoctorRegistrationFragment extends Fragment {
         mCountryCode = mCountryCodeSpinnerET.getSelectedItem().toString();
         mMobile = mPhoneNumberET.getText().toString();
 
-        return validateUserData();
+        validateUserData();
     }
 
-    private UserModel validateUserData() {
-
-        if(
-                isValidFirstName()
-                        && isValidSurname()
-                        && isValidEmail()
-                        && isValidPasswordOne()
-                        && isValidSpecialization()
-                        && isValidPasswordTwo()){
-            Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-            return instantiateDoctor();
+    private void validateUserData() {
+        isValidFirstName();
+        isValidSurname();
+        isValidEmail();
+        isValidSpecialization();
+        isValidPasswordOne();
+        isValidPasswordTwo();
+        if(isValidFirstName() && isValidSurname() && isValidEmail() && isValidPasswordOne() && isValidSpecialization() && isValidPasswordTwo()){
+            mRegister.setEnabled(false);
+            instantiateDoctor();
         }else{
             Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();
-            return null;
         }
     }
 
@@ -346,7 +346,7 @@ public class DoctorRegistrationFragment extends Fragment {
         }
     }
 
-    private UserModel instantiateDoctor() {
+    private void instantiateDoctor() {
         UserModel doctor = new UserModel(
                 this.mFName,
                 this.mSurname,
@@ -359,7 +359,7 @@ public class DoctorRegistrationFragment extends Fragment {
         doctor.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
         doctor.setPractice(this.mPractice);
         doctor.setSpecialization(this.mSpecialization);
-        return doctor;
+        saveDoctor(doctor);
     }
 
     @SuppressLint("MissingPermission")
