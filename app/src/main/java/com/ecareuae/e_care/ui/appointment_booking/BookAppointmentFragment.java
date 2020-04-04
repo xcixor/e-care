@@ -89,7 +89,9 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     @Override
     public void onClick(View view) {
-        createAppointment(mDoctor);
+        if (mCurrentUser != null)
+            createAppointment(mDoctor);
+        Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
     }
 
     private void createAppointment(UserModel doctor) {
@@ -97,7 +99,7 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
         MedicalAppointmentModel appointment = new MedicalAppointmentModel(doctor.getSurName(), mDate, message, mCurrentUser.getEmail(), doctor.getEmail());
         saveAppointment(appointment);
         sendEmail(message);
-        Toast.makeText(getContext(), appointment.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Appointment with " + appointment.getDoctor()  + " on " + appointment.getDate() + " created.", Toast.LENGTH_LONG).show();
     }
 
     private void sendEmail(String message) {

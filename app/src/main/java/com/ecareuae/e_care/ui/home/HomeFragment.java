@@ -195,7 +195,8 @@ public class HomeFragment extends Fragment implements
                 String markerInfoString = gson.toJson(markerInfo);
                 markerOptions
                         .position(latLng)
-                        .snippet(markerInfoString);
+                        .snippet(markerInfoString).
+                        title(location.getUser().getSurName());
                 mGoogleMap.addMarker(markerOptions);
                 mGoogleMap.setInfoWindowAdapter(
                         new CustomInfoWindowAdapter(getContext()));
@@ -305,9 +306,10 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        if(marker.getTitle().equals("My Location"))
+            return;
         Gson gson = new Gson();
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
-
         Fragment frag = new BookAppointmentFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("key", markerInfo.getUser());
