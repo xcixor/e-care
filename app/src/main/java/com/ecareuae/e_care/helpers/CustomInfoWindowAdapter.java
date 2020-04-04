@@ -20,12 +20,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public CustomInfoWindowAdapter(Context context) {
         mContext = context;
         mWindow = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
-//        mWindow.setLayoutParams(
-//                new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.WRAP_CONTENT,
-//                        120
-//                )
-//        );
     }
 
     private void renderWindowInfo(Marker marker, View view){
@@ -51,10 +45,4 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return mWindow;
     }
 
-//    @Override
-//    public void onInfoWindowClick(Marker marker) {
-////        Toast.makeText(mContext, "Window clicked", Toast.LENGTH_SHORT).show();
-////        Log.d(TAG, "onWindowClick: Clicked");
-//        Intent intent = new Intent(mContext, UserTypeSelectionActivity.class);
-//    }
 }
