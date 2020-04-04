@@ -183,10 +183,9 @@ public class HomeFragment extends Fragment implements
     private void setDoctorsLocations(ArrayList<UserLocationModel> locations) {
         MarkerOptions markerOptions = new MarkerOptions();
         for (UserLocationModel location : locations){
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            MarkerInfo markerInfo = new MarkerInfo();
             if (location.getUser().isDoctor())
-                Log.d(TAG, "setDoctorsLocations: lats "  + location.getLatitude() + " user " + location.getUser().getEmail());
-                MarkerInfo markerInfo = new MarkerInfo();
-                Log.d(TAG, "setDoctorsLocations: location info" + location.toString());
                 markerInfo.setName("Dr. " + location.getUser().getSurName());
                 markerInfo.setAddress(location.getUser().getPractice());
                 markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
@@ -195,7 +194,7 @@ public class HomeFragment extends Fragment implements
                 Gson gson = new Gson();
                 String markerInfoString = gson.toJson(markerInfo);
                 markerOptions
-                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .position(latLng)
                         .snippet(markerInfoString);
                 mGoogleMap.addMarker(markerOptions);
                 mGoogleMap.setInfoWindowAdapter(
