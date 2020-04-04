@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
 import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.helpers.MarkerInfo;
@@ -78,6 +79,7 @@ public class HomeFragment extends Fragment implements
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).toggleMenutItems();
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);

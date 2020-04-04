@@ -17,6 +17,8 @@ public class UserModel implements Parcelable {
     private String ID;
     private boolean isDoctor;
     private String mUserImageName;
+    private String mCountryCode;
+
 
     public UserModel(String firstName, String surName, String email, String gender, boolean isDoctor)
     {
@@ -27,6 +29,8 @@ public class UserModel implements Parcelable {
         this.isDoctor = isDoctor;
     }
 
+    public UserModel(){}
+
     private UserModel(Parcel in){
         firstName = in.readString();
         surName = in.readString();
@@ -35,6 +39,22 @@ public class UserModel implements Parcelable {
         isDoctor = in.readInt() == 1;
         image = in.readString();
         specialization = in.readString();
+    }
+
+    public boolean isDoctor() {
+        return isDoctor;
+    }
+
+    public void setDoctor(boolean doctor) {
+        isDoctor = doctor;
+    }
+
+    public String getCountryCode() {
+        return mCountryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        mCountryCode = countryCode;
     }
 
     public String getFirstName() {
@@ -77,9 +97,8 @@ public class UserModel implements Parcelable {
         return location;
     }
 
-    public void setMobilePhoneNumber(String phoneNumber, String countryCode) {
-        String userNumber = countryCode + phoneNumber;
-        this.mobilePhoneNumber = userNumber;
+    public void setMobilePhoneNumber(String phoneNumber) {
+        this.mobilePhoneNumber = phoneNumber;
     }
 
     public void setPassword(String password){
@@ -99,7 +118,7 @@ public class UserModel implements Parcelable {
         this.specialization = specialization;
     }
 
-    public void setImageUrl(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

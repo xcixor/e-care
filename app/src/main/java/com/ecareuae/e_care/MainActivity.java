@@ -33,6 +33,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE;
+
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private DrawerLayout mDrawer;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private boolean mShowVisible=false;
 
 
     @Override
@@ -99,9 +100,19 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
             mDrawer.closeDrawer(GravityCompat.START, false);
             mAuth.signOut();
+            goHome();
             toggleMenutItems();
             return true;
         });
+    }
+
+    private void goHome() {
+        androidx.fragment.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = new HomeFragment();
+        fragmentTransaction.add(R.id.drawer_layout, fragment);
+        fragmentTransaction.setTransition(TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 
 

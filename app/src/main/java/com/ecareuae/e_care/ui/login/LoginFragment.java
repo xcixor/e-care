@@ -57,6 +57,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     toastMessage("Welcome @" + user.getEmail());
                     ((MainActivity)getActivity()).toggleMenutItems();
                     Fragment fragment = new ProfileFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userId", user.getEmail());
+                    fragment.setArguments(bundle);
                     switchFragments(fragment);
                 }else{
                     Log.d(TAG, "onAuthStateChanged: signed out");

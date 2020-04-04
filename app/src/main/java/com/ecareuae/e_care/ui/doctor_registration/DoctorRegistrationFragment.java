@@ -36,6 +36,7 @@ import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.models.UserModel;
 import com.ecareuae.e_care.ui.login.LoginFragment;
+import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.ecareuae.e_care.utils.ValidationUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -155,6 +156,8 @@ public class DoctorRegistrationFragment extends Fragment {
         mSpecializationET = mRoot.findViewById(R.id.et_specialization);
         mPass1ET = mRoot.findViewById(R.id.et_pass_1);
         mPass2ET = mRoot.findViewById(R.id.et_pass_2);
+        mUserImageName = "";
+        mUserImagePath = "";
     }
 
     private void addTextChangedListeners() {
@@ -180,38 +183,37 @@ public class DoctorRegistrationFragment extends Fragment {
 
             getLastLocation();
         UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, doctor);
-        if (mUserImagePath != null)
-            doctor.setImageUrl(mUserImagePath);
+        if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
+            doctor.setImage(mUserImagePath);
             doctor.setUserImageName(mUserImageName);
 
-        Log.d("doc", doctor.toString());
-        saveToAuth(doctor.getEmail(), doctor.getPassword());
-        DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
-        mSavedDoctorId = docRef.getKey();
-        docRef.setValue(doctor);
-        FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
-        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+//        saveToAuth(doctor.getEmail(), doctor.getPassword());
+        mAuth.createUserWithEmailAndPassword(doctor.getEmail(), doctor.getPassword())
+            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    Log.d(TAG, "New user registration: " + task.isSuccessful());
 
-//            open another activity
-    }
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: error" + task.getException());
+                        toastMessage(task.getException().getMessage());
 
-    private void saveToAuth(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "New user registration: " + task.isSuccessful());
-
-                        if (!task.isSuccessful()) {
-                            Fragment fragment = new DoctorRegistrationFragment();
-                            switchFragments(fragment);
-                            toastMessage("Authentication failed. " + task.getException());
-                        } else {
-                            Fragment fragment = new LoginFragment();
-                            switchFragments(fragment);
-                        }
+                        Fragment fragment = new DoctorRegistrationFragment();
+                        switchFragments(fragment);
+                    } else {
+                        DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
+                        mSavedDoctorId = docRef.getKey();
+                        docRef.setValue(doctor);
+                        FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
+//                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new ProfileFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("userId", doctor.getEmail());
+                        fragment.setArguments(bundle);
+                        switchFragments(fragment);
                     }
-                });
+                }
+            });
     }
 
     private void switchFragments(Fragment fragment) {
@@ -223,7 +225,7 @@ public class DoctorRegistrationFragment extends Fragment {
     }
 
     private void toastMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private UserModel getDoctor() {
@@ -353,7 +355,8 @@ public class DoctorRegistrationFragment extends Fragment {
                 true
         );
         doctor.setPassword(this.mPassOne);
-        doctor.setMobilePhoneNumber(this.mMobile, this.mCountryCode);
+        doctor.setCountryCode(this.mCountryCode);
+        doctor.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
         doctor.setPractice(this.mPractice);
         doctor.setSpecialization(this.mSpecialization);
         return doctor;
