@@ -10,12 +10,24 @@ public class MedicalAppointmentModel implements Parcelable {
     private Date mDate;
     private String mMessage;
     private String mSpecialization;
+    private String ownerEmail;
 
 
-    public MedicalAppointmentModel(String doctor, Date date, String message) {
+    public MedicalAppointmentModel(String doctor, Date date, String message, String doctorEmail) {
         mDoctor = doctor;
         mDate = date;
         mMessage = message;
+        ownerEmail = doctorEmail;
+    }
+
+    public MedicalAppointmentModel(){}
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
     }
 
     private MedicalAppointmentModel(Parcel source){

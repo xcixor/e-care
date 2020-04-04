@@ -75,7 +75,6 @@ public class HomeFragment extends Fragment implements
     private EditText mSearchInput;
     private ImageView mGpsLocater;
     private List<UserLocationModel> mPlaces;
-//    private DatabaseReference mDatabaseReference;
     private ArrayList<UserModel> mUserModels;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,7 +85,6 @@ public class HomeFragment extends Fragment implements
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
-//        mDatabaseReference = FirebaseUtil.getmDatabaseReference();
 
         if(isServiceOk()){
             init();

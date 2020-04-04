@@ -43,27 +43,27 @@ public class AppointmentsRepository {
         mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Rajesh",
                 new Date(),
-                "Hi doc, I would like to have plastic surgery please advise")
+                "Hi doc, I would like to have plastic surgery please advise", "fdfdf")
         );
         mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Zainab",
                 new Date(),
-                "Hello, can i see you about a troubling appendix..")
+                "Hello, can i see you about a troubling appendix..", "fdfdf")
         );
         mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Akipeteshi",
                 new Date(),
-                "I would like to see you on the mentioned date for a colonoscopy")
+                "I would like to see you on the mentioned date for a colonoscopy", "fdfdf")
         );
         mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Rajesh",
                 new Date(),
-                "My child has a fever, can I see you then for a check up?!")
+                "My child has a fever, can I see you then for a check up?!", "fdfd")
         );
         mAppointments.add(new MedicalAppointmentModel(
                 "Dr. Nina",
                 new Date(),
-                "Id like to fuck your fat pussy, oooooowi!")
+                "Id like to fuck your fat pussy, oooooowi!", "uurur")
         );
     }
 

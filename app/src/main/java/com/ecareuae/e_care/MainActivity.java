@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.TextView;
 
 import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private DrawerLayout mDrawer;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private TextView mHeaderSubTitle;
 
 
     @Override
@@ -63,25 +65,32 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_history,
-                R.id.nav_tools, R.id.nav_profile, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_login, R.id.nav_history, R.id.nav_profile, R.id.nav_logout)
                 .setDrawerLayout(mDrawer)
                 .build();
         mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, mNavController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(mNavigationView, mNavController);
         toggleMenutItems();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            this.invalidateOptionsMenu();
-        }
     }
+
+    private void instantiateViews() {
+        View headerView = mNavigationView.inflateHeaderView(R.layout.nav_header_navigation);
+        TextView nav_sub_title = headerView.findViewById(R.id.nav_header_subtitle);
+        if (mCurrentUser != null)
+            nav_sub_title.setText(mCurrentUser.getEmail());
+    }
+
 
     public void toggleMenutItems() {
         mCurrentUser = mAuth.getCurrentUser();
         Menu nav_Menu = mNavigationView.getMenu();
         if (mCurrentUser == null){
 //            logged out
+            mDrawer.bringToFront();
+
             nav_Menu.findItem(R.id.nav_login).setVisible(true);
+
             nav_Menu.findItem(R.id.nav_history).setVisible(false);
             nav_Menu.findItem(R.id.nav_profile).setVisible(false);
             nav_Menu.findItem(R.id.nav_logout).setVisible(false);
@@ -98,10 +107,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void addLogoutFunctionality() {
         mNavigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
-            mDrawer.closeDrawer(GravityCompat.START, false);
+            mDrawer.closeDrawer(GravityCompat.START, true);
             mAuth.signOut();
             goHome();
-            toggleMenutItems();
             return true;
         });
     }

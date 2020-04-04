@@ -66,18 +66,6 @@
         app:layout_constraintStart_toStartOf="@+id/et_auth_email"
         app:layout_constraintTop_toBottomOf="@+id/et_auth_email" />
 
-    <TextView
-        android:id="@+id/txt_forgot_password_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/forgot_password_msg"
-        android:textSize="@dimen/small_heading_txt_size"
-        app:layout_constraintStart_toStartOf="@+id/et_auth_password"
-        app:layout_constraintTop_toBottomOf="@+id/et_auth_password" />
-
     <Button
         android:id="@+id/login_button"
         android:layout_width="0dp"
@@ -86,7 +74,7 @@
         android:background="@drawable/rounded_btn"
         android:text="@string/login_btn_msg"
         app:layout_constraintEnd_toEndOf="@+id/et_auth_password"
-        app:layout_constraintStart_toStartOf="@+id/txt_forgot_password_msg"
+        app:layout_constraintStart_toStartOf="@+id/et_auth_password"
         app:layout_constraintTop_toBottomOf="@+id/et_auth_password" />
 
     <TextView

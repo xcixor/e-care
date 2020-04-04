@@ -20,7 +20,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.Date;
 
@@ -35,6 +39,8 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
     private Date mDate;
     private View mRoot;
     private Long mAppointmentBookDate;
+    private FirebaseUser mCurrentUser;
+    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +50,8 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
         mDate = new Date();
         Bundle bundle = getArguments();
         instantiateViews();
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
         setCalenderMinDate();
         mCalendarView.setOnDateChangeListener(this);
         mCreateAppointmentFAB.setOnClickListener(this);
@@ -89,7 +97,7 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     private void createAppointment(UserModel doctor) {
         String message =  mAppointmentMessage.getText().toString();
-        MedicalAppointmentModel appointment = new MedicalAppointmentModel(doctor.getSurName(), mDate, message);
+        MedicalAppointmentModel appointment = new MedicalAppointmentModel(doctor.getSurName(), mDate, message, mCurrentUser.getEmail());
         saveAppointment(appointment);
         sendEmail(message);
         Toast.makeText(getContext(), appointment.toString(), Toast.LENGTH_LONG).show();
@@ -118,6 +126,7 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
     }
 
     private void saveAppointment(MedicalAppointmentModel appointment) {
-//        save to db
+        //        save to db
+        FirebaseUtil.getmDatabaseReference().child("appointments").push().setValue(appointment);
     }
 }
