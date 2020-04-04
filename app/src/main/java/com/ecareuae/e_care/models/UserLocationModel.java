@@ -11,6 +11,8 @@ public class UserLocationModel {
         mUser = user;
     }
 
+    public UserLocationModel(){}
+
     public double getLatitude() {
         return mLatitude;
     }
@@ -32,7 +34,6 @@ public class UserLocationModel {
         return "UserLocation{" +
                 "mLatitude=" + mLatitude +
                 ", mLongitude=" + mLongitude +
-                ", mUserId='" + mUser.getEmail() + '\'' +
                 '}';
     }
 }

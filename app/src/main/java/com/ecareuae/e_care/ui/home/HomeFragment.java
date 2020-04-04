@@ -51,6 +51,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment implements
     private EditText mSearchInput;
     private ImageView mGpsLocater;
     private List<UserLocationModel> mPlaces;
-    private DatabaseReference mDatabaseReference;
+//    private DatabaseReference mDatabaseReference;
     private ArrayList<UserModel> mUserModels;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -85,41 +86,38 @@ public class HomeFragment extends Fragment implements
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
-        mDatabaseReference = FirebaseUtil.getmDatabaseReference();
-        mPlaces = homeViewModel.getLocations();
+//        mDatabaseReference = FirebaseUtil.getmDatabaseReference();
 
         if(isServiceOk()){
             init();
         }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("userLocations");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                instantiateDoctorsLocations(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return root;
     }
-    private void instantiateDoctorsLocations() {
-//        LatLng latLng1 = new LatLng(-1.281229, 36.834509);
-//        LatLng latLng2 = new LatLng(-1.398734, 36.774996);
-//        LatLng latLng3 = new LatLng(-1.379428, 36.769717);
-//        LatLng latLng4 = new LatLng(-1.395345, 36.753667);
-//
-//        mPlaces.add(latLng1);
-//        mPlaces.add(latLng2);
-//        mPlaces.add(latLng3);
-//        mPlaces.add(latLng4);
 
-//        DatabaseReference locations = mDatabaseReference.child("userLocations");
-//        ValueEventListener valueEventListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mPlaces = new ArrayList<>();
-//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    UserLocation location = ds.getValue(UserLocation.class);
-//                    mPlaces.add(location);
-//                }
-//                Log.d(TAG, mPlaces.get(0).toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {}
-//        };
-//        mDatabaseReference.addListenerForSingleValueEvent(valueEventListener);
+    private void instantiateDoctorsLocations(DataSnapshot dataSnapshot) {
+        mPlaces = new ArrayList<>();
+        for (DataSnapshot ds: dataSnapshot.getChildren()){
+            String key = ds.getKey();
+            UserLocationModel location = new UserLocationModel();
+            location = ds.getValue(UserLocationModel.class);
+            mPlaces.add(location);
+        }
+        setDoctorsLocations(mPlaces);
     }
 
     private void init(){
@@ -179,7 +177,6 @@ public class HomeFragment extends Fragment implements
         Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
         mGoogleMap = googleMap;
         mGoogleMap.setOnInfoWindowClickListener(this);
-        setDoctorsLocations();
         if(mMLocationPermissionGranted){
             getDeviceLocation();
             mGoogleMap.setMyLocationEnabled(true);
@@ -188,9 +185,9 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private void setDoctorsLocations() {
+    private void setDoctorsLocations(List<UserLocationModel> locations) {
         MarkerOptions markerOptions = new MarkerOptions();
-        for (UserLocationModel location : mPlaces){
+        for (UserLocationModel location : locations){
             MarkerInfo markerInfo = new MarkerInfo();
 //            UserLocation userLocation = mPlaces.get(i);
 //            UserModel user = getLocationUser(userLocation.getUserId());
@@ -212,24 +209,24 @@ public class HomeFragment extends Fragment implements
         }
     }
 
-    private UserModel getLocationUser(String userId) {
-        DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
-
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUserModels = new ArrayList<>();
-                UserModel userModel = dataSnapshot.getValue(UserModel.class);
-                mUserModels.add(userModel);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return mUserModels.get(0);
-    }
+//    private UserModel getLocationUser(String userId) {
+//        DatabaseReference userRef = mDatabaseReference.child("users").child(userId);
+//
+//        userRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                mUserModels = new ArrayList<>();
+//                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+//                mUserModels.add(userModel);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        return mUserModels.get(0);
+//    }
 
     public boolean isServiceOk(){
         Log.d(TAG, "isServiceOk: checking google services version");
