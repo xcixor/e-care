@@ -1,6 +1,7 @@
 package com.ecareuae.e_care.helpers;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -24,25 +25,35 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private void renderWindowInfo(Marker marker, View view){
         Gson gson = new Gson();
+        Log.d(TAG, "renderWindowInfo: " + marker.getTitle());
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
         TextView tvName = (TextView) view.findViewById(R.id.info_window_tv_name);
-        tvName.setText("Dr. " + markerInfo.getName());
+        tvName.setText(markerInfo.getName());
         TextView tvAddress = (TextView) view.findViewById(R.id.info_window_tv_practice);
         tvAddress.setText(markerInfo.getAddress());
         TextView tvMobile = (TextView) view.findViewById(R.id.info_window_tv_mobile);
         tvMobile.setText(markerInfo.getMobile());
+
     }
 
     @Override
     public View getInfoWindow(Marker marker) {
-        renderWindowInfo(marker, mWindow);
-        return mWindow;
+        if (!marker.getTitle().equals("My Location")) {
+            renderWindowInfo(marker, mWindow);
+            return mWindow;
+        }else {
+            return null;
+        }
     }
 
     @Override
     public View getInfoContents(Marker marker) {
-        renderWindowInfo(marker, mWindow);
-        return mWindow;
+        if (!marker.getTitle().equals("My Location")) {
+            renderWindowInfo(marker, mWindow);
+            return mWindow;
+        }else{
+            return null;
+        }
     }
 
 }
