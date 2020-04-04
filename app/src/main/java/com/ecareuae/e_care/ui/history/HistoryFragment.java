@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment implements AppointmentRecyclerAdapter.OnAppointmentListener {
 
     private static String TAG = "HistoryFragment";
-    private HistoryViewModel mHistoryViewModel;
+//    private HistoryViewModel mHistoryViewModel;
     private View mRoot;
     private RecyclerView mRecyclerAppointments;
     private LinearLayoutManager mAppointmentsLayoutManager;
@@ -46,11 +46,11 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mHistoryViewModel =
-                ViewModelProviders.of(this).get(HistoryViewModel.class);
+//        mHistoryViewModel =
+//                ViewModelProviders.of(this).get(HistoryViewModel.class);
         mRoot = inflater.inflate(R.layout.fragment_history, container, false);
 
-        mHistoryViewModel.init();
+//        mHistoryViewModel.init();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         initializeViews();
@@ -102,7 +102,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     }
 
     private void openEditScreen(int position){
-        MedicalAppointmentModel appointment = mHistoryViewModel.getMedicalAppointment(position);
+        MedicalAppointmentModel appointment = mAppointments.get(position);
         if (appointment != null){
             Fragment frag = new AppointmentEditFragment();
             Bundle bundle = new Bundle();
@@ -114,26 +114,16 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
             ft.addToBackStack(null);
             ft.commit();
         }
-//        Fragment frag = new AppointmentEditFragment();
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        ft.replace(this.getId(), frag);
-//        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        ft.addToBackStack(null);
-//        ft.commit();
     }
 
     @Override
     public void onAppointmentClicked(int position) {
         openEditScreen(position);
-        Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDoctor());
+//        Log.d(TAG, "onAppointmentClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDoctor());
     }
 
     @Override
     public void onDeleteIconClick(int position) {
-//        if (mHistoryViewModel.removeAppointment(position)) {
-//            mAdapter.notifyDataSetChanged();
-//            Toast.makeText(getContext(), "Appointment Deleted!", Toast.LENGTH_SHORT).show();
-//        }
         MedicalAppointmentModel toDelete = mAppointments.get(position);
         Log.d(TAG, "onDeleteIconClick: " + toDelete);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -158,6 +148,6 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     @Override
     public void onEditIconClick(int position) {
         openEditScreen(position);
-        Log.d(TAG, "onEditClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
+//        Log.d(TAG, "onEditClicked: clicked! "+ mHistoryViewModel.getMedicalAppointment(position).getDate());
     }
 }
