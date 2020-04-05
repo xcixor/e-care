@@ -42,8 +42,6 @@ import com.squareup.picasso.Transformation;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-//import static android.app.Activity.RESULT_OK;
-
 public class NormalUserRegistrationFragment extends Fragment {
     private static String TAG = "PatientRegistrationFragment";
     private Button mRegister;
