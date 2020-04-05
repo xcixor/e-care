@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -47,8 +48,10 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         initializeViews();
-        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("appointments");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference().child("appointments");
         Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
+        Log.d(TAG, "onCreateView: current user in history is " + mCurrentUser.getEmail());
         appointmentsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -81,11 +84,13 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
 
 
     private void initializeAppointments(ArrayList<MedicalAppointmentModel> appointments){
-        mAdapter = new AppointmentRecyclerAdapter(getContext(), appointments, this);
-        mAppointmentsLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerAppointments.setLayoutManager(mAppointmentsLayoutManager);
-        mRecyclerAppointments.setAdapter(mAdapter);
-        Log.d(TAG, "initializeAppointments: initialized!");
+        if (getActivity() != null) {
+            mAdapter = new AppointmentRecyclerAdapter(getContext(), appointments, this);
+            mAppointmentsLayoutManager = new LinearLayoutManager(getContext());
+            mRecyclerAppointments.setLayoutManager(mAppointmentsLayoutManager);
+            mRecyclerAppointments.setAdapter(mAdapter);
+            Log.d(TAG, "initializeAppointments: initialized!");
+        }
     }
 
     private ArrayList<MedicalAppointmentModel> getAppointments() {

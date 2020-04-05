@@ -14,10 +14,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
+import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -82,12 +84,9 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(getContext(), "Submit new msg", Toast.LENGTH_SHORT).show();
         String message =  mMessage.getText().toString();
-        mAppointment = new MedicalAppointmentModel(mAppointment.getDoctor(), mDate, message, mCurrentUser.getEmail(), mAppointment.getDoctorEmail());
-        saveAppointment(mAppointment);
-        sendEmail(message);
-
+        MedicalAppointmentModel newAppointment = new MedicalAppointmentModel(mAppointment.getDoctor(), mDate, message, mCurrentUser.getEmail(), mAppointment.getDoctorEmail());
+        sendEmail(message, newAppointment);
     }
 
     private void saveAppointment(MedicalAppointmentModel appointment) {
@@ -97,11 +96,14 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
         editQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: listening " + dataSnapshot);
                 for (DataSnapshot appointmentSnapshot: dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: " + appointmentSnapshot);
                     String key = appointmentSnapshot.getKey();
                     Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/appointments/" + key, appointment);
+                    childUpdates.put("/" + key, appointment);
                     ref.updateChildren(childUpdates);
+                    goBack();
                 }
             }
 
@@ -112,7 +114,19 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
         });
     }
 
-    private void sendEmail(String message){
+    private void goBack() {
+        Fragment fragment = new ProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", mCurrentUser.getEmail());
+        fragment.setArguments(bundle);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(this.getId(), fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    private void sendEmail(String message, MedicalAppointmentModel appointment){
         String emailMessage = "";
         if (message.isEmpty()) {
             emailMessage = "Request for appointment on " + mDate.toString();
@@ -129,8 +143,9 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
         i.putExtra(Intent.EXTRA_TEXT   , emailMessage);
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));
+            saveAppointment(appointment);
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "There are no email clients installed. Email not sent!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Error sending email, check your details!", Toast.LENGTH_SHORT).show();
         }
     }
 
