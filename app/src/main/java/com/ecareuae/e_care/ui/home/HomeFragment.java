@@ -87,8 +87,8 @@ public class HomeFragment extends Fragment implements
             init();
         }
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("userLocations");
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("userLocations");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -182,9 +182,12 @@ public class HomeFragment extends Fragment implements
 
     private void setDoctorsLocations(ArrayList<UserLocationModel> locations) {
         MarkerOptions markerOptions = new MarkerOptions();
+//        Location aLocation =  new Location();
         if (locations.size() > 0) {
             for (UserLocationModel location : locations) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                Log.d(TAG, "setDoctorsLocations: name " + location.getUser().getEmail());
+                LatLng latLng = new LatLng(Double.parseDouble(location.getLatitude()), Double.parseDouble(location.getLongitude()));
+                Log.d(TAG, "setDoctorsLocations: location " + latLng);
                 MarkerInfo markerInfo = new MarkerInfo();
                 if (location.getUser().isDoctor())
                     markerInfo.setName("Dr. " + location.getUser().getSurName());

@@ -76,7 +76,8 @@ public class NormalUserRegistrationFragment extends Fragment {
             mSpecializationLayout;
     private static final int PERMISSION_ID = 200;
     private FusedLocationProviderClient mFusedLocationClient;
-    private double latitude, longitude;
+    private String latitude;
+    private String longitude;
     private ImageView mUserImageView;
     private Uri mImageUri;
     private final int PICK_IMAGE_REQUEST = 71;
@@ -85,6 +86,7 @@ public class NormalUserRegistrationFragment extends Fragment {
     private FirebaseAuth mAuth;
 
     private View mRoot;
+    private Location mLocation;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_normal_user_registration, container, false);
@@ -363,12 +365,12 @@ public class NormalUserRegistrationFragment extends Fragment {
                         new OnCompleteListener<Location>() {
                             @Override
                             public void onComplete(@NonNull Task<Location> task) {
-                                Location location = task.getResult();
-                                if (location == null) {
+                                mLocation = task.getResult();
+                                if (mLocation == null) {
                                     requestNewLocationData();
                                 } else {
-                                    latitude = location.getLatitude();
-                                    longitude = location.getLongitude();
+                                    latitude = Double.toString(mLocation.getLatitude());
+                                    longitude = Double.toString(mLocation.getLongitude());
                                 }
                             }
                         }
@@ -404,8 +406,8 @@ public class NormalUserRegistrationFragment extends Fragment {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            latitude = mLastLocation.getLatitude();
-            longitude = mLastLocation.getLongitude();
+            latitude = Double.toString(mLastLocation.getLatitude());
+            longitude = Double.toString(mLastLocation.getLongitude());
         }
     };
 
