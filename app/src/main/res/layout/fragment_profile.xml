@@ -30,8 +30,8 @@
             android:id="@+id/profile_linear_layout_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="@dimen/profile_container_margin"
+            android:layout_marginEnd="@dimen/profile_container_margin"
             android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,9 +65,9 @@
             android:id="@+id/profile_linear_layout_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/profile_container_margin"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="@dimen/profile_container_margin"
             android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
                     android:layout_centerInParent="true"
                     android:contentDescription="@string/app_image_content_desc"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_envelope" />
+                    app:srcCompat="@drawable/ic_envelope_profile" />
             </RelativeLayout>
 
             <TextView
@@ -104,9 +104,9 @@
             android:layout_below="@+id/profile_linear_layout_one"
             android:layout_alignParentBottom="true"
 
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/profile_container_margin"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="@dimen/profile_container_margin"
             android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
