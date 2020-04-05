@@ -87,7 +87,6 @@ public class HomeFragment extends Fragment implements
             init();
         }
 
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("userLocations");
         ref.addValueEventListener(new ValueEventListener() {
             @Override

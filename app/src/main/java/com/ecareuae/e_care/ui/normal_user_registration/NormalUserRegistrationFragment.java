@@ -1,17 +1,9 @@
-package com.ecareuae.e_care.ui.normal_normal_user;
+package com.ecareuae.e_care.ui.normal_user_registration;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +18,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.ecareuae.e_care.helpers.CustomTextWatcher;
-import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.R;
-import com.ecareuae.e_care.models.UserLocationModel;
+import com.ecareuae.e_care.helpers.CustomTextWatcher;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.ecareuae.e_care.utils.ValidationUtil;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -75,7 +60,6 @@ public class NormalUserRegistrationFragment extends Fragment {
             mPassOneLayout, mPassTwoLayout,
             mSpecializationLayout;
     private static final int PERMISSION_ID = 200;
-    private FusedLocationProviderClient mFusedLocationClient;
     private String latitude;
     private String longitude;
     private ImageView mUserImageView;
@@ -84,9 +68,7 @@ public class NormalUserRegistrationFragment extends Fragment {
     private TextView mUploadPhoto;
     private Transformation transformation;
     private FirebaseAuth mAuth;
-
     private View mRoot;
-    private Location mLocation;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_normal_user_registration, container, false);
@@ -99,7 +81,6 @@ public class NormalUserRegistrationFragment extends Fragment {
         instantiateLayouts();
         instantiateViews();
         addTextChangedListeners();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         mUserImageView = mRoot.findViewById(R.id.user_image);
         mUploadPhoto = mRoot.findViewById(R.id.tv_upload_photo);
         mRegister = mRoot.findViewById(R.id.register_btn);
@@ -177,8 +158,6 @@ public class NormalUserRegistrationFragment extends Fragment {
 
     private void savePatient(UserModel patient) {
         if (patient != null)
-            getLastLocation();
-            UserLocationModel userLocationModel = new UserLocationModel(latitude, longitude, patient);
             if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
                 patient.setImage(mUserImagePath);
                 patient.setUserImageName(mUserImageName);
@@ -199,8 +178,6 @@ public class NormalUserRegistrationFragment extends Fragment {
                                 DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                                 mSavedPatientId = docRef.getKey();
                                 docRef.setValue(patient);
-                                FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
-    //                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
                                 Fragment fragment = new ProfileFragment();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("userId", patient.getEmail());
@@ -357,60 +334,6 @@ public class NormalUserRegistrationFragment extends Fragment {
         savePatient(patient);
     }
 
-    @SuppressLint("MissingPermission")
-    private void getLastLocation(){
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(
-                        new OnCompleteListener<Location>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Location> task) {
-                                mLocation = task.getResult();
-                                if (mLocation == null) {
-                                    requestNewLocationData();
-                                } else {
-                                    latitude = Double.toString(mLocation.getLatitude());
-                                    longitude = Double.toString(mLocation.getLongitude());
-                                }
-                            }
-                        }
-                );
-            } else {
-                Toast.makeText(getContext(), "Turn on location", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        } else {
-            requestPermissions();
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private void requestNewLocationData(){
-
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(0);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        mFusedLocationClient.requestLocationUpdates(
-                mLocationRequest, mLocationCallback,
-                Looper.myLooper()
-        );
-
-    }
-
-    private LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location mLastLocation = locationResult.getLastLocation();
-            latitude = Double.toString(mLastLocation.getLatitude());
-            longitude = Double.toString(mLastLocation.getLongitude());
-        }
-    };
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -468,28 +391,5 @@ public class NormalUserRegistrationFragment extends Fragment {
 
     private void showImageSavingError() {
         Toast.makeText(getContext(), "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
-    }
-
-    private boolean checkPermissions(){
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            return true;
-        }
-        return false;
-    }
-
-    private void requestPermissions(){
-        ActivityCompat.requestPermissions(
-                getActivity(),
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSION_ID
-        );
-    }
-
-    private boolean isLocationEnabled(){
-        LocationManager locationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-                LocationManager.NETWORK_PROVIDER
-        );
     }
 }
