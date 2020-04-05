@@ -85,7 +85,13 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
         String message =  mMessage.getText().toString();
-        MedicalAppointmentModel newAppointment = new MedicalAppointmentModel(mAppointment.getDoctor(), mDate, message, mCurrentUser.getEmail(), mAppointment.getDoctorEmail());
+        MedicalAppointmentModel newAppointment = new MedicalAppointmentModel(
+                mAppointment.getDoctor(),
+                mDate,
+                message,
+                mCurrentUser.getEmail(),
+                mAppointment.getDoctorEmail()
+        );
         sendEmail(message, newAppointment);
     }
 
@@ -106,7 +112,6 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
                     goBack();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "onCancelled", databaseError.toException());

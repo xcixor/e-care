@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment implements
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 200;
     public static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    public static final float DEFAULT_ZOOM = 12f;
+    public static final float DEFAULT_ZOOM = 7f;
     private Boolean mMLocationPermissionGranted = false;
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
