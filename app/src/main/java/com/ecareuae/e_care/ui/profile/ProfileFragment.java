@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,8 +48,8 @@ public class ProfileFragment extends Fragment {
             mUserId = bundle.getString("userId");
         }
         Log.d(TAG, "onCreateView: bundle  ** " + mUserId);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("users");
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("users");
         Query usersQuery = ref.orderByChild("email").equalTo(mUserId);
         usersQuery.addValueEventListener(new ValueEventListener() {
             @Override

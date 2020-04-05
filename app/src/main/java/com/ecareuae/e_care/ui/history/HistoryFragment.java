@@ -5,25 +5,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -49,8 +47,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         initializeViews();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("appointments");
+        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("appointments");
         Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
         appointmentsQuery.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,8 +116,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     public void onDeleteIconClick(int position) {
         MedicalAppointmentModel toDelete = mAppointments.get(position);
         Log.d(TAG, "onDeleteIconClick: " + toDelete);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("appointments");
+        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("appointments");
         Query deleteQuery = ref.orderByChild("message").equalTo(toDelete.getMessage());
         deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
