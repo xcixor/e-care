@@ -47,7 +47,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_login">Login</string>
     <string name="menu_history">My Appointments</string>
-    <string name="menu_tools">Tools</string>
+    <string name="edit_appointment">Edit Appointment</string>
     <string name="menu_profile">My Profile</string>
     <string name="menu_logout">Logout</string>
     <string name="app_image_content_desc">Profile Image Content Desc</string>

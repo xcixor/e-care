@@ -21,19 +21,25 @@
         android:id="@+id/nav_history"
         android:name="com.ecareuae.e_care.ui.history.HistoryFragment"
         android:label="@string/menu_history"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
-        android:id="@+id/nav_tools"
+        android:id="@+id/frag_edit_appointment"
         android:name="com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment"
-        android:label="@string/menu_tools"
+        android:label="@string/edit_appointment"
         tools:layout="@layout/fragment_appointment_edit" />
+
+    <fragment
+        android:id="@+id/frag_book_appointment"
+        android:name="com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment"
+        android:label="Book Appointment"
+        tools:layout="@layout/fragment_book_appointment"/>
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.ecareuae.e_care.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/user_selection"
@@ -46,4 +52,11 @@
         android:name="com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment"
         android:label="Doctor Registration"
         tools:layout="@layout/fragment_doctor_registration"/>
+
+    <fragment
+        android:id="@+id/normalUserRegistrationFragment"
+        android:name="com.ecareuae.e_care.ui.normal_user_registration.NormalUserRegistrationFragment"
+        android:label="NormalUserRegistrationFragment" />
+
+
 </navigation>
