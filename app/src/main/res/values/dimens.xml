@@ -8,7 +8,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="search_bar_margin">10dp</dimen>
-    <dimen name="map_magnfying_icon_dimensions">15dp</dimen>
+    <dimen name="map_magnfying_icon_dimensions">24dp</dimen>
     <dimen name="map_magnifying_icon_margin">15dp</dimen>
     <dimen name="search_area_border_radius">5dp</dimen>
     <dimen name="map_centering_icon_size">40dp</dimen>
@@ -18,6 +18,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="profile_text_padding">20dp</dimen>
-    <dimen name="appointment_container_image_margin">10dp</dimen>
+    <dimen name="profile_text_padding">8dp</dimen>
+    <dimen name="profile_container_margin">8dp</dimen>
 </resources>

@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">e-care</string>
     <string name="welcome_msg">Welcome to e-Care</string>
-    <string name="username_hint">username</string>
     <string name="password_hint">password</string>
-    <string name="forgot_password_msg">Forgot password?</string>
     <string name="login_btn_msg">Login</string>
     <string name="register_prompt_msg">REGISTER</string>
     <string name="account_prompt_msg">Don\'t have an account?</string>
     <string name="avatar_content_description">TODO</string>
-    <string name="title_activity_registration">Registration</string>
     <string name="image_field_msg">upload photo</string>
     <string name="et_first_name_placeholder">First Name</string>
     <string name="et_surname_placeholder">Surname</string>
@@ -32,27 +29,16 @@
         <item>+972</item>
         <item>+974</item>
     </string-array>
-    <string-array name="user_type_array">
-        <item>Doctor</item>
-        <item>Patient</item>
-    </string-array>
-    <string name="API_KEY">AIzaSyCRmqYouU2-m7fBSkSH8GIxyMOJrEKtit0</string>
     <string name="search_message">Address, practice or Dr\'s name</string>
     <string name="map_info_window_name">Name</string>
     <string name="map_info_window_address">Address</string>
     <string name="map_info_window_mobile">Mobile</string>
     <string name="map_info_window_tv_message">Click to make an Appointment</string>
     <string name="message_to_doctor">Message to doctor</string>
-    <string name="appointment_back_button">Back</string>
-    <string name="appointment_confirm_button">Confirm</string>
-    <string name="title_book_appointment">Book Appointment</string>
     <string name="ev_appointment_doctor_s_name_msg">Doctor\'s Name</string>
-    <string name="ev_appointment_specialization_msg">Specialization</string>
     <string name="ev_appointment_heading_msg">Request for Appointment</string>
     <string name="appointment_fab_msg">Confirm Appointment</string>
     <string name="title_activity_navigation">e-care</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">e-care</string>
     <string name="nav_header_subtitle">e-care@ecareuae</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -72,11 +58,9 @@
     <string name="profile_name">Full Name</string>
     <string name="appointment_title">Appointment Title</string>
     <string name="appointment_description">Appointment Description</string>
-    <string name="appointment_status_content_desc">Appointment Status Icon Content Desc</string>
     <string name="appointment_edit_content_desc">Edit Icon Content Desc</string>
     <string name="appointment_delete_content_desc">Delete Icon Content Desc</string>
     <string name="appointment_date">Date</string>
-    <string name="submit">Delete Icon</string>
     <string name="select_new_date">Select new Date</string>
     <string name="et_profession_placeholder">Profession</string>
 </resources>

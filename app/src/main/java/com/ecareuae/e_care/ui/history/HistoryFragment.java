@@ -5,18 +5,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ecareuae.e_care.models.MedicalAppointmentModel;
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.models.MedicalAppointmentModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,6 +51,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("appointments");
         Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
+        Log.d(TAG, "onCreateView: current user in history is " + mCurrentUser.getEmail());
         appointmentsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -84,11 +84,13 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
 
 
     private void initializeAppointments(ArrayList<MedicalAppointmentModel> appointments){
-        mAdapter = new AppointmentRecyclerAdapter(getContext(), appointments, this);
-        mAppointmentsLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerAppointments.setLayoutManager(mAppointmentsLayoutManager);
-        mRecyclerAppointments.setAdapter(mAdapter);
-        Log.d(TAG, "initializeAppointments: initialized!");
+        if (getActivity() != null) {
+            mAdapter = new AppointmentRecyclerAdapter(getContext(), appointments, this);
+            mAppointmentsLayoutManager = new LinearLayoutManager(getContext());
+            mRecyclerAppointments.setLayoutManager(mAppointmentsLayoutManager);
+            mRecyclerAppointments.setAdapter(mAdapter);
+            Log.d(TAG, "initializeAppointments: initialized!");
+        }
     }
 
     private ArrayList<MedicalAppointmentModel> getAppointments() {
@@ -119,8 +121,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     public void onDeleteIconClick(int position) {
         MedicalAppointmentModel toDelete = mAppointments.get(position);
         Log.d(TAG, "onDeleteIconClick: " + toDelete);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("appointments");
+        DatabaseReference ref = FirebaseUtil.getmDatabaseReference().child("appointments");
         Query deleteQuery = ref.orderByChild("message").equalTo(toDelete.getMessage());
         deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

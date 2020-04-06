@@ -10,11 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment;
-import com.ecareuae.e_care.ui.normal_normal_user.NormalUserRegistrationFragment;
+import com.ecareuae.e_care.ui.normal_user_registration.NormalUserRegistrationFragment;
 
 public class UserTypeSelectionFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 

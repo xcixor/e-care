@@ -16,6 +16,9 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,20 +39,25 @@ public class ProfileFragment extends Fragment {
     private View mRoot;
     private String mUserId;
     private Transformation transformation;
+    private FirebaseUser mCurrentUser;
+    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity)getActivity()).toggleMenutItems();
         mRoot = inflater.inflate(R.layout.fragment_profile, container, false);
         instantiateViews();
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            mUserId = bundle.getString("userId");
-        }
-        Log.d(TAG, "onCreateView: bundle  ** " + mUserId);
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = mAuth.getCurrentUser();
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            mUserId = bundle.getString("userId");
+//        }
+//        Log.d(TAG, "onCreateView: bundle  ** " + mUserId);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users");
-        Query usersQuery = ref.orderByChild("email").equalTo(mUserId);
+        Query usersQuery = ref.orderByChild("email").equalTo(mCurrentUser.getEmail());
+        Log.d(TAG, "onCreateView: user email in profile is " + mCurrentUser.getEmail());
         usersQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
