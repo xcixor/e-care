@@ -24,6 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
+
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="@dimen/map_magnfying_icon_dimensions"
             android:layout_height="@dimen/map_magnfying_icon_dimensions"
@@ -31,6 +32,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/map_magnifying_icon_margin"
             app:srcCompat="@drawable/ic_search"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,6 +45,21 @@
             android:hint="@string/search_message"
             android:singleLine="true"
             android:imeOptions="actionSearch"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:id="@+id/ic_cancel"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_above="@id/et_search"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@id/et_search"
+            android:elevation="10dp"
+            android:clickable="true"
+            android:layout_marginRight="10dp"
+            app:srcCompat="@drawable/ic_cancel"/>
+
     </RelativeLayout>
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="@dimen/map_centering_icon_size"

@@ -4,13 +4,12 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -25,15 +24,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.ecareuae.e_care.MainActivity;
-import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
-import com.ecareuae.e_care.repositories.FirebaseUtil;
-import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.R;
+import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
+import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.models.UserLocationModel;
-import com.ecareuae.e_care.models.UserModel;
+import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -51,30 +48,28 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment implements
-        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, View.OnClickListener, View.OnFocusChangeListener, View.OnTouchListener {
 
     public static final String TAG = "HomeFragment";
     public static final int ERROR_DIALOG_REQUEST = 9001;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 200;
     public static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    public static final float DEFAULT_ZOOM = 7f;
+    public static final float DEFAULT_ZOOM = 6f;
     private Boolean mMLocationPermissionGranted = false;
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private EditText mSearchInput;
-    private ImageView mGpsLocater;
+    private ImageView mGpsLocater, mCancelSearch;
     private ArrayList<UserLocationModel> mPlaces;
-    private ArrayList<UserModel> mUserModels;
+    private ArrayList<Marker> mMarkers;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +77,12 @@ public class HomeFragment extends Fragment implements
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
+        mCancelSearch = root.findViewById(R.id.ic_cancel);
+        mCancelSearch.setOnClickListener(this);
+        mSearchInput.setOnFocusChangeListener(this);
+        mSearchInput.setOnTouchListener(this);
+        mPlaces = new ArrayList<>();
+        mMarkers = new ArrayList<>();
 
         if(isServiceOk()){
             init();
@@ -104,7 +105,6 @@ public class HomeFragment extends Fragment implements
     }
 
     private void instantiateDoctorsLocations(DataSnapshot dataSnapshot) {
-        mPlaces = new ArrayList<>();
         for (DataSnapshot ds: dataSnapshot.getChildren()){
             String key = ds.getKey();
             UserLocationModel location = new UserLocationModel();
@@ -123,12 +123,10 @@ public class HomeFragment extends Fragment implements
         mSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                Log.d(TAG, "initSearch: focus changed to input search ...........");
                 if (actionId == EditorInfo.IME_ACTION_SEARCH
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN
                         || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-                    Log.d(TAG, "initSearch: something has been typed ...........");
                     geoLocate();
 
                 }
@@ -145,30 +143,35 @@ public class HomeFragment extends Fragment implements
     }
 
     private void geoLocate() {
-        Log.d(TAG, "geoLocate: searching........");
         String searchInput = mSearchInput.getText().toString();
-        Geocoder geocoder = new Geocoder(getContext());
-        List<Address> addressList = new ArrayList<>();
-        try {
-            addressList = geocoder.getFromLocationName(searchInput, 1);
-        }catch (IOException e){
-            Toast.makeText(getContext(), "Slow network! try again", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "IOException: "+ e.getMessage());
-        }
-        if (addressList.size() > 0){
-            Address address = addressList.get(0);
-            Log.d(TAG, "geoLocate: " + address.toString());
-            moveCamera(
-                    new LatLng(address.getLatitude(), address.getLongitude()),
-                    DEFAULT_ZOOM,
-                    address.getAddressLine(0)
-            );
+        fetchDoctorsFromDatabase(searchInput);
+    }
+
+    private void fetchDoctorsFromDatabase(String searchInput) {
+        Log.d(TAG, "fetchDoctorsFromDatabase: searching for " + searchInput);
+        String search = searchInput.toLowerCase();
+        ArrayList<UserLocationModel> foundLocations = new ArrayList<>();
+        if (mPlaces.size() > 0){
+            for (UserLocationModel location : mPlaces){
+                if (
+                        location.getUser().getSpecialization().toLowerCase().equals(search) ||
+                                location.getUser().getEmail().toLowerCase().equals(search) ||
+                                location.getUser().getFirstName().toLowerCase().equals(search) ||
+                                location.getUser().getSurName().toLowerCase().equals(search) ||
+                                location.getUser().getMobilePhoneNumber().toLowerCase().equals(search) ||
+                                location.getUser().getGender().toLowerCase().equals(search)
+                ){
+                    foundLocations.add(location);
+                }
+            }
+            Log.d(TAG, "fetchDoctorsFromDatabase: found ....... " + foundLocations);
+            setDoctorsLocations(foundLocations);
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(getContext(), "Map is ready", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "welcome", Toast.LENGTH_SHORT).show();
         mGoogleMap = googleMap;
         mGoogleMap.setOnInfoWindowClickListener(this);
         if(mMLocationPermissionGranted){
@@ -180,13 +183,15 @@ public class HomeFragment extends Fragment implements
     }
 
     private void setDoctorsLocations(ArrayList<UserLocationModel> locations) {
+        for (Marker marker : mMarkers){
+            marker.remove();
+        }
         MarkerOptions markerOptions = new MarkerOptions();
-//        Location aLocation =  new Location();
         if (locations.size() > 0) {
+            int position = 0;
             for (UserLocationModel location : locations) {
                 Log.d(TAG, "setDoctorsLocations: name " + location.getUser().getEmail());
                 LatLng latLng = new LatLng(Double.parseDouble(location.getLatitude()), Double.parseDouble(location.getLongitude()));
-                Log.d(TAG, "setDoctorsLocations: location " + latLng);
                 MarkerInfo markerInfo = new MarkerInfo();
                 if (location.getUser().isDoctor())
                     markerInfo.setName("Dr. " + location.getUser().getSurName());
@@ -200,21 +205,21 @@ public class HomeFragment extends Fragment implements
                         .position(latLng)
                         .snippet(markerInfoString).
                         title(location.getUser().getSurName());
-                mGoogleMap.addMarker(markerOptions);
+//                String markerName = "marker" + Integer.toString(position);
+                Marker marker = mGoogleMap.addMarker(markerOptions);
                 mGoogleMap.setInfoWindowAdapter(
                         new CustomInfoWindowAdapter(getContext()));
+                mMarkers.add(marker);
+                position++;
             }
         }
     }
 
     public boolean isServiceOk(){
-        Log.d(TAG, "isServiceOk: checking google services version");
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getContext());
         if (available == ConnectionResult.SUCCESS){
-//            ok user can make map requests
             return true;
         }else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            Log.d(TAG, "Resolvable error");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
@@ -225,7 +230,6 @@ public class HomeFragment extends Fragment implements
     }
 
     public void getLocationPermissions(){
-        Log.d(TAG, "getLocationPermissions: getting permissions");
         String [] permissions = {FINE_LOCATION, COARSE_LOCATION};
         if (ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             if (ContextCompat.checkSelfPermission(getContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -250,7 +254,6 @@ public class HomeFragment extends Fragment implements
                             return;
                         }
                     }
-                    Log.d(TAG, "Permissions Result: granted");
                     mMLocationPermissionGranted = true;
                     initMap();
                 }
@@ -264,7 +267,6 @@ public class HomeFragment extends Fragment implements
     }
 
     private void getDeviceLocation(){
-        Log.d(TAG, "Device Location: getting device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         try {
             if (mMLocationPermissionGranted){
@@ -300,7 +302,6 @@ public class HomeFragment extends Fragment implements
     }
 
     private void hideSoftKeyboard(){
-//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if (getActivity().getCurrentFocus() == null) {
             return;
         }
@@ -326,4 +327,25 @@ public class HomeFragment extends Fragment implements
         ft.commit();
     }
 
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "onClick: cancelling search  ....");
+        setDoctorsLocations(mPlaces);
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if (!hasFocus)
+            Log.d(TAG, "onFocusChange: lost focus");
+            setDoctorsLocations(mPlaces);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+            Log.d(TAG, "onTouch: motion up");
+            setDoctorsLocations(mPlaces);
+        }
+        return false;
+    }
 }
