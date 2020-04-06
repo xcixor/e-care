@@ -9,7 +9,12 @@
         android:id="@+id/nav_home"
         android:name="com.ecareuae.e_care.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_frag_book_appointment"
+            app:destination="@id/frag_book_appointment"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"
@@ -21,7 +26,12 @@
         android:id="@+id/nav_history"
         android:name="com.ecareuae.e_care.ui.history.HistoryFragment"
         android:label="@string/menu_history"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_nav_history_to_frag_edit_appointment"
+            app:destination="@id/frag_edit_appointment"
+            app:popUpTo="@id/nav_history" />
+    </fragment>
 
     <fragment
         android:id="@+id/frag_edit_appointment"
@@ -33,7 +43,12 @@
         android:id="@+id/frag_book_appointment"
         android:name="com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment"
         android:label="Book Appointment"
-        tools:layout="@layout/fragment_book_appointment"/>
+        tools:layout="@layout/fragment_book_appointment">
+        <action
+            android:id="@+id/action_frag_book_appointment_to_nav_history"
+            app:destination="@id/nav_history"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_profile"

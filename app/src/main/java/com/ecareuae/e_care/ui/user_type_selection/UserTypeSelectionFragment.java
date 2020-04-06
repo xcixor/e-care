@@ -17,7 +17,6 @@ import com.ecareuae.e_care.ui.normal_user_registration.NormalUserRegistrationFra
 
 public class UserTypeSelectionFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
-    private static final String BACK_STACK_ROOT_TAG = "user_type_selection_fragment";
     private RadioGroup mRadioGroup;
     private View mRoot;
     private View mRadioButton;
@@ -55,7 +54,6 @@ public class UserTypeSelectionFragment extends Fragment implements RadioGroup.On
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(this.getId(), fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(this.getClass().getName());
         ft.commit();
     }
 

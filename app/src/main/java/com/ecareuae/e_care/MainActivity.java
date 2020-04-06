@@ -129,35 +129,4 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    @Override
-    public void onBackPressed() {
-        FragmentManager fm = getFragmentManager();
-        if (fm.getBackStackEntryCount() > 0) {
-            Log.i("MainActivity", "popping backstack");
-            fm.popBackStack();
-        } else {
-            Log.i("MainActivity", "nothing on backstack, calling super");
-            super.onBackPressed();
-        }
-
-    }
-//
-//    @Override
-//    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//        Menu nav_Menu = mNavigationView.getMenu();
-//        if (mCurrentUser != null){
-//            nav_Menu.findItem(R.id.nav_login).setVisible(false);
-//            nav_Menu.findItem(R.id.nav_history).setVisible(true);
-//            nav_Menu.findItem(R.id.nav_profile).setVisible(true);
-//            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
-//        }else{
-//            nav_Menu.findItem(R.id.nav_login).setVisible(false);
-//            nav_Menu.findItem(R.id.nav_history).setVisible(true);
-//            nav_Menu.findItem(R.id.nav_profile).setVisible(true);
-//            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
-//            Log.d(TAG, "onAuthStateChanged: signed out");
-////                    ((MainActivity)getActivity()).toggleMenutItems();
-////                    toastMessage("Successfully signed out!");
-//        }
-//    }
 }
