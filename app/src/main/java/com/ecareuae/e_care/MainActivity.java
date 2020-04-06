@@ -109,18 +109,9 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
             mDrawer.closeDrawer(GravityCompat.START, true);
             mAuth.signOut();
-            goHome();
+            mNavController.navigate(R.id.nav_home);
             return true;
         });
-    }
-
-    private void goHome() {
-        androidx.fragment.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = new HomeFragment();
-        fragmentTransaction.add(R.id.drawer_layout, fragment);
-        fragmentTransaction.setTransition(TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
     }
 
 
