@@ -178,9 +178,8 @@ public class NormalUserRegistrationFragment extends Fragment {
                             if (!task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: error" + task.getException());
                                 toastMessage(task.getException().getMessage());
-
-                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.frag_normal_user);
                             } else {
+                                mRegister.setEnabled(false);
                                 DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                                 mSavedPatientId = docRef.getKey();
                                 docRef.setValue(patient);
@@ -224,7 +223,6 @@ public class NormalUserRegistrationFragment extends Fragment {
             && isValidPasswordOne()
             && isValidSpecialization()
             && isValidPasswordTwo()){
-            mRegister.setEnabled(false);
             instantiatePatient();
         }else{
             Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();

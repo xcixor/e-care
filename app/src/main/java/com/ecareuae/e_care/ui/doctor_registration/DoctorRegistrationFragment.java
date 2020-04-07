@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -115,6 +116,14 @@ public class DoctorRegistrationFragment extends Fragment {
                 getDoctor();
             }
         });
+
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack(R.id.user_selection, false);
+//            }
+//        };
+//        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         return mRoot;
     }
@@ -215,7 +224,6 @@ public class DoctorRegistrationFragment extends Fragment {
         isValidPasswordOne();
         isValidPasswordTwo();
         if(isValidFirstName() && isValidSurname() && isValidEmail() && isValidPasswordOne() && isValidSpecialization() && isValidPasswordTwo()){
-            mRegister.setEnabled(false);
             instantiateDoctor();
         }else{
             Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();
@@ -359,9 +367,9 @@ public class DoctorRegistrationFragment extends Fragment {
                     if (!task.isSuccessful()) {
                         Log.d(TAG, "onComplete: error" + task.getException());
                         toastMessage(task.getException().getMessage());
-
-                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.doctor_registration);
                     } else {
+                        mRegister.setEnabled(false);
+
                         DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                         mSavedDoctorId = docRef.getKey();
                         docRef.setValue(doctor);
