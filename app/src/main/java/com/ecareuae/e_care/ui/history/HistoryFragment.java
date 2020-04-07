@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -100,15 +101,10 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     private void openEditScreen(int position){
         MedicalAppointmentModel appointment = mAppointments.get(position);
         if (appointment != null){
-            Fragment frag = new AppointmentEditFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable("key", appointment);
-            frag.setArguments(bundle);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(this.getId(), frag);
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.addToBackStack(null);
-            ft.commit();
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
+                    .navigate(R.id.frag_edit_appointment, bundle);
         }
     }
 

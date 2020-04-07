@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment;
@@ -37,24 +38,16 @@ public class UserTypeSelectionFragment extends Fragment implements RadioGroup.On
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
         mRadioButton = radioGroup.findViewById(checkedId);
-//        int index = radioGroup.indexOfChild(radioButton);
         switch(mRadioButton.getId()) {
             case R.id.radio_doctor:
-                Fragment fragment = new DoctorRegistrationFragment();
-                startFragmentTransaction(fragment);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.doctor_registration);
                 break;
             case R.id.radio_patient:
-                Fragment userFragment = new NormalUserRegistrationFragment();
-                startFragmentTransaction(userFragment);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
+                        .navigate(R.id.frag_normal_user);
                 break;
         }
-    }
-
-    public void startFragmentTransaction(Fragment fragment){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
     }
 
 }

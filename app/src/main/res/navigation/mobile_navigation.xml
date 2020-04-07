@@ -14,13 +14,22 @@
             android:id="@+id/action_nav_home_to_frag_book_appointment"
             app:destination="@id/frag_book_appointment"
             app:popUpTo="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_login2"
+            app:destination="@id/nav_login"
+            app:popUpTo="@id/nav_home" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.ecareuae.e_care.ui.login.LoginFragment"
         android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_nav_login_to_user_selection"
+            app:destination="@id/user_selection"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_history"
@@ -30,6 +39,10 @@
         <action
             android:id="@+id/action_nav_history_to_frag_edit_appointment"
             app:destination="@id/frag_edit_appointment"
+            app:popUpTo="@id/nav_history" />
+        <action
+            android:id="@+id/action_nav_history_to_nav_home"
+            app:destination="@id/nav_home"
             app:popUpTo="@id/nav_history" />
     </fragment>
 
@@ -48,30 +61,59 @@
             android:id="@+id/action_frag_book_appointment_to_nav_history"
             app:destination="@id/nav_history"
             app:popUpTo="@id/nav_home" />
+        <argument
+            android:name="key"
+            app:argType="com.ecareuae.e_care.models.UserModel" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.ecareuae.e_care.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/user_selection"
         android:name="com.ecareuae.e_care.ui.user_type_selection.UserTypeSelectionFragment"
         android:label="User Type Selection"
-        tools:layout="@layout/fragment_user_type_selection"/>
+        tools:layout="@layout/fragment_user_type_selection">
+        <action
+            android:id="@+id/action_user_selection_to_doctor_registration"
+            app:destination="@id/doctor_registration"
+            app:popUpTo="@id/user_selection" />
+        <action
+            android:id="@+id/action_user_selection_to_normalUserRegistrationFragment"
+            app:destination="@id/frag_normal_user"
+            app:popUpTo="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/doctor_registration"
         android:name="com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment"
         android:label="Doctor Registration"
-        tools:layout="@layout/fragment_doctor_registration"/>
+        tools:layout="@layout/fragment_doctor_registration">
+        <action
+            android:id="@+id/action_doctor_registration_to_nav_profile"
+            app:destination="@id/nav_profile"
+            app:popUpTo="@id/user_selection" />
+    </fragment>
 
     <fragment
-        android:id="@+id/normalUserRegistrationFragment"
+        android:id="@+id/frag_normal_user"
         android:name="com.ecareuae.e_care.ui.normal_user_registration.NormalUserRegistrationFragment"
-        android:label="NormalUserRegistrationFragment" />
+        android:label="NormalUserRegistrationFragment" >
+        <action
+            android:id="@+id/action_normalUserRegistrationFragment_to_nav_profile"
+            app:destination="@id/nav_profile"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 
 </navigation>

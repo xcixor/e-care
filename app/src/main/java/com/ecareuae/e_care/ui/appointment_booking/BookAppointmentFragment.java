@@ -90,10 +90,12 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     @Override
     public void onClick(View view) {
-        if (mCurrentUser != null)
+        if (mCurrentUser != null) {
             createAppointment(mDoctor);
-        Navigation.findNavController(view).navigate(R.id.nav_history);
-        Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
+            Navigation.findNavController(view).navigate(R.id.nav_history);
+        }else {
+            Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void createAppointment(UserModel doctor) {

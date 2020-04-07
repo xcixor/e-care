@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.helpers.CustomTextWatcher;
@@ -170,28 +171,15 @@ public class NormalUserRegistrationFragment extends Fragment {
                                 Log.d(TAG, "onComplete: error" + task.getException());
                                 toastMessage(task.getException().getMessage());
 
-                                Fragment fragment = new NormalUserRegistrationFragment();
-                                switchFragments(fragment);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.frag_normal_user);
                             } else {
                                 DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                                 mSavedPatientId = docRef.getKey();
                                 docRef.setValue(patient);
-                                Fragment fragment = new ProfileFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("userId", patient.getEmail());
-                                fragment.setArguments(bundle);
-                                switchFragments(fragment);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_login);
                             }
                         }
                     });
-    }
-
-    private void switchFragments(Fragment fragment) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 
     private void toastMessage(String message) {

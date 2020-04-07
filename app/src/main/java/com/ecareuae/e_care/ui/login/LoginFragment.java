@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
@@ -52,15 +54,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (user != null){
                     Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
                     toastMessage("Welcome @" + user.getEmail());
-                    ((MainActivity)getActivity()).toggleMenutItems();
-                    Fragment fragment = new ProfileFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId", user.getEmail());
-                    fragment.setArguments(bundle);
-                    switchFragments(fragment);
+//                    ((MainActivity)getActivity()).toggleMenutItems();
+//                    Fragment fragment = new ProfileFragment();
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_profile);
                 }else{
                     Log.d(TAG, "onAuthStateChanged: signed out");
-                    ((MainActivity)getActivity()).toggleMenutItems();
+//                    ((MainActivity)getActivity()).toggleMenutItems();
 //                    toastMessage("Successfully signed out!");
                 }
             }

@@ -49,11 +49,6 @@ public class ProfileFragment extends Fragment {
         instantiateViews();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            mUserId = bundle.getString("userId");
-//        }
-//        Log.d(TAG, "onCreateView: bundle  ** " + mUserId);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users");
         Query usersQuery = ref.orderByChild("email").equalTo(mCurrentUser.getEmail());
@@ -69,8 +64,6 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
-//        getUser(mUserId);
-//        setData();
         return mRoot;
     }
 

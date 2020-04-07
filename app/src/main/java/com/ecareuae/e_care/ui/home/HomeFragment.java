@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
@@ -32,6 +33,7 @@ import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
+import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragmentDirections;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -305,8 +307,11 @@ public class HomeFragment extends Fragment implements
         if (getActivity().getCurrentFocus() == null) {
             return;
         }
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        InputMethodManager inputMethodManager = (InputMethodManager)getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getActivity().
+                getCurrentFocus().
+                getWindowToken(), 0);
     }
 
     @Override
@@ -315,16 +320,10 @@ public class HomeFragment extends Fragment implements
             return;
         Gson gson = new Gson();
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
-        Fragment frag = new BookAppointmentFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("key", markerInfo.getUser());
-        frag.setArguments(bundle);
-
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), frag);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
+                .navigate(R.id.frag_book_appointment, bundle);
     }
 
     @Override

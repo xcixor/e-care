@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
@@ -93,6 +94,7 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
                 mAppointment.getDoctorEmail()
         );
         sendEmail(message, newAppointment);
+        Navigation.findNavController(view).navigate(R.id.nav_history);
     }
 
     private void saveAppointment(MedicalAppointmentModel appointment) {
@@ -109,7 +111,6 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put("/" + key, appointment);
                     ref.updateChildren(childUpdates);
-                    goBack();
                 }
             }
             @Override
@@ -117,18 +118,6 @@ public class AppointmentEditFragment extends Fragment implements View.OnClickLis
                 Log.e(TAG, "onCancelled", databaseError.toException());
             }
         });
-    }
-
-    private void goBack() {
-        Fragment fragment = new ProfileFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("userId", mCurrentUser.getEmail());
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 
     private void sendEmail(String message, MedicalAppointmentModel appointment){
