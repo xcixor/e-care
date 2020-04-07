@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
+import com.ecareuae.e_care.models.UserModel;
 import com.ecareuae.e_care.repositories.FirebaseUtil;
 import com.ecareuae.e_care.ui.appointment_edit.AppointmentEditFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +43,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     private String mUserId;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -49,14 +51,15 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         initializeViews();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("appointments");
 
-        Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
-        appointmentsQuery.addValueEventListener(new ValueEventListener() {
+
+        mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference ref = mDatabase.getReference().child("users");
+        Query usersQuery = ref.orderByChild("email").equalTo(mCurrentUser.getEmail());
+        usersQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                getData(snapshot);
+                showData(snapshot);
             }
 
             @Override
@@ -64,19 +67,74 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
                 Log.d(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
+
         return mRoot;
     }
 
-    private void getData(DataSnapshot snapshot) {
+    private void showData(DataSnapshot ds) {
+        Log.d(TAG, "showData: getting user");
+        if (ds.exists()) {
+            String key = "";
+            for (DataSnapshot dataSnapshot: ds.getChildren()) {
+                key = dataSnapshot.getKey();
+            }
+            UserModel user = new UserModel();
+            user = new UserModel(
+                    ds.child(key).getValue(UserModel.class).getFirstName(),
+                    ds.child(key).getValue(UserModel.class).getSurName(),
+                    ds.child(key).getValue(UserModel.class).getEmail(),
+                    ds.child(key).getValue(UserModel.class).getGender(),
+                    ds.child(key).getValue(UserModel.class).isDoctor());
+            Log.d(TAG, "showData: user is " + user.getEmail());
+            setData(user);
+        }else {
+            Log.d(TAG, "onDataChange: user not found");
+        }
+    }
+
+    private void setData(UserModel user) {
+        mDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference ref = mDatabase.getReference().child("appointments");
+
+        if (user.isDoctor()){
+            Query appointmentsQuery = ref.orderByChild("doctorEmail").equalTo(mCurrentUser.getEmail());
+            appointmentsQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    getData(snapshot, user);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, "onCancelled: " + databaseError.getMessage());
+                }
+            });
+        }else {
+            Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
+            appointmentsQuery.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    getData(snapshot, user);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, "onCancelled: " + databaseError.getMessage());
+                }
+            });
+        }
+    }
+
+    private void getData(DataSnapshot snapshot, UserModel user) {
         mAppointments = new ArrayList<>();
         for (DataSnapshot ds: snapshot.getChildren()){
             String key = ds.getKey();
-            MedicalAppointmentModel location = new MedicalAppointmentModel();
-            location = ds.getValue(MedicalAppointmentModel.class);
-            mAppointments.add(location);
+            MedicalAppointmentModel appointment = new MedicalAppointmentModel();
+            appointment = ds.getValue(MedicalAppointmentModel.class);
+            appointment.setIsDoctor(user.isDoctor());
+            mAppointments.add(appointment);
         }
         initializeAppointments(mAppointments);
-        Log.d(TAG, "getData: " + mAppointments);
     }
 
     private void initializeViews() {

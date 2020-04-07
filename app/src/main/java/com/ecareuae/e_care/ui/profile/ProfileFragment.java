@@ -49,10 +49,10 @@ public class ProfileFragment extends Fragment {
         instantiateViews();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users");
         Query usersQuery = ref.orderByChild("email").equalTo(mCurrentUser.getEmail());
-        Log.d(TAG, "onCreateView: user email in profile is " + mCurrentUser.getEmail());
         usersQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
