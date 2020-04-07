@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
@@ -61,7 +62,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 //import static android.app.Activity.RESULT_OK;
 
-public class DoctorRegistrationFragment extends Fragment {
+public class DoctorRegistrationFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {
     private static String TAG = "DoctorRegistrationFragment";
     private Button mRegister;
     private TextInputEditText mFirstNameET;
@@ -117,13 +118,13 @@ public class DoctorRegistrationFragment extends Fragment {
             }
         });
 
-//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack(R.id.user_selection, false);
-//            }
-//        };
-//        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.user_selection);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         return mRoot;
     }
@@ -486,5 +487,10 @@ public class DoctorRegistrationFragment extends Fragment {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
                 LocationManager.NETWORK_PROVIDER
         );
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.user_selection);
     }
 }
