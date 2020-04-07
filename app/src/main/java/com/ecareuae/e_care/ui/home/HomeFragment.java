@@ -56,7 +56,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements
-        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, View.OnClickListener, View.OnFocusChangeListener, View.OnTouchListener {
+        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, View.OnClickListener {
 
     public static final String TAG = "HomeFragment";
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -81,8 +81,6 @@ public class HomeFragment extends Fragment implements
         mGpsLocater = root.findViewById(R.id.ic_gps);
         mCancelSearch = root.findViewById(R.id.ic_cancel);
         mCancelSearch.setOnClickListener(this);
-        mSearchInput.setOnFocusChangeListener(this);
-        mSearchInput.setOnTouchListener(this);
         mPlaces = new ArrayList<>();
         mMarkers = new ArrayList<>();
 
@@ -197,22 +195,22 @@ public class HomeFragment extends Fragment implements
                 MarkerInfo markerInfo = new MarkerInfo();
                 if (location.getUser().isDoctor())
                     markerInfo.setName("Dr. " + location.getUser().getSurName());
-                markerInfo.setAddress(location.getUser().getPractice());
-                markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
-                markerInfo.setUserId(location.getUser().getEmail());
-                markerInfo.setUser(location.getUser());
-                Gson gson = new Gson();
-                String markerInfoString = gson.toJson(markerInfo);
-                markerOptions
-                        .position(latLng)
-                        .snippet(markerInfoString).
-                        title(location.getUser().getSurName());
-//                String markerName = "marker" + Integer.toString(position);
-                Marker marker = mGoogleMap.addMarker(markerOptions);
-                mGoogleMap.setInfoWindowAdapter(
-                        new CustomInfoWindowAdapter(getContext()));
-                mMarkers.add(marker);
-                position++;
+                    markerInfo.setAddress(location.getUser().getPractice());
+                    markerInfo.setMobile(location.getUser().getMobilePhoneNumber());
+                    markerInfo.setUserId(location.getUser().getEmail());
+                    markerInfo.setUser(location.getUser());
+                    Gson gson = new Gson();
+                    String markerInfoString = gson.toJson(markerInfo);
+                    markerOptions
+                            .position(latLng)
+                            .snippet(markerInfoString).
+                            title(location.getUser().getSurName());
+                    Marker marker = mGoogleMap.addMarker(markerOptions);
+                    mGoogleMap.setInfoWindowAdapter(
+                            new CustomInfoWindowAdapter(getContext()));
+                    mMarkers.add(marker);
+//                    moveCamera(latLng, DEFAULT_ZOOM, "Dr. " + location.getUser().getSurName());
+                    position++;
             }
         }
     }
@@ -330,21 +328,5 @@ public class HomeFragment extends Fragment implements
     public void onClick(View view) {
         Log.d(TAG, "onClick: cancelling search  ....");
         setDoctorsLocations(mPlaces);
-    }
-
-    @Override
-    public void onFocusChange(View view, boolean hasFocus) {
-        if (!hasFocus)
-            Log.d(TAG, "onFocusChange: lost focus");
-            setDoctorsLocations(mPlaces);
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-            Log.d(TAG, "onTouch: motion up");
-            setDoctorsLocations(mPlaces);
-        }
-        return false;
     }
 }

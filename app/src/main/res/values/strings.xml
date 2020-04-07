@@ -31,7 +31,7 @@
     </string-array>
     <string name="search_message">Address, practice or Dr\'s name</string>
     <string name="map_info_window_name">Name</string>
-    <string name="map_info_window_address">Address</string>
+    <string name="map_info_window_practice">Practice</string>
     <string name="map_info_window_mobile">Mobile</string>
     <string name="map_info_window_tv_message">Click to make an Appointment</string>
     <string name="message_to_doctor">Message to doctor</string>
