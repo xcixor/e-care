@@ -95,7 +95,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
     private void setData(UserModel user) {
         mDatabase = FirebaseDatabase.getInstance();
         DatabaseReference ref = mDatabase.getReference().child("appointments");
-
+        Log.d(TAG, "setData: user is " + user.isDoctor());
         if (user.isDoctor()){
             Query appointmentsQuery = ref.orderByChild("doctorEmail").equalTo(mCurrentUser.getEmail());
             appointmentsQuery.addValueEventListener(new ValueEventListener() {
@@ -110,7 +110,8 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
                 }
             });
         }else {
-            Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
+            Log.d(TAG, "setData: in user is not doctor");
+            Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(user.getEmail());
             appointmentsQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -134,6 +135,7 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
             appointment.setIsDoctor(user.isDoctor());
             mAppointments.add(appointment);
         }
+        Log.d(TAG, "getData: user data is  " + mAppointments);
         initializeAppointments(mAppointments);
     }
 

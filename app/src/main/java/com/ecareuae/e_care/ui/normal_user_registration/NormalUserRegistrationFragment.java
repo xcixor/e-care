@@ -316,7 +316,7 @@ public class NormalUserRegistrationFragment extends Fragment {
                 this.mSurname,
                 this.mEmail,
                 this.mGender,
-                true
+                false
         );
         patient.setPassword(this.mPassOne);
         patient.setCountryCode(this.mCountryCode);

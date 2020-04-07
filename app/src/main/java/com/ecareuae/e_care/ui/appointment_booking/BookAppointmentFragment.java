@@ -100,10 +100,20 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     private void createAppointment(UserModel doctor) {
         String message =  mAppointmentMessage.getText().toString();
-        MedicalAppointmentModel appointment = new MedicalAppointmentModel(doctor.getSurName(), mDate, message, mCurrentUser.getEmail(), doctor.getEmail());
+        MedicalAppointmentModel appointment = new MedicalAppointmentModel(
+                doctor.getSurName(),
+                mDate,
+                message,
+                mCurrentUser.getEmail(),
+                doctor.getEmail()
+        );
         saveAppointment(appointment);
         sendEmail(message);
-        Toast.makeText(getContext(), "Appointment with " + appointment.getDoctor()  + " on " + appointment.getDate() + " created.", Toast.LENGTH_LONG).show();
+        Toast.makeText(
+                getContext(),
+                "Appointment with " + appointment.getDoctor()  + " on " + appointment.getDate() + " created.",
+                Toast.LENGTH_LONG)
+                .show();
     }
 
     private void sendEmail(String message) {

@@ -12,7 +12,6 @@ public class MedicalAppointmentModel implements Parcelable {
     private String mSpecialization;
     private String mOwnerEmail;
     private String mDoctorEmail;
-    private boolean isDoctor;
 
 
     public MedicalAppointmentModel(String doctor, Date date, String message, String ownerEmail, String doctorEmail) {
@@ -21,14 +20,6 @@ public class MedicalAppointmentModel implements Parcelable {
         mMessage = message;
         mOwnerEmail = ownerEmail;
         mDoctorEmail = doctorEmail;
-    }
-
-    public boolean getIsDoctor() {
-        return isDoctor;
-    }
-
-    public void setIsDoctor(boolean doctor) {
-        isDoctor = doctor;
     }
 
     public MedicalAppointmentModel(){}
