@@ -51,8 +51,8 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         initializeViews();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("appointments");
+
         Query appointmentsQuery = ref.orderByChild("ownerEmail").equalTo(mCurrentUser.getEmail());
-        Log.d(TAG, "onCreateView: current user in history is " + mCurrentUser.getEmail());
         appointmentsQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

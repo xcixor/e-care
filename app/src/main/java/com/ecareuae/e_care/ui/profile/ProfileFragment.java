@@ -87,6 +87,7 @@ public class ProfileFragment extends Fragment {
             user.setMobilePhoneNumber(ds.child(key).getValue(UserModel.class).getMobilePhoneNumber());
             user.setSpecialization(ds.child(key).getValue(UserModel.class).getSpecialization());
             user.setImage(ds.child(key).getValue(UserModel.class).getImage());
+            user.setDoctor(ds.child(key).getValue(UserModel.class).isDoctor());
             setData(user);
             Log.d(TAG, "showData: " + user.toString());
         }else {

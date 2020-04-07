@@ -314,7 +314,7 @@ public class DoctorRegistrationFragment extends Fragment {
         );
         doctor.setPassword(this.mPassOne);
         doctor.setCountryCode(this.mCountryCode);
-        doctor.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
+        doctor.setMobilePhoneNumber(this.mCountryCode + this.mMobile);
         doctor.setPractice(this.mPractice);
         doctor.setSpecialization(this.mSpecialization);
         InstantiateSaveDoctor(doctor);

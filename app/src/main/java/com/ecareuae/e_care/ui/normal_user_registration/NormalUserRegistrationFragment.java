@@ -323,7 +323,7 @@ public class NormalUserRegistrationFragment extends Fragment {
         );
         patient.setPassword(this.mPassOne);
         patient.setCountryCode(this.mCountryCode);
-        patient.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
+        patient.setMobilePhoneNumber(this.mCountryCode + this.mMobile);
         patient.setSpecialization(this.mSpecialization);
         savePatient(patient);
     }
