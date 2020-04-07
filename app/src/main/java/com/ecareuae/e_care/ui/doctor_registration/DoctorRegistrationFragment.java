@@ -24,11 +24,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.helpers.CustomTextWatcher;
 import com.ecareuae.e_care.repositories.FirebaseUtil;
@@ -90,8 +92,6 @@ public class DoctorRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_doctor_registration, container, false);
-        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
-        actionBar.setTitle("Doctor Registration");
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 
@@ -116,6 +116,14 @@ public class DoctorRegistrationFragment extends Fragment {
                 getDoctor();
             }
         });
+
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack(R.id.user_selection, false);
+//            }
+//        };
+//        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         return mRoot;
     }
@@ -185,14 +193,6 @@ public class DoctorRegistrationFragment extends Fragment {
             getLastLocation(doctor);
     }
 
-    private void switchFragments(Fragment fragment) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
-    }
-
     private void toastMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
@@ -224,7 +224,6 @@ public class DoctorRegistrationFragment extends Fragment {
         isValidPasswordOne();
         isValidPasswordTwo();
         if(isValidFirstName() && isValidSurname() && isValidEmail() && isValidPasswordOne() && isValidSpecialization() && isValidPasswordTwo()){
-            mRegister.setEnabled(false);
             instantiateDoctor();
         }else{
             Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();
@@ -323,7 +322,7 @@ public class DoctorRegistrationFragment extends Fragment {
         );
         doctor.setPassword(this.mPassOne);
         doctor.setCountryCode(this.mCountryCode);
-        doctor.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
+        doctor.setMobilePhoneNumber(this.mCountryCode + " " + this.mMobile);
         doctor.setPractice(this.mPractice);
         doctor.setSpecialization(this.mSpecialization);
         InstantiateSaveDoctor(doctor);
@@ -368,20 +367,15 @@ public class DoctorRegistrationFragment extends Fragment {
                     if (!task.isSuccessful()) {
                         Log.d(TAG, "onComplete: error" + task.getException());
                         toastMessage(task.getException().getMessage());
-
-                        Fragment fragment = new DoctorRegistrationFragment();
-                        switchFragments(fragment);
                     } else {
+                        mRegister.setEnabled(false);
+
                         DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                         mSavedDoctorId = docRef.getKey();
                         docRef.setValue(doctor);
                         FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
                         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
-                        Fragment fragment = new ProfileFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("userId", doctor.getEmail());
-                        fragment.setArguments(bundle);
-                        switchFragments(fragment);
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_login);
                     }
                 });
     }

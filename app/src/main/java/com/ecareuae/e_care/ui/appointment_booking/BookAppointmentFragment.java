@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.models.MedicalAppointmentModel;
@@ -89,9 +90,12 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
 
     @Override
     public void onClick(View view) {
-        if (mCurrentUser != null)
+        if (mCurrentUser != null) {
             createAppointment(mDoctor);
-        Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
+            Navigation.findNavController(view).navigate(R.id.nav_history);
+        }else {
+            Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void createAppointment(UserModel doctor) {

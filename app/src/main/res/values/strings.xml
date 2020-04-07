@@ -16,7 +16,7 @@
     <string name="et_pass_1_placeholder">Password</string>
     <string name="et_pass_2_placeholder">Repeat Password</string>
     <string name="register_button_msg">Register</string>
-    <string name="user_type_select_msg">Select type of userModel to continue</string>
+    <string name="user_type_select_msg">Select type of user type to continue</string>
     <string name="doctor_radio_placeholder">Doctor</string>
     <string name="patient_radio_placeholder">Patient</string>
     <string-array name="gender_array">
@@ -31,7 +31,7 @@
     </string-array>
     <string name="search_message">Address, practice or Dr\'s name</string>
     <string name="map_info_window_name">Name</string>
-    <string name="map_info_window_address">Address</string>
+    <string name="map_info_window_practice">Practice</string>
     <string name="map_info_window_mobile">Mobile</string>
     <string name="map_info_window_tv_message">Click to make an Appointment</string>
     <string name="message_to_doctor">Message to doctor</string>
@@ -47,7 +47,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_login">Login</string>
     <string name="menu_history">My Appointments</string>
-    <string name="menu_tools">Tools</string>
+    <string name="edit_appointment">Edit Appointment</string>
     <string name="menu_profile">My Profile</string>
     <string name="menu_logout">Logout</string>
     <string name="app_image_content_desc">Profile Image Content Desc</string>

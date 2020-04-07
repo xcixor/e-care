@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
@@ -52,16 +54,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (user != null){
                     Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
                     toastMessage("Welcome @" + user.getEmail());
-                    ((MainActivity)getActivity()).toggleMenutItems();
-                    Fragment fragment = new ProfileFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId", user.getEmail());
-                    fragment.setArguments(bundle);
-                    switchFragments(fragment);
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).
+                            navigate(R.id.nav_profile);
                 }else{
                     Log.d(TAG, "onAuthStateChanged: signed out");
-                    ((MainActivity)getActivity()).toggleMenutItems();
-//                    toastMessage("Successfully signed out!");
                 }
             }
         };
@@ -95,8 +91,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tv_register:
-                Fragment fragment = new UserTypeSelectionFragment();
-                switchFragments(fragment);
+                Navigation.findNavController(view).navigate(R.id.user_selection);
                 break;
             case R.id.login_button:
                 initiateLogin();
@@ -118,13 +113,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void toastMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void switchFragments(Fragment fragment){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 }

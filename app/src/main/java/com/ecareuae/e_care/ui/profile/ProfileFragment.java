@@ -49,15 +49,10 @@ public class ProfileFragment extends Fragment {
         instantiateViews();
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            mUserId = bundle.getString("userId");
-//        }
-//        Log.d(TAG, "onCreateView: bundle  ** " + mUserId);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("users");
         Query usersQuery = ref.orderByChild("email").equalTo(mCurrentUser.getEmail());
-        Log.d(TAG, "onCreateView: user email in profile is " + mCurrentUser.getEmail());
         usersQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -69,8 +64,6 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
-//        getUser(mUserId);
-//        setData();
         return mRoot;
     }
 
@@ -94,6 +87,7 @@ public class ProfileFragment extends Fragment {
             user.setMobilePhoneNumber(ds.child(key).getValue(UserModel.class).getMobilePhoneNumber());
             user.setSpecialization(ds.child(key).getValue(UserModel.class).getSpecialization());
             user.setImage(ds.child(key).getValue(UserModel.class).getImage());
+            user.setDoctor(ds.child(key).getValue(UserModel.class).isDoctor());
             setData(user);
             Log.d(TAG, "showData: " + user.toString());
         }else {

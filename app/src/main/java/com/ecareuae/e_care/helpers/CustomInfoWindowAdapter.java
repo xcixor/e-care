@@ -29,10 +29,10 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         MarkerInfo markerInfo = gson.fromJson(marker.getSnippet(), MarkerInfo.class);
         TextView tvName = (TextView) view.findViewById(R.id.info_window_tv_name);
         tvName.setText(markerInfo.getName());
-        TextView tvAddress = (TextView) view.findViewById(R.id.info_window_tv_practice);
-        tvAddress.setText(markerInfo.getAddress());
+        TextView tvPractice = (TextView) view.findViewById(R.id.info_window_tv_practice);
+        tvPractice.setText(markerInfo.getUser().getPractice());
         TextView tvMobile = (TextView) view.findViewById(R.id.info_window_tv_mobile);
-        tvMobile.setText(markerInfo.getMobile());
+        tvMobile.setText(markerInfo.getUser().getSpecialization());
 
     }
 

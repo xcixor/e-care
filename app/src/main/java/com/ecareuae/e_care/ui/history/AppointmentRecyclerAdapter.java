@@ -44,13 +44,21 @@ public class AppointmentRecyclerAdapter extends RecyclerView.Adapter<Appointment
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MedicalAppointmentModel appointment = mAppointments.get(position);
-        String title = "Appointment with " + appointment.getDoctor();
-        Date date = appointment.getDate();
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-        holder.mTvDate.setText(df.format("yyyy-MM-dd hh:mm a", date));
-        holder.mTvTitle.setText(title);
-        holder.mTvDescription.setText(appointment.getMessage());
-
+        if (!appointment.getIsDoctor()) {
+            String title = "Appointment with: " + appointment.getDoctor();
+            Date date = appointment.getDate();
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            holder.mTvDate.setText(df.format("yyyy-MM-dd hh:mm a", date));
+            holder.mTvTitle.setText(title);
+            holder.mTvDescription.setText(appointment.getMessage());
+        }else{
+            String title = "Patient: " + appointment.getOwnerEmail();
+            Date date = appointment.getDate();
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            holder.mTvDate.setText(df.format("yyyy-MM-dd hh:mm a", date));
+            holder.mTvTitle.setText(title);
+            holder.mTvDescription.setText(appointment.getMessage());
+        }
     }
 
     @Override

@@ -16,10 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.helpers.CustomTextWatcher;
@@ -70,8 +72,6 @@ public class NormalUserRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_normal_user_registration, container, false);
-        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
-        actionBar.setTitle("Patient Registration");
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 
@@ -95,6 +95,15 @@ public class NormalUserRegistrationFragment extends Fragment {
                 getPatient();
             }
         });
+
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.frag_normal_user);
+//            }
+//        };
+
+//        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         return mRoot;
     }
@@ -169,29 +178,15 @@ public class NormalUserRegistrationFragment extends Fragment {
                             if (!task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: error" + task.getException());
                                 toastMessage(task.getException().getMessage());
-
-                                Fragment fragment = new NormalUserRegistrationFragment();
-                                switchFragments(fragment);
                             } else {
+                                mRegister.setEnabled(false);
                                 DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                                 mSavedPatientId = docRef.getKey();
                                 docRef.setValue(patient);
-                                Fragment fragment = new ProfileFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("userId", patient.getEmail());
-                                fragment.setArguments(bundle);
-                                switchFragments(fragment);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_login);
                             }
                         }
                     });
-    }
-
-    private void switchFragments(Fragment fragment) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 
     private void toastMessage(String message) {
@@ -228,7 +223,6 @@ public class NormalUserRegistrationFragment extends Fragment {
             && isValidPasswordOne()
             && isValidSpecialization()
             && isValidPasswordTwo()){
-            mRegister.setEnabled(false);
             instantiatePatient();
         }else{
             Toast.makeText(getContext(), "Please validate your data!", Toast.LENGTH_SHORT).show();
@@ -327,7 +321,7 @@ public class NormalUserRegistrationFragment extends Fragment {
         );
         patient.setPassword(this.mPassOne);
         patient.setCountryCode(this.mCountryCode);
-        patient.setMobilePhoneNumber(this.mMobile + this.mCountryCode);
+        patient.setMobilePhoneNumber(this.mCountryCode + " " + this.mMobile);
         patient.setSpecialization(this.mSpecialization);
         savePatient(patient);
     }
@@ -390,4 +384,5 @@ public class NormalUserRegistrationFragment extends Fragment {
     private void showImageSavingError() {
         Toast.makeText(getContext(), "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
     }
+
 }
