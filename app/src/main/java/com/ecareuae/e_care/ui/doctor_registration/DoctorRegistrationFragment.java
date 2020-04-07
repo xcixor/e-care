@@ -91,8 +91,6 @@ public class DoctorRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_doctor_registration, container, false);
-        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
-        actionBar.setTitle("Doctor Registration");
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 

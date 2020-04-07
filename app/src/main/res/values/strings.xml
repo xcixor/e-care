@@ -16,7 +16,7 @@
     <string name="et_pass_1_placeholder">Password</string>
     <string name="et_pass_2_placeholder">Repeat Password</string>
     <string name="register_button_msg">Register</string>
-    <string name="user_type_select_msg">Select type of userModel to continue</string>
+    <string name="user_type_select_msg">Select type of user type to continue</string>
     <string name="doctor_radio_placeholder">Doctor</string>
     <string name="patient_radio_placeholder">Patient</string>
     <string-array name="gender_array">

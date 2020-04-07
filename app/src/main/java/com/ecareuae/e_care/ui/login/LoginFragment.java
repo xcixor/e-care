@@ -54,13 +54,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 if (user != null){
                     Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
                     toastMessage("Welcome @" + user.getEmail());
-//                    ((MainActivity)getActivity()).toggleMenutItems();
-//                    Fragment fragment = new ProfileFragment();
-                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_profile);
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).
+                            navigate(R.id.nav_profile);
                 }else{
                     Log.d(TAG, "onAuthStateChanged: signed out");
-//                    ((MainActivity)getActivity()).toggleMenutItems();
-//                    toastMessage("Successfully signed out!");
                 }
             }
         };
@@ -94,8 +91,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.tv_register:
-                Fragment fragment = new UserTypeSelectionFragment();
-                switchFragments(fragment);
+                Navigation.findNavController(view).navigate(R.id.user_selection);
                 break;
             case R.id.login_button:
                 initiateLogin();
@@ -117,13 +113,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void toastMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void switchFragments(Fragment fragment){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(this.getId(), fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 }

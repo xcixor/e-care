@@ -23,8 +23,6 @@ public class UserTypeSelectionFragment extends Fragment implements RadioGroup.On
     private View mRadioButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
-        actionBar.setTitle("User Type Selection");
         mRoot = inflater.inflate(R.layout.fragment_user_type_selection, container, false);
         instantiateViews();
         mRadioGroup.setOnCheckedChangeListener(this);

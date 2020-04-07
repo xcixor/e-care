@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -71,8 +72,6 @@ public class NormalUserRegistrationFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRoot = inflater.inflate(R.layout.fragment_normal_user_registration, container, false);
-        Toolbar actionBar = getActivity().findViewById(R.id.toolbar);
-        actionBar.setTitle("Patient Registration");
         initializeGenderDropdown();
         initializeCountryCodesDropdown();
 
@@ -96,6 +95,15 @@ public class NormalUserRegistrationFragment extends Fragment {
                 getPatient();
             }
         });
+
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.frag_normal_user);
+//            }
+//        };
+
+//        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         return mRoot;
     }
@@ -378,4 +386,5 @@ public class NormalUserRegistrationFragment extends Fragment {
     private void showImageSavingError() {
         Toast.makeText(getContext(), "Image failed to upload, contact admin!", Toast.LENGTH_SHORT).show();
     }
+
 }

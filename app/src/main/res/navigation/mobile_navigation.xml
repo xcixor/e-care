@@ -43,7 +43,8 @@
         <action
             android:id="@+id/action_nav_history_to_nav_home"
             app:destination="@id/nav_home"
-            app:popUpTo="@id/nav_history" />
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -90,7 +91,8 @@
         <action
             android:id="@+id/action_user_selection_to_normalUserRegistrationFragment"
             app:destination="@id/frag_normal_user"
-            app:popUpTo="@id/nav_home" />
+            app:popUpTo="@id/nav_login"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -107,7 +109,7 @@
     <fragment
         android:id="@+id/frag_normal_user"
         android:name="com.ecareuae.e_care.ui.normal_user_registration.NormalUserRegistrationFragment"
-        android:label="NormalUserRegistrationFragment" >
+        android:label="Patient Registration" >
         <action
             android:id="@+id/action_normalUserRegistrationFragment_to_nav_profile"
             app:destination="@id/nav_profile"
