@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
                         .fit()
                         .into(profileImage);
             }
+        }else{
+            profileImage.setImageResource(R.drawable.ic_hospital_marker);
+            nav_sub_title.setText(R.string.nav_header_subtitle);
         }
     }
 
