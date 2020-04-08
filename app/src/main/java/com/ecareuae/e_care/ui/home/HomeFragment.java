@@ -164,9 +164,16 @@ public class HomeFragment extends Fragment implements
                     foundLocations.add(location);
                 }
             }
-            Log.d(TAG, "fetchDoctorsFromDatabase: found ....... " + foundLocations);
-            setDoctorsLocations(foundLocations);
+            if (foundLocations.size() > 0) {
+                setDoctorsLocations(foundLocations);
+            }else {
+                toast("No results found for: " + searchInput);
+            }
         }
+    }
+
+    public void toast(String message){
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
