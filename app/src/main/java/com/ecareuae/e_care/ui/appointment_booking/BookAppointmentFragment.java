@@ -94,7 +94,7 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
             createAppointment(mDoctor);
             Navigation.findNavController(view).navigate(R.id.nav_history);
         }else {
-            Toast.makeText(getContext(), "Please login to perform this action", Toast.LENGTH_LONG).show();
+            toast("Please login to perform this action");
         }
     }
 
@@ -107,13 +107,17 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
                 mCurrentUser.getEmail(),
                 doctor.getEmail()
         );
-        saveAppointment(appointment);
-        sendEmail(message);
-        Toast.makeText(
-                getContext(),
-                "Appointment with " + appointment.getDoctor()  + " on " + appointment.getDate() + " created.",
-                Toast.LENGTH_LONG)
-                .show();
+        if (!mCurrentUser.getEmail().equals(doctor.getEmail())) {
+            saveAppointment(appointment);
+            sendEmail(message);
+            toast("Appointment with " + appointment.getDoctor() + " on " + appointment.getDate() + " created.");
+        }else{
+            toast("You cannot make an appointment with yourself");
+        }
+    }
+
+    private void toast(String message){
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private void sendEmail(String message) {
@@ -134,7 +138,7 @@ public class BookAppointmentFragment extends Fragment implements CalendarView.On
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "There are no email clients installed. Email not sent!", Toast.LENGTH_SHORT).show();
+            toast("There are no email clients installed. Email not sent!");
         }
     }
 
