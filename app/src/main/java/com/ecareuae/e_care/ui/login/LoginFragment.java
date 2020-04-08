@@ -24,10 +24,16 @@ import com.ecareuae.e_care.MainActivity;
 import com.ecareuae.e_care.R;
 import com.ecareuae.e_care.ui.profile.ProfileFragment;
 import com.ecareuae.e_care.ui.user_type_selection.UserTypeSelectionFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginFragment extends Fragment implements View.OnClickListener {
+import java.util.concurrent.Executor;
+
+public class LoginFragment extends Fragment implements View.OnClickListener, OnCompleteListener, OnFailureListener {
 
     private static String TAG = "LoginFragment";
     private TextView mRegisterPrompt;
@@ -52,8 +58,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
-                    Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
-                    toastMessage("Welcome @" + user.getEmail());
+                    ((MainActivity)getActivity()).instantiateViews();
+                    toastMessage("Welcome " + user.getEmail());
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).
                             navigate(R.id.nav_profile);
                 }else{
@@ -105,13 +111,27 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
         if (!email.equals("") && !password.equals("")){
-            mAuth.signInWithEmailAndPassword(email, password);
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this)
+                    .addOnFailureListener(this);
         }else{
             toastMessage("Check your authentication details!");
         }
     }
 
     private void toastMessage(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onComplete(@NonNull Task task) {
+        if (!task.isSuccessful()){
+            toastMessage(task.getException().getMessage());
+        }
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        toastMessage(e.getMessage());
     }
 }

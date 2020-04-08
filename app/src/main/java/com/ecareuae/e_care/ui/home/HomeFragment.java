@@ -1,5 +1,4 @@
 package com.ecareuae.e_care.ui.home;
-
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -23,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
 import com.ecareuae.e_care.MainActivity;
@@ -32,8 +29,6 @@ import com.ecareuae.e_care.helpers.CustomInfoWindowAdapter;
 import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.ecareuae.e_care.models.UserLocationModel;
 import com.ecareuae.e_care.repositories.FirebaseUtil;
-import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragment;
-import com.ecareuae.e_care.ui.appointment_booking.BookAppointmentFragmentDirections;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -76,6 +71,7 @@ public class HomeFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity)getActivity()).toggleMenutItems();
+        ((MainActivity)getActivity()).instantiateViews();
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mSearchInput = root.findViewById(R.id.et_search);
         mGpsLocater = root.findViewById(R.id.ic_gps);
@@ -164,9 +160,16 @@ public class HomeFragment extends Fragment implements
                     foundLocations.add(location);
                 }
             }
-            Log.d(TAG, "fetchDoctorsFromDatabase: found ....... " + foundLocations);
-            setDoctorsLocations(foundLocations);
+            if (foundLocations.size() > 0) {
+                setDoctorsLocations(foundLocations);
+            }else {
+                toast("No results found for: " + searchInput);
+            }
         }
+    }
+
+    public void toast(String message){
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
