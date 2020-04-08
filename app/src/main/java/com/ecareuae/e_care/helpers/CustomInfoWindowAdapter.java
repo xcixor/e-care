@@ -39,19 +39,19 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         tvPractice.setText(markerInfo.getUser().getPractice());
         TextView tvMobile = (TextView) view.findViewById(R.id.info_window_tv_mobile);
         tvMobile.setText(markerInfo.getUser().getSpecialization());
-        ImageView image = view.findViewById(R.id.info_window_user_image);
-        if (markerInfo.getUser().getImage() != null && !markerInfo.getUser().getImage().equals("")){
-            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
-            int margin = 0;
-            Transformation transformation = new RoundedCornersTransformation(radius, margin);
-            Picasso.get()
-                    .load(markerInfo.getUser().getImage())
-                    .transform(transformation)
-                    .placeholder(R.drawable.ic_account)
-                    .error(R.drawable.ic_account)
-                    .fit()
-                    .into(image);
-        }
+//        ImageView image = view.findViewById(R.id.info_window_user_image);
+//        if (markerInfo.getUser().getImage() != null && !markerInfo.getUser().getImage().equals("")){
+//            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
+//            int margin = 0;
+//            Transformation transformation = new RoundedCornersTransformation(radius, margin);
+//            Picasso.get()
+//                    .load(markerInfo.getUser().getImage())
+//                    .transform(transformation)
+//                    .placeholder(R.drawable.ic_account)
+//                    .error(R.drawable.ic_account)
+//                    .fit()
+//                    .into(image);
+//        }
     }
 
     @Override
