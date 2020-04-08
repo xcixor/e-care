@@ -14,22 +14,13 @@
             android:id="@+id/action_nav_home_to_frag_book_appointment"
             app:destination="@id/frag_book_appointment"
             app:popUpTo="@id/nav_home" />
-        <action
-            android:id="@+id/action_nav_home_to_nav_login2"
-            app:destination="@id/nav_login"
-            app:popUpTo="@id/nav_home" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.ecareuae.e_care.ui.login.LoginFragment"
         android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_nav_login_to_user_selection"
-            app:destination="@id/user_selection"
-            app:popUpTo="@id/nav_home" />
-    </fragment>
+        tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/nav_history"
@@ -85,10 +76,6 @@
         android:label="User Type Selection"
         tools:layout="@layout/fragment_user_type_selection">
         <action
-            android:id="@+id/action_user_selection_to_doctor_registration"
-            app:destination="@id/doctor_registration"
-            app:popUpTo="@id/user_selection" />
-        <action
             android:id="@+id/action_user_selection_to_normalUserRegistrationFragment"
             app:destination="@id/frag_normal_user"
             app:popUpTo="@id/nav_login"
@@ -99,12 +86,7 @@
         android:id="@+id/doctor_registration"
         android:name="com.ecareuae.e_care.ui.doctor_registration.DoctorRegistrationFragment"
         android:label="Doctor Registration"
-        tools:layout="@layout/fragment_doctor_registration">
-        <action
-            android:id="@+id/action_doctor_registration_to_nav_profile"
-            app:destination="@id/nav_profile"
-            app:popUpTo="@id/user_selection" />
-    </fragment>
+        tools:layout="@layout/fragment_doctor_registration"/>
 
     <fragment
         android:id="@+id/frag_normal_user"
