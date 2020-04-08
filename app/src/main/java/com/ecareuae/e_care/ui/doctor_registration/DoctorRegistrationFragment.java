@@ -372,7 +372,6 @@ public class DoctorRegistrationFragment extends Fragment implements FragmentMana
                         toastMessage(task.getException().getMessage());
                     } else {
                         mRegister.setEnabled(false);
-
                         DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                         mSavedDoctorId = docRef.getKey();
                         docRef.setValue(doctor);

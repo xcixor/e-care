@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView profileImage = headerView.findViewById(R.id.nav_header_image);
         if (mCurrentUser != null) {
             Log.d(TAG, "instantiateViews: setting display stuff");
-            if (!mCurrentUser.getDisplayName().equals("")) {
+            if (mCurrentUser.getDisplayName() != null && !mCurrentUser.getDisplayName().equals("")) {
                 nav_sub_title.setText(mCurrentUser.getDisplayName());
             } else {
                 nav_sub_title.setText(mCurrentUser.getEmail());

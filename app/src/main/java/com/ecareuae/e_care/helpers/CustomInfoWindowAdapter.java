@@ -1,9 +1,11 @@
 package com.ecareuae.e_care.helpers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecareuae.e_care.R;
@@ -11,6 +13,10 @@ import com.ecareuae.e_care.helpers.MarkerInfo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -33,7 +39,19 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         tvPractice.setText(markerInfo.getUser().getPractice());
         TextView tvMobile = (TextView) view.findViewById(R.id.info_window_tv_mobile);
         tvMobile.setText(markerInfo.getUser().getSpecialization());
-
+        ImageView image = view.findViewById(R.id.info_window_user_image);
+        if (markerInfo.getUser().getImage() != null && !markerInfo.getUser().getImage().equals("")){
+            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
+            int margin = 0;
+            Transformation transformation = new RoundedCornersTransformation(radius, margin);
+            Picasso.get()
+                    .load(markerInfo.getUser().getImage())
+                    .transform(transformation)
+                    .placeholder(R.drawable.ic_account)
+                    .error(R.drawable.ic_account)
+                    .fit()
+                    .into(image);
+        }
     }
 
     @Override
