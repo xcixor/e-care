@@ -52,6 +52,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -374,6 +376,23 @@ public class DoctorRegistrationFragment extends Fragment implements FragmentMana
                         DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                         mSavedDoctorId = docRef.getKey();
                         docRef.setValue(doctor);
+
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(doctor.getSurName())
+                                .setPhotoUri(Uri.parse(mUserImagePath))
+                                .build();
+
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User profile updated.");
+                                        }
+                                    }
+                                });
+
                         FirebaseUtil.getmDatabaseReference().child("userLocations").push().setValue(userLocationModel);
                         Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
                         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_login);

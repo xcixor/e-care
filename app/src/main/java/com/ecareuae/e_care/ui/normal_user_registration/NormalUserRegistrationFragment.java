@@ -36,6 +36,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -167,13 +169,11 @@ public class NormalUserRegistrationFragment extends Fragment {
             if (!mUserImagePath.equals("") && !mUserImageName.equals(""))
                 patient.setImage(mUserImagePath);
                 patient.setUserImageName(mUserImageName);
-            Log.d(TAG, "savePatient: **  " + patient.toString());
             mAuth.createUserWithEmailAndPassword(patient.getEmail(), patient.getPassword())
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Log.d(TAG, "New user registration: " + task.isSuccessful());
-
                             if (!task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: error" + task.getException());
                                 toastMessage(task.getException().getMessage());
@@ -182,6 +182,22 @@ public class NormalUserRegistrationFragment extends Fragment {
                                 DatabaseReference docRef = FirebaseUtil.getmDatabaseReference().child("users").push();
                                 mSavedPatientId = docRef.getKey();
                                 docRef.setValue(patient);
+
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(patient.getSurName())
+                                        .setPhotoUri(Uri.parse(mUserImagePath))
+                                        .build();
+
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "User profile updated.");
+                                                }
+                                            }
+                                        });
                                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.nav_login);
                             }
                         }

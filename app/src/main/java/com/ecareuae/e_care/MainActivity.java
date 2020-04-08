@@ -1,6 +1,7 @@
 package com.ecareuae.e_care;
 
 import android.app.FragmentManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -25,6 +26,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -32,7 +35,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE;
 
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mDrawer = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
-
+        instantiateViews();
 
         addLogoutFunctionality();
         // Passing each menu ID as a set of Ids because each
@@ -74,11 +80,31 @@ public class MainActivity extends AppCompatActivity {
         toggleMenutItems();
     }
 
-    private void instantiateViews() {
-        View headerView = mNavigationView.inflateHeaderView(R.layout.nav_header_navigation);
+    public void instantiateViews() {
+        mCurrentUser = mAuth.getCurrentUser();
+        View headerView = mNavigationView.getHeaderView(0);
         TextView nav_sub_title = headerView.findViewById(R.id.nav_header_subtitle);
-        if (mCurrentUser != null)
-            nav_sub_title.setText(mCurrentUser.getEmail());
+        ImageView profileImage = headerView.findViewById(R.id.nav_header_image);
+        if (mCurrentUser != null) {
+            Log.d(TAG, "instantiateViews: setting display stuff");
+            if (!mCurrentUser.getDisplayName().equals("")) {
+                nav_sub_title.setText(mCurrentUser.getDisplayName());
+            } else {
+                nav_sub_title.setText(mCurrentUser.getEmail());
+            }
+            if (mCurrentUser.getPhotoUrl() != null && !mCurrentUser.getPhotoUrl().equals("")) {
+                int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
+                int margin = 0;
+                Transformation transformation = new RoundedCornersTransformation(radius, margin);
+                Picasso.get()
+                        .load(mCurrentUser.getPhotoUrl())
+                        .transform(transformation)
+                        .placeholder(R.drawable.ic_account)
+                        .error(R.drawable.ic_account)
+                        .fit()
+                        .into(profileImage);
+            }
+        }
     }
 
 

@@ -58,7 +58,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, OnC
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null){
-                    Log.d(TAG, "onAuthStateChanged: signed in" + user.getUid());
                     toastMessage("Welcome @" + user.getEmail());
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).
                             navigate(R.id.nav_profile);
