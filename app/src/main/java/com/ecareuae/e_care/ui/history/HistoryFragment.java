@@ -97,11 +97,39 @@ public class HistoryFragment extends Fragment implements AppointmentRecyclerAdap
         DatabaseReference ref = mDatabase.getReference().child("appointments");
         Log.d(TAG, "setData: user is " + user.isDoctor());
         if (user.isDoctor()){
-            Query appointmentsQuery = ref.orderByChild("doctorEmail").equalTo(mCurrentUser.getEmail());
-            appointmentsQuery.addValueEventListener(new ValueEventListener() {
+//            Query appointmentsQuery = ref.orderByChild("doctorEmail").equalTo(mCurrentUser.getEmail());
+//            appointmentsQuery.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    getData(snapshot, user);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    Log.d(TAG, "onCancelled: " + databaseError.getMessage());
+//                }
+//            });
+            mAppointments = new ArrayList<>();
+            ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    getData(snapshot, user);
+                    mAppointments = new ArrayList<>();
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        String key = ds.getKey();
+                        MedicalAppointmentModel appointment = new MedicalAppointmentModel();
+                        appointment = ds.getValue(MedicalAppointmentModel.class);
+                        if (appointment.getOwnerEmail().contains(user.getEmail())) {
+                            mAppointments.add(appointment);
+                            Log.d(TAG, "getData: user data is  " + mAppointments);
+                            initializeAppointments(mAppointments);
+                        }else if (appointment.getDoctorEmail().contains(user.getEmail())){
+                            appointment.setIsDoctor(user.isDoctor());
+                            mAppointments.add(appointment);
+                            Log.d(TAG, "getData: user data is  " + mAppointments);
+                            initializeAppointments(mAppointments);
+                        }
+
+                    }
                 }
 
                 @Override
