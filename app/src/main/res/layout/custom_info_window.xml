@@ -43,14 +43,24 @@
             app:layout_constraintTop_toTopOf="@id/info_window_tv_name" />
 
         <TextView
+            android:id="@+id/info_window_tv_specialization"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/map_info_window_specialization"
+            app:layout_constraintEnd_toEndOf="@id/info_window_tv_practice"
+            app:layout_constraintStart_toStartOf="@id/info_window_tv_practice"
+            app:layout_constraintTop_toTopOf="@id/info_window_tv_practice" />
+
+        <TextView
             android:id="@+id/info_window_tv_mobile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/map_info_window_mobile"
-            app:layout_constraintEnd_toEndOf="@id/info_window_tv_practice"
-            app:layout_constraintStart_toStartOf="@id/info_window_tv_practice"
-            app:layout_constraintTop_toTopOf="@id/info_window_tv_practice" />
+            app:layout_constraintEnd_toEndOf="@id/info_window_tv_specialization"
+            app:layout_constraintStart_toStartOf="@id/info_window_tv_specialization"
+            app:layout_constraintTop_toTopOf="@id/info_window_tv_specialization" />
 
         <TextView
             android:id="@+id/info_window_tv_appointment"

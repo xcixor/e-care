@@ -325,7 +325,7 @@ public class DoctorRegistrationFragment extends Fragment implements FragmentMana
         );
         doctor.setPassword(this.mPassOne);
         doctor.setCountryCode(this.mCountryCode);
-        doctor.setMobilePhoneNumber(this.mCountryCode + " " + this.mMobile);
+        doctor.setMobilePhoneNumber(this.mMobile);
         doctor.setPractice(this.mPractice);
         doctor.setSpecialization(this.mSpecialization);
         InstantiateSaveDoctor(doctor);

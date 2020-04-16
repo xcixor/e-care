@@ -63,4 +63,5 @@
     <string name="appointment_date">Date</string>
     <string name="select_new_date">Select new Date</string>
     <string name="et_profession_placeholder">Profession</string>
+    <string name="map_info_window_specialization">Specialization</string>
 </resources>

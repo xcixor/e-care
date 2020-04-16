@@ -18,6 +18,10 @@ import com.squareup.picasso.Transformation;
 
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
+/**
+ * Renders a window to create an appointment
+ * with a doctor
+ */
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final View mWindow;
@@ -38,7 +42,9 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         TextView tvPractice = (TextView) view.findViewById(R.id.info_window_tv_practice);
         tvPractice.setText(markerInfo.getUser().getPractice());
         TextView tvMobile = (TextView) view.findViewById(R.id.info_window_tv_mobile);
-        tvMobile.setText(markerInfo.getUser().getSpecialization());
+        tvMobile.setText(markerInfo.getUser().getMobilePhoneNumber());
+        TextView tvSpcialization = (TextView) view.findViewById(R.id.info_window_tv_specialization);
+        tvSpcialization.setText(markerInfo.getUser().getSpecialization());
 //        ImageView image = view.findViewById(R.id.info_window_user_image);
 //        if (markerInfo.getUser().getImage() != null && !markerInfo.getUser().getImage().equals("")){
 //            int radius = Resources.getSystem().getDisplayMetrics().widthPixels;
